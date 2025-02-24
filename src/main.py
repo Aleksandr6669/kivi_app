@@ -1,58 +1,84 @@
 import flet as ft
 from routes import route_change
+from views.user_info_view import user_info_view
 
 def main(page: ft.Page):
-    page.title = "Kivi Retail 1.4"
-    page.theme_mode = ft.ThemeMode.SYSTEM # Системная тема (светлая/темная)
+    page.title = "Kivi Retail TEST"
+    page.version = "0.0.1"
+    page.theme_mode = ft.ThemeMode.SYSTEM  # Системная тема (светлая/темная)
+    page.horizontal_alignment = 'center'  # Выравнивание по центру
+    page.vertical_alignment = 'center'  # Выравнивание по центру
 
-    # Функция для обработки клика по аватару
-    def show_user_info(e):
-        page.go("/user_info")  # Переход на страницу с информацией о пользователе
+    expanded = False
+    radius_avatar = page.height * 0.05
 
-    # Аватар пользователя с обработкой клика
-    avatar = ft.Container(
-        content=ft.Stack(
-            [
-                ft.CircleAvatar(
-                    foreground_image_src="https://avatars.githubusercontent.com/u/5041459?s=88&v=4"
-                ),
-                ft.Container(
-                    content=ft.CircleAvatar(bgcolor=ft.Colors.GREEN, radius=5),
-                    alignment=ft.alignment.bottom_left,
-                ),
-            ],
-            width=40,
-            height=40,
-        ),
-        margin=ft.Margin(left=0, right=16, top=0, bottom=0),
-        on_click=show_user_info  # Обработчик клика по аватару
-    )
-    
-    # Панель с заголовком и аватаром
-    appbar = ft.AppBar(
-        title=ft.Text("Kivi Retail", size=28, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, color=ft.Colors.BLUE_ACCENT),
-        bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-        actions=[avatar]
-    )
+    def _expand_click(e):
+        nonlocal expanded, radius_avatar
+        # Toggle expansion state
+        expanded = not expanded
+        # Update the height and radius based on the state
+        new_height = page.height * 0.8 if expanded else page.height * 0.15
+        radius_avatar = page.height * 0.1 if expanded else page.height * 0.05
+        _top_container.height = new_height
+        _avatar.radius = radius_avatar
+        _title.content.size = 36 if expanded else 32
+        _subtitle.content.size = 28 if expanded else 26
+        _top_container.update()
 
-    # Панель навигации
-    navigation_bar = ft.NavigationBar(
-        destinations=[
-            ft.NavigationBarDestination(icon=ft.Icons.INFO_OUTLINE, label="News feed"),
-            ft.NavigationBarDestination(icon=ft.Icons.MAIL_OUTLINE, label="Order"),
-            ft.NavigationBarDestination(icon=ft.Icons.FAVORITE_BORDER, selected_icon=ft.Icons.FAVORITE, label="Favorites"),
-        ],
-        on_change=lambda e: page.go(["/news_feed", "/order", "/favorites"][e.control.selected_index])
-    )
-    
+    def _top():
+        global _avatar, _top_container, _title, _subtitle
+        info, _avatar, _title, _subtitle = user_info_view(page, radius_avatar)
+        _top_container = ft.Container(
+            width=page.width,  # Dynamic width (80% of the screen width)
+            height=page.height * 0.15,  # Dynamic height (40% of the screen height)
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.bottom_right,
+                end=ft.alignment.top_left,
+                colors=["lightblue600", "lightblue900"],
+            ),
+            border_radius=35,
+            animate=ft.animation.Animation(duration=350, curve="decelerate"),
+            on_click=_expand_click,
+            content=ft.Column(
+                alignment="start",
+                controls=[info],
+            ),
+        )
+        return _top_container
+
+    def _bottom():
+        bottom = ft.Container(
+            width=page.width,  # Dynamic width (80% of the screen width)
+            height=page.height * 0.10,  # Dynamic height (40% of the screen height)
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.bottom_right,
+                end=ft.alignment.top_left,
+                colors=["lightblue300", "lightblue600"],
+            ),
+            border_radius=35,
+            # animate=ft.animation.Animation(duration=350, curve="decelerate"),
+        )
+        return bottom
+
     # Контент страницы
-    content = ft.Column(expand=True)
+    _c = ft.Container(
+        width=page.width,
+        height=page.height,
+        content=ft.Column(
+            width=page.width * 0.95,
+            height=page.height,
+            controls=[
+                _top(),
+                ft.Container(height=page.height * 0.7),  # Пустое пространство между верхним и нижним контейнерами
+                _bottom()
+            ],
+        ),
+    )
     
     # Добавляем элементы на страницу
-    page.add(appbar, content, navigation_bar)
-    
-    # Обработка смены маршрута
-    page.on_route_change = lambda e: route_change(e.route, content, page)
-    page.go("/news_feed")  # Начальная страница
+    page.add(_c)
 
-ft.app(main, view=ft.AppView.WEB_BROWSER)
+if __name__ == "__main__":
+    ft.app(main, assets_dir="assets")
+
+# ft.app(main, view=ft.AppView.WEB_BROWSER)

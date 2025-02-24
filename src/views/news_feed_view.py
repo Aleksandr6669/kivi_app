@@ -19,7 +19,7 @@ def news_feed_view(page):
                     ft.Row([
                         ft.Icon(ft.Icons.PHONE, size=20, color=ft.Colors.RED_600),
                         ft.Text("Телефон:", size=16, color=ft.Colors.RED_600),
-                        ft.Text("+7 999 999 99 99", text_align=ft.TextAlign.RIGHT, size=20, color=ft.Colors.BLACK, width=page.width * 0.5),
+                        ft.Text("+3 999 999 99 99", text_align=ft.TextAlign.RIGHT, size=20, color=ft.Colors.BLACK, width=page.width * 0.5),
                     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ]),
                 bgcolor=ft.Colors.GREY_200,
