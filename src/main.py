@@ -10,35 +10,62 @@ def main(page: ft.Page):
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = True
 
-    page.appbar = ft.AppBar(
+    # page.appbar = ft.AppBar(
+    #     title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
+    #     actions=[
+    #         ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
+    #     ],
+    #     bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
+    # )
+
+    top_appbar = ft.AppBar(
         title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
         actions=[
             ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
         ],
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
-
-
     
-    page.navigation_bar = ft.NavigationBar(
+    # page.navigation_bar = ft.NavigationBar(
+    #     destinations=[
+    #         ft.NavigationBarDestination(
+    #             icon=ft.Icons.EXPLORE,
+    #             label="Explore",
+    #         ),
+    #         ft.NavigationBarDestination(
+    #             icon=ft.Icons.COMMUTE,
+    #             label="Commute",
+    #         ),
+    #         ft.NavigationBarDestination(
+    #             icon=ft.Icons.BOOKMARK_BORDER,
+    #             selected_icon=ft.Icons.BOOKMARK,
+    #             label="Bookmark",
+    #         ),
+    #     ],
+    
+    #     label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED, # Метки отображаются только для выбранного пункта назначения
+    #     bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
+    # )
+
+
+    bottom_navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
-                icon=ft.Icons.EXPLORE,
-                label="Explore",
+                icon=ft.Icon(ft.Icons.HOME, size=30), 
+                label="Home"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icons.COMMUTE,
-                label="Commute",
+                icon=ft.Icon(ft.Icons.SEARCH, size=30), 
+                label="Search"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icons.BOOKMARK_BORDER,
-                selected_icon=ft.Icons.BOOKMARK,
-                label="Bookmark",
+                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30),
+                label="Notifications"
             ),
         ],
-    
-        label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED, # Метки отображаются только для выбранного пункта назначения
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
+        adaptive=True,
+        label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED  # Метки отображаются только для выбранного пункта назначения
     )
 
 
@@ -88,7 +115,8 @@ def main(page: ft.Page):
     
     # Добавляем элементы на страницу
     page.add(_c)
-    page.add(ft.Container(height=20))
+    page.add(top_appbar)
+    page.add(bottom_navigation_bar)
 
 if __name__ == "__main__":
     ft.app(main, assets_dir="assets")
