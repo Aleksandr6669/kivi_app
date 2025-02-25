@@ -17,6 +17,7 @@ def main(page: ft.Page):
         # ],
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
         # shadow_color=ft.Colors.with_opacity(0.01, ft.CupertinoColors.SYSTEM_BACKGROUND),
+        adaptive = True,
     )
 
     page.navigation_bar = ft.NavigationBar(
@@ -36,6 +37,7 @@ def main(page: ft.Page):
             ),
         ],
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
+        adaptive = True,
     )
 
 
