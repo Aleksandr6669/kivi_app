@@ -56,8 +56,6 @@ def main(page: ft.Page):
         global _top_container
         info = user_info_view(page)
         _top_container = ft.Container(
-            width=page.width,  # Dynamic width (80% of the screen width)
-            height=page.height * 0.15,  # Dynamic height (40% of the screen height)
             gradient=ft.LinearGradient(
                 begin=ft.alignment.bottom_right,
                 end=ft.alignment.top_left,

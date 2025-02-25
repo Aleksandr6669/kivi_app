@@ -1,9 +1,8 @@
 import flet as ft
 
 def user_info_view(page):
-    info = ft.Row([
-        ft.Container(
-            ft.Container(
+    
+    info = ft.Container(
                 ft.Column([
                     ft.Text("Информация", size=28, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
                     ft.Row([
@@ -25,15 +24,8 @@ def user_info_view(page):
                 bgcolor=ft.Colors.GREY_200,
                 border_radius=24,
                 padding=14  
-            ),
-            bgcolor=ft.Colors.GREY_200,
-            width=page.width * 0.9,
-            border_radius=24,
-            margin=ft.Margin(left=5, right=5, top=5, bottom=5)  
-        )
-    ], alignment=ft.MainAxisAlignment.CENTER
-    
-    )
+            )
+            
 
 
     return info
