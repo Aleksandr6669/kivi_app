@@ -72,30 +72,7 @@ def main(page: ft.Page):
             margin=ft.Margin(left=0, top=0, right=0, bottom=10),
         )
         return _top_container
-
-    def _bottom():
-        global _bottom_container
-        _bottom_container = ft.Container(
-            width=page.width,  # Dynamic width (80% of the screen width)
-            height=page.height * 0.10,  # Dynamic height (40% of the screen height)
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.bottom_right,
-                end=ft.alignment.top_left,
-                colors=["lightblue300", "lightblue600"],
-            ),
-            border_radius=35,
-            animate=ft.animation.Animation(duration=350, curve="decelerate"),
-        )
-        return _bottom_container
-
-    def _middle():
-        global _middle_container
-        _middle_container = ft.Container(
-            height=page.height * 0.7,  # Initial height
-            animate=ft.animation.Animation(duration=350, curve="decelerate"),
-        )
-        return _middle_container
-
+    
     # Page content
     _c = ft.Container(
         height=page.height,  # Set the height of the container
