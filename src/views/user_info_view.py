@@ -12,7 +12,7 @@ def user_info_view(page):
                     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                     ft.Row([
                         ft.Icon(ft.Icons.CALENDAR_TODAY, size=20, color=ft.Colors.PURPLE_600),
-                        ft.Text("Дата рождения:", size=16, color=ft.Colors.PURPLE_600),
+                        ft.Text("Дата рожд.:", size=16, color=ft.Colors.PURPLE_600),
                         ft.Text("31/10/1988", text_align=ft.TextAlign.RIGHT, size=20, color=ft.Colors.WHITE, width=page.width * 0.5),
                     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                     ft.Row([
@@ -20,7 +20,7 @@ def user_info_view(page):
                         ft.Text("Телефон:", size=16, color=ft.Colors.RED_600),
                         ft.Text("+3 999 999 99 99", text_align=ft.TextAlign.RIGHT, size=20, color=ft.Colors.WHITE, width=page.width * 0.5),
                     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                ]),
+                ]), adaptive = True,
             )
             
 

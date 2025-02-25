@@ -12,12 +12,10 @@ def main(page: ft.Page):
 
     page.appbar = ft.AppBar(
         title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
-        # actions=[
-        #     ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
-        # ],
+        actions=[
+            ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
+        ],
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-        # shadow_color=ft.Colors.with_opacity(0.01, ft.CupertinoColors.SYSTEM_BACKGROUND),
-        adaptive = True,
     )
 
     page.navigation_bar = ft.NavigationBar(
@@ -36,8 +34,8 @@ def main(page: ft.Page):
                 label="Bookmark",
             ),
         ],
+        label_behavior="Тестовая версия",
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-        adaptive = True,
     )
 
 
