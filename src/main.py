@@ -36,8 +36,8 @@ def main(page: ft.Page):
                 label="Bookmark",
             ),
         ],
-        col=2,
-        label_behavior="Тестовая версия",
+    
+        label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED, # Метки отображаются только для выбранного пункта назначения
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
 
@@ -88,6 +88,7 @@ def main(page: ft.Page):
     
     # Добавляем элементы на страницу
     page.add(_c)
+    page.add(ft.Container(height=20))
 
 if __name__ == "__main__":
     ft.app(main, assets_dir="assets")
