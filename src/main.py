@@ -18,6 +18,8 @@ def main(page: ft.Page):
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
 
+
+    
     page.navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
@@ -34,6 +36,7 @@ def main(page: ft.Page):
                 label="Bookmark",
             ),
         ],
+        col=2,
         label_behavior="Тестовая версия",
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
@@ -78,7 +81,7 @@ def main(page: ft.Page):
             height=page.height,  # Set the height of the ListView
             controls=[
                 _top() for i in range(10)  # Alternate between _top and _bottom
-            ] + [ft.Container(height=100)],  # Add spacing at the end
+            ]+ [ft.Container(height=100)],  # Add spacing at the end
             on_scroll=True,
         ),
     )
