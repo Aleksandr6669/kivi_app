@@ -34,7 +34,9 @@ def news_feed_view(page):
     ], alignment=ft.MainAxisAlignment.CENTER)
 
     news = ft.ListView(
+        height=page.height,
         controls=[info, info, info, info],
+        on_scroll=True,
         expand=True,
         spacing=10
     )

@@ -1,7 +1,5 @@
 import flet as ft
 import asyncio
-from routes import route_change
-from views.user_info_view import user_info_view
 
 def main(page: ft.Page):
     page.title = "Kivi Retail TEST"
@@ -11,46 +9,63 @@ def main(page: ft.Page):
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = True
 
-    expanded = False
-
-    def _expand_click(event):
-        nonlocal expanded
-        # Toggle expansion state
-        expanded = not expanded
-        # Update the height and radius based on the state
-        new_top_height = page.height * 0.7 if expanded else page.height * 0.15
-        _top_container.height = new_top_height
-        _top_container.update()
-
-    def _top():
-        global _top_container
-        info = user_info_view(page)
-        _top_container = ft.Container(
+    def news_feed_view(page, title, content, icon, date):
+        # Пример функции, возвращающей новость о компании КИВИ
+        return ft.Container(
+            padding=ft.Padding(10, 10, 10, 10),
+            border_radius=ft.BorderRadius(10, 10, 10, 10),
             gradient=ft.LinearGradient(
-                begin=ft.alignment.bottom_right,
-                end=ft.alignment.top_left,
-                colors=["grey800", "grey900"],
+                begin=ft.alignment.top_left,
+                end=ft.alignment.bottom_right,
+                colors=["#333333", "#111111"]
             ),
-            border_radius=ft.BorderRadius(top_left=15, top_right=15, bottom_left=15, bottom_right=15),
-            animate=ft.animation.Animation(duration=350, curve="decelerate"),
-            on_click=_expand_click,
+            shadow=ft.BoxShadow(
+                blur_radius=10,
+                spread_radius=2,
+                color=ft.Colors.GREY_400,
+                offset=ft.Offset(2, 2)
+            ),
             content=ft.Column(
-                alignment="start",
-                controls=[info],
+                controls=[
+                    ft.Row(
+                        controls=[
+                            ft.Icon(icon, size=40, color=ft.Colors.WHITE),
+                            ft.Column(
+                                controls=[
+                                    ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
+                                    ft.Text(date, size=14, color=ft.Colors.GREY_300),
+                                ]
+                            )
+                        ]
+                    ),
+                    ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
+                ]
             ),
-            margin=ft.Margin(left=0, top=0, right=0, bottom=10),
+            margin=ft.Margin(10, 10, 10, 10)
         )
-        return _top_container
 
     def home_page():
+        news_list = [
+            {"title": "Новость 1", "content": "Компания КИВИ запускает новый продукт. Подробнее можно узнать на [официальном сайте](https://www.kivi.com).", "icon": ft.Icons.NEW_LABEL, "date": "26 февраля 2025"},
+            {"title": "Новость 2", "content": "Компания КИВИ открывает новый офис. Адрес офиса можно найти [здесь](https://www.kivi.com/office).", "icon": ft.Icons.BUSINESS, "date": "25 февраля 2025"},
+            {"title": "Новость 3", "content": "Компания КИВИ объявляет о партнерстве с ведущими компаниями. Подробности на [сайте](https://www.kivi.com/partners).", "icon": ft.Icons.HANDSHAKE, "date": "24 февраля 2025"},
+            {"title": "Новость 4", "content": "Компания КИВИ проводит благотворительную акцию. Узнать больше можно [здесь](https://www.kivi.com/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "23 февраля 2025"},
+            {"title": "Новость 5", "content": "Компания КИВИ получила награду за инновации. Подробности на [официальном сайте](https://www.kivi.com/awards).", "icon": ft.Icons.STAR, "date": "22 февраля 2025"},
+            {"title": "Новость 6", "content": "Компания КИВИ запускает новую программу лояльности. Узнать больше можно [здесь](https://www.kivi.com/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "21 февраля 2025"},
+            {"title": "Новость 7", "content": "Компания КИВИ расширяет ассортимент продукции. Подробности на [сайте](https://www.kivi.com/products).", "icon": ft.Icons.SHOPPING_CART, "date": "20 февраля 2025"},
+            {"title": "Новость 8", "content": "Компания КИВИ проводит вебинар по новым технологиям. Регистрация доступна [здесь](https://www.kivi.com/webinar).", "icon": ft.Icons.WEB, "date": "19 февраля 2025"},
+            {"title": "Новость 9", "content": "Компания КИВИ объявляет о скидках на продукцию. Подробности на [официальном сайте](https://www.kivi.com/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "18 февраля 2025"},
+            {"title": "Новость 10", "content": "Компания КИВИ открывает новые вакансии. Узнать больше можно [здесь](https://www.kivi.com/careers).", "icon": ft.Icons.WORK, "date": "17 февраля 2025"},
+        ]
+
+        news_controls = [news_feed_view(page, news["title"], news["content"], news["icon"], news["date"]) for news in news_list]
+
         return ft.Container(
             height=0,  # Начальная высота 0
             animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
             content=ft.ListView(
                 height=page.height,  # Set the height of the ListView
-                controls=[
-                    _top() for i in range(10)  # Alternate between _top and _bottom
-                ]+ [ft.Container(height=100)],  # Add spacing at the end
+                controls=news_controls + [ft.Container(height=100)],  # Add spacing at the end
                 on_scroll=True,
             )
         )
@@ -59,14 +74,26 @@ def main(page: ft.Page):
         return ft.Container(
             height=0,  # Начальная высота 0
             animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
-            content=ft.Text("Search Page", size=24, weight=ft.FontWeight.BOLD)
+            content=ft.ListView(
+                height=page.height,  # Set the height of the ListView
+                controls=[
+                    ft.Text("Search Page", size=24, weight=ft.FontWeight.BOLD)
+                ]+ [ft.Container(height=100)],  # Add spacing at the end
+                on_scroll=True,
+            )
         )
 
     def notifications_page():
         return ft.Container(
             height=0,  # Начальная высота 0
             animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
-            content=ft.Text("Notifications Page", size=24, weight=ft.FontWeight.BOLD)
+            content=ft.ListView(
+                height=page.height,  # Set the height of the ListView
+                controls=[
+                    ft.Text("Notifications Page", size=24, weight=ft.FontWeight.BOLD)
+                ]+ [ft.Container(height=100)],  # Add spacing at the end
+                on_scroll=True,
+            )
         )
 
     async def on_nav_change(e):
@@ -79,7 +106,7 @@ def main(page: ft.Page):
     top_appbar = ft.AppBar(
         title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
         actions=[
-            ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
+            ft.IconButton(ft.CupertinoIcons.INFO, style=ft.ButtonStyle(padding=0))
         ],
         bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
