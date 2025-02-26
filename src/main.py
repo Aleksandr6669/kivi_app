@@ -128,15 +128,15 @@ def main(page: ft.Page):
     bottom_navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.HOME, size=20), 
+                icon=ft.Icon(ft.Icons.HOME, size=40), 
                 label="Home"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.SEARCH, size=20), 
+                icon=ft.Icon(ft.Icons.SEARCH, size=40), 
                 label="Search"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=20),
+                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=40),
                 label="Notifications"
             ),
         ],
@@ -159,4 +159,4 @@ def main(page: ft.Page):
 if __name__ == "__main__":
     ft.app(main, assets_dir="assets")
 
-# ft.app(main, view=ft.AppView.WEB_BROWSER)
+    # ft.app(main, view=ft.AppView.WEB_BROWSER)
