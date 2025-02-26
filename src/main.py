@@ -11,20 +11,17 @@ def main(page: ft.Page):
 
     def news_feed_view(page, title, content, icon, date):
         # Пример функции, возвращающей новость о компании КИВИ
-        def expand_news(e):
-            dialog = ft.AlertDialog(
-                title=ft.Text(title, size=24, weight=ft.FontWeight.BOLD),
-                content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
-                actions=[
-                    ft.TextButton("Закрыть", on_click=lambda e: setattr(dialog, 'open', False))
-                ],
-                actions_alignment=ft.MainAxisAlignment.END,
-            )
-            page.dialog = dialog
-            dialog.open = True
-            page.update()
+        expanded = False
 
-        return ft.Container(
+        def toggle_expand(e):
+            nonlocal expanded
+            expanded = not expanded
+            container.height = container.height * 2 if expanded else 120
+            container.content.controls[0].controls[2].content.icon = ft.Icon(ft.Icons.EXPAND_LESS if expanded else ft.Icons.EXPAND_MORE, size=24, color=ft.Colors.WHITE),
+            container.update()
+
+        container = ft.Container(
+            height=120,
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
             gradient=ft.LinearGradient(
@@ -49,14 +46,22 @@ def main(page: ft.Page):
                                     ft.Text(date, size=14, color=ft.Colors.GREY_300),
                                 ]
                             ),
-                            ft.IconButton(ft.Icons.EXPAND_MORE, on_click=expand_news, icon_size=24, icon_color=ft.Colors.WHITE)
+                            ft.Container(
+                                content=ft.Icon(ft.Icons.EXPAND_MORE, size=24, color=ft.Colors.WHITE),
+                                alignment=ft.alignment.top_right,
+                                padding=ft.Padding(0, 0, 10, 0)
+                            ),
                         ]
                     ),
                     ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
                 ]
             ),
-            margin=ft.Margin(10, 10, 10, 10)
+            margin=ft.Margin(10, 10, 10, 10),
+            animate=ft.Animation(duration=350, curve="decelerate"),
+            on_click=toggle_expand  # Добавляем обработчик нажатия на весь контейнер
         )
+
+        return container
 
     def home_page():
         news_list = [
@@ -76,7 +81,7 @@ def main(page: ft.Page):
 
         return ft.Container(
             height=0,  # Начальная высота 0
-            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            animate=ft.Animation(duration=250, curve="decelerate"),
             content=ft.ListView(
                 height=page.height,  # Set the height of the ListView
                 controls=news_controls + [ft.Container(height=100)],  # Add spacing at the end
@@ -87,7 +92,7 @@ def main(page: ft.Page):
     def search_page():
         return ft.Container(
             height=0,  # Начальная высота 0
-            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            animate=ft.Animation(duration=250, curve="decelerate"),
             content=ft.ListView(
                 height=page.height,  # Set the height of the ListView
                 controls=[
@@ -100,7 +105,7 @@ def main(page: ft.Page):
     def notifications_page():
         return ft.Container(
             height=0,  # Начальная высота 0
-            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            animate=ft.Animation(duration=250, curve="decelerate"),
             content=ft.ListView(
                 height=page.height,  # Set the height of the ListView
                 controls=[
@@ -128,15 +133,15 @@ def main(page: ft.Page):
     bottom_navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.HOME, size=40), 
+                icon=ft.Icon(ft.Icons.HOME, size=30),
                 label="Home"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.SEARCH, size=40), 
+                icon=ft.Icon(ft.Icons.SEARCH, size=30),
                 label="Search"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=40),
+                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30),
                 label="Notifications"
             ),
         ],
