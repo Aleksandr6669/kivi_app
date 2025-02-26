@@ -1,4 +1,5 @@
 import flet as ft
+import asyncio
 from routes import route_change
 from views.user_info_view import user_info_view
 
@@ -9,65 +10,6 @@ def main(page: ft.Page):
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = True
-
-    # page.appbar = ft.AppBar(
-    #     title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
-    #     actions=[
-    #         ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
-    #     ],
-    #     bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-    # )
-
-    top_appbar = ft.AppBar(
-        title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
-        actions=[
-            ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
-        ],
-        bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-    )
-    
-    # page.navigation_bar = ft.NavigationBar(
-    #     destinations=[
-    #         ft.NavigationBarDestination(
-    #             icon=ft.Icons.EXPLORE,
-    #             label="Explore",
-    #         ),
-    #         ft.NavigationBarDestination(
-    #             icon=ft.Icons.COMMUTE,
-    #             label="Commute",
-    #         ),
-    #         ft.NavigationBarDestination(
-    #             icon=ft.Icons.BOOKMARK_BORDER,
-    #             selected_icon=ft.Icons.BOOKMARK,
-    #             label="Bookmark",
-    #         ),
-    #     ],
-    
-    #     label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED, # Метки отображаются только для выбранного пункта назначения
-    #     bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-    # )
-
-
-    bottom_navigation_bar = ft.NavigationBar(
-        destinations=[
-            ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.HOME, size=30), 
-                label="Home"
-            ),
-            ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.SEARCH, size=30), 
-                label="Search"
-            ),
-            ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30),
-                label="Notifications"
-            ),
-        ],
-        bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
-        adaptive=True,
-        label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED  # Метки отображаются только для выбранного пункта назначения
-    )
-
 
     expanded = False
 
@@ -96,27 +38,82 @@ def main(page: ft.Page):
                 alignment="start",
                 controls=[info],
             ),
-            padding=ft.Padding(left=10, top=10, right=10, bottom=10),
             margin=ft.Margin(left=0, top=0, right=0, bottom=10),
         )
         return _top_container
-    
-    # Page content
-    _c = ft.Container(
-        height=page.height,  # Set the height of the container
-        content=ft.ListView(
-            height=page.height,  # Set the height of the ListView
-            controls=[
-                _top() for i in range(10)  # Alternate between _top and _bottom
-            ]+ [ft.Container(height=100)],  # Add spacing at the end
-            on_scroll=True,
-        ),
+
+    def home_page():
+        return ft.Container(
+            height=0,  # Начальная высота 0
+            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            content=ft.ListView(
+                height=page.height,  # Set the height of the ListView
+                controls=[
+                    _top() for i in range(10)  # Alternate between _top and _bottom
+                ]+ [ft.Container(height=100)],  # Add spacing at the end
+                on_scroll=True,
+            )
+        )
+
+    def search_page():
+        return ft.Container(
+            height=0,  # Начальная высота 0
+            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            content=ft.Text("Search Page", size=24, weight=ft.FontWeight.BOLD)
+        )
+
+    def notifications_page():
+        return ft.Container(
+            height=0,  # Начальная высота 0
+            animate=ft.animation.Animation(duration=250, curve="ease_in_out"),
+            content=ft.Text("Notifications Page", size=24, weight=ft.FontWeight.BOLD)
+        )
+
+    async def on_nav_change(e):
+        selected_index = e.control.selected_index
+        for i, container in enumerate(page.controls[1:4]):
+            container.height = page.height if i == selected_index else 0
+            container.update()
+        await asyncio.sleep(0.5)  # Задержка для плавного перехода
+
+    top_appbar = ft.AppBar(
+        title=ft.Text("KIVI Retail DEV", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_600),
+        actions=[
+            ft.IconButton(ft.cupertino_icons.INFO, style=ft.ButtonStyle(padding=0))
+        ],
+        bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
     )
-    
+
+    bottom_navigation_bar = ft.NavigationBar(
+        destinations=[
+            ft.NavigationBarDestination(
+                icon=ft.Icon(ft.Icons.HOME, size=20), 
+                label="Home"
+            ),
+            ft.NavigationBarDestination(
+                icon=ft.Icon(ft.Icons.SEARCH, size=20), 
+                label="Search"
+            ),
+            ft.NavigationBarDestination(
+                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=20),
+                label="Notifications"
+            ),
+        ],
+        bgcolor=ft.Colors.with_opacity(0.04, ft.CupertinoColors.SYSTEM_BACKGROUND),
+        label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED,
+        on_change=on_nav_change
+    )
+
     # Добавляем элементы на страницу
-    page.add(_c)
     page.add(top_appbar)
+    page.add(home_page())  # Начальная страница
+    page.add(search_page())
+    page.add(notifications_page())
     page.add(bottom_navigation_bar)
+
+    # Устанавливаем начальную высоту для первой страницы
+    page.controls[1].height = page.height
+    page.controls[1].update()
 
 if __name__ == "__main__":
     ft.app(main, assets_dir="assets")

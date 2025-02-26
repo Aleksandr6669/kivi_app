@@ -20,8 +20,7 @@ def user_info_view(page):
                         ft.Text("Телефон:", size=16, color=ft.Colors.RED_600),
                         ft.Text("+3 999 999 99 99", text_align=ft.TextAlign.RIGHT, size=20, color=ft.Colors.WHITE, width=page.width * 0.5),
                     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                ]), adaptive = True,
-            )
+                ]), padding=14,            )
             
 
 
