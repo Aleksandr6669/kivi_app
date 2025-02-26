@@ -11,6 +11,19 @@ def main(page: ft.Page):
 
     def news_feed_view(page, title, content, icon, date):
         # Пример функции, возвращающей новость о компании КИВИ
+        def expand_news(e):
+            dialog = ft.AlertDialog(
+                title=ft.Text(title, size=24, weight=ft.FontWeight.BOLD),
+                content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
+                actions=[
+                    ft.TextButton("Закрыть", on_click=lambda e: setattr(dialog, 'open', False))
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+            )
+            page.dialog = dialog
+            dialog.open = True
+            page.update()
+
         return ft.Container(
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
@@ -35,7 +48,8 @@ def main(page: ft.Page):
                                     ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
                                     ft.Text(date, size=14, color=ft.Colors.GREY_300),
                                 ]
-                            )
+                            ),
+                            ft.IconButton(ft.Icons.EXPAND_MORE, on_click=expand_news, icon_size=24, icon_color=ft.Colors.WHITE)
                         ]
                     ),
                     ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
