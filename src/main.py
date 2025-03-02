@@ -19,7 +19,7 @@ def main(page: ft.Page):
         {"title": "Новость 7", "content": "Компания КИВИ расширяет ассортимент продукции. Подробности на [сайте](https://www.kivi.com/products).", "icon": ft.Icons.SHOPPING_CART, "date": "20 февраля 2025"},
         {"title": "Новость 8", "content": "Компания КИВИ проводит вебинар по новым технологиям. Регистрация доступна [здесь](https://www.kivi.com/webinar).", "icon": ft.Icons.WEB, "date": "19 февраля 2025"},
         {"title": "Новость 9", "content": "Компания КИВИ объявляет о скидках на продукцию. Подробности на [официальном сайте](https://www.kivi.com/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "18 февраля 2025"},
-        {"title": "Новость 10", "content": "Компания КИВИ открывает новые вакансии. Узнать больше можно [здесь](https://www.kivi.com/careers).", "icon": ft.Icons.WORK, "date": "17 февраля 2025"},
+        {"title": "Новость 101", "content": "Компания КИВИ открывает новые вакансии. Узнать больше можно [здесь](https://www.kivi.com/careers).", "icon": ft.Icons.WORK, "date": "17 февраля 2025"},
     ]
 
     def news_feed_view(page, title, content, icon, date):
@@ -171,6 +171,6 @@ def main(page: ft.Page):
     page.controls[1].update()
 
 if __name__ == "__main__":
-    ft.app(main, assets_dir="assets")
+    # ft.app(main, assets_dir="assets")
 
-    # ft.app(main, view=ft.AppView.WEB_BROWSER)
+    ft.app(main, view=ft.AppView.WEB_BROWSER)
