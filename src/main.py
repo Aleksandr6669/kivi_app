@@ -4,6 +4,8 @@ import asyncio
 def main(page: ft.Page):
     page.title = "Kivi Retail TEST"
     page.version = "0.7"
+    # Загружаем manifest.json для PWA
+    page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
     # Задание иконки для PWA
     page.favicon = "icon.png"  # Путь к твоей иконке
     page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
@@ -173,6 +175,6 @@ def main(page: ft.Page):
     page.controls[1].update()
 
 if __name__ == "__main__":
-    ft.app(main, assets_dir="assets")
+#    ft.app(main, assets_dir="assets")
 
-#    ft.app(main, view=ft.AppView.WEB_BROWSER)
+    ft.app(main, view=ft.AppView.WEB_BROWSER)
