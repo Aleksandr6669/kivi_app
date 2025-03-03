@@ -7,6 +7,9 @@ def main(page: ft.Page):
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
     # Задание иконки для PWA
+    page.icon = "assets/icon.png"  # Путь к иконке
+    page.splash = "assets/splash_web.png"  # Для светлой темы
+    page.splash_dark = "assets/splash_dark_web.png"  # Для темной темы
     # Загружаем manifest.json для PWA
     page.web_manifest = "assets/manifest.json"
     page.favicon = "icon.png"  # Путь к твоей иконке
