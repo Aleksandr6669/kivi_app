@@ -3,7 +3,8 @@ import asyncio
 
 def main(page: ft.Page):
     page.title = "Kivi Retail TEST"
-    page.version = " # Задание иконки для PWA
+    page.version = "0.7"
+    # Задание иконки для PWA
     page.favicon = "icon.png"  # Путь к твоей иконке
     page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
