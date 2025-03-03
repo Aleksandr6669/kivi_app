@@ -7,13 +7,6 @@ def main(page: ft.Page):
     page.description = "MyCoolApp - the best app to do cool things"
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
-    # Задание иконки для PWA
-    page.icon = "assets/icon.png"  # Путь к иконке
-    page.splash = "assets/icon.png"  # Для светлой темы
-    page.splash_dark = "assets/icon.png"  # Для темной темы
-    # Загружаем manifest.json для PWA
-    page.web_manifest = "manifest.json"
-    page.favicon = "icon.png"  # Путь к твоей иконке
     page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
