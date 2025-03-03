@@ -182,4 +182,4 @@ def main(page: ft.Page):
 if __name__ == "__main__":
 #    ft.app(main, assets_dir="assets")
 
-    ft.app(main, view=ft.AppView.WEB_BROWSER)
+    ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
