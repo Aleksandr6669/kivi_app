@@ -7,11 +7,11 @@ def main(page: ft.Page):
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
     # Задание иконки для PWA
-    page.icon = "assets/icon.png"  # Путь к иконке
-    page.splash = "assets/splash_web.png"  # Для светлой темы
-    page.splash_dark = "assets/splash_dark_web.png"  # Для темной темы
+    page.icon = "icon.png"  # Путь к иконке
+    page.splash = "icon.png"  # Для светлой темы
+    page.splash_dark = "icon.png"  # Для темной темы
     # Загружаем manifest.json для PWA
-    page.web_manifest = "assets/manifest.json"
+    page.web_manifest = "asmanifest.json"
     page.favicon = "icon.png"  # Путь к твоей иконке
     page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
