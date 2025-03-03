@@ -5,8 +5,10 @@ def main(page: ft.Page):
     page.title = "Kivi Retail TEST"
     page.version = "0.7"
     page.description = "MyCoolApp - the best app to do cool things"
+    
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
+    page.manifest = "manifest.json" 
     page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
