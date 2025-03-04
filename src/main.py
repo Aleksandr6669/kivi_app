@@ -35,25 +35,14 @@ def main(page: ft.Page):
         container = ft.Container(
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
-            # gradient=ft.LinearGradient(
-            #     begin=ft.alignment.top_left,
-            #     end=ft.alignment.bottom_right,
-            #     colors=["#333333", "#111111"]
-            # ),
             image=ft.DecorationImage(
                 src="news_background.jpg", 
                 fit=ft.ImageFit.COVER, 
                 color_filter=ft.ColorFilter(
                     blend_mode=ft.BlendMode.COLOR,
-                    color=ft.Colors.BLUE_300
+                    color=ft.Colors.BLUE_200
                 )
             ),  # Добавляем фоновое изображение
-            # shadow=ft.BoxShadow(
-            # blur_radius=10,
-            # spread_radius=2,
-            # color=ft.Colors.GREY_400,
-            # offset=ft.Offset(2, 2)
-            # ),
             content=ft.Column(
             controls=[
                 ft.Row(
@@ -100,7 +89,7 @@ def main(page: ft.Page):
 
         news_list_view = ft.ListView(
             height=page.height,  # Set the height of the ListView
-            controls=news_controls,  # Add spacing at the end
+            controls=news_controls + [ft.Container(height=400)],  # Add spacing at the end
             on_scroll=True,
         )
 
@@ -112,7 +101,8 @@ def main(page: ft.Page):
             content=ft.Column(
                 controls=[
                     search_input,
-                    news_list_view
+                    news_list_view,
+                    
                 ]
             )
         )
@@ -161,15 +151,18 @@ def main(page: ft.Page):
     bottom_navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.HOME, size=30),
+                bgcolor=ft.Colors.BLUE_500,
+                icon=ft.Icon(ft.Icons.HOME, size=30, color=ft.Colors.BLUE_300),
                 label="Home"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.SEARCH, size=30),
+                bgcolor=ft.Colors.BLUE_500,
+                icon=ft.Icon(ft.Icons.SEARCH, size=30, color=ft.Colors.BLUE_300),
                 label="Search"
             ),
             ft.NavigationBarDestination(
-                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30),
+                bgcolor=ft.Colors.BLUE_500,
+                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30, color=ft.Colors.BLUE_300),
                 label="Notifications"
             ),
         ],
