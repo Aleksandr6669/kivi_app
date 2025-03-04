@@ -28,33 +28,40 @@ def main(page: ft.Page):
 
     def news_feed_view(page, title, content, icon, date):
         container = ft.Container(
-            padding=ft.Padding(10, 10, 10, 10),
-            border_radius=ft.BorderRadius(10, 10, 10, 10),
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.top_left,
-                end=ft.alignment.bottom_right,
-                colors=["#333333", "#111111"]
-            ),
-            shadow=ft.BoxShadow(
-            blur_radius=10,
-            spread_radius=2,
-            color=ft.Colors.GREY_400,
-            offset=ft.Offset(2, 2)
-            ),
+            padding=ft.Padding(0, 0, 0, 0),  # Увеличиваем отступы
+            border_radius=ft.BorderRadius(20, 20, 20, 20),
             content=ft.Column(
             controls=[
-                ft.Row(
+                ft.Stack(
                 controls=[
-                    ft.Icon(icon, size=40, color=ft.Colors.WHITE),
-                    ft.Column(
-                    controls=[
-                        ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
-                        ft.Text(date, size=14, color=ft.Colors.GREY_300),
-                    ]
+                    ft.Image(
+                    src="news_background.jpg",
+                    border_radius=ft.BorderRadius(20, 20, 20, 20),
+                    fit=ft.ImageFit.CONTAIN,
+                    ),
+                    ft.Container(
+                    content=ft.Column(
+                        controls=[
+                        ft.Row(
+                            controls=[
+                            ft.Icon(icon, size=40, color=ft.Colors.WHITE),
+                            ft.Column(
+                                controls=[
+                                ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
+                                ft.Text(date, size=14, color=ft.Colors.GREY_300),
+                                ]
+                            ),
+                            ]
+                        ),
+                        ft.Container(
+                            content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
+                        ),
+                        ]
+                    ),
+                    padding=ft.Padding(10, 10, 10, 10)  # Добавляем отступы для контейнера
                     ),
                 ]
                 ),
-                ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
             ]
             ),
             margin=ft.Margin(10, 10, 10, 10),
@@ -175,6 +182,6 @@ def main(page: ft.Page):
     page.controls[1].update()
 
 if __name__ == "__main__":
-#    ft.app(main, assets_dir="assets")
+    ft.app(main, assets_dir="assets")
 
-    ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
+    # ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
