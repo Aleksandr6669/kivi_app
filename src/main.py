@@ -9,7 +9,7 @@ def main(page: ft.Page):
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
     page.manifest = "manifest.json" 
-    page.theme_mode = ft.ThemeMode.DARK  # Системная тема (светлая/темная)
+    page.theme_mode = ft.ThemeMode.LIGHT  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = False # Отключаем адаптивный дизайн
