@@ -9,10 +9,15 @@ def main(page: ft.Page):
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
     page.manifest = "manifest.json" 
-    page.theme_mode = ft.ThemeMode.LIGHT  # Системная тема (светлая/темная)
+    page.theme_mode = ft.ThemeMode.SYSTEM  # Системная тема (светлая/темная)
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = False # Отключаем адаптивный дизайн
+    page.language = "ua"  # Устанавливаем язык страницы
+    page.favicon = "favicon.png"  # Устанавливаем иконку страницы
+    page.fonts = {"default": "Roboto"}  # Устанавливаем шрифт по умолчанию
+
+
     news_list = [
         {"title": "Новость 1", "content": "Компания КИВИ запускает новый продукт. Подробнее можно узнать на [официальном сайте](https://www.kivi.com).", "icon": ft.Icons.NEW_LABEL, "date": "26 февраля 2025"},
         {"title": "Новость 2", "content": "Компания КИВИ открывает новый офис. Адрес офиса можно найти [здесь](https://www.kivi.com/office).", "icon": ft.Icons.BUSINESS, "date": "25 февраля 2025"},
@@ -28,40 +33,41 @@ def main(page: ft.Page):
 
     def news_feed_view(page, title, content, icon, date):
         container = ft.Container(
-            padding=ft.Padding(0, 0, 0, 0),  # Увеличиваем отступы
-            border_radius=ft.BorderRadius(20, 20, 20, 20),
+            padding=ft.Padding(10, 10, 10, 10),
+            border_radius=ft.BorderRadius(10, 10, 10, 10),
+            # gradient=ft.LinearGradient(
+            #     begin=ft.alignment.top_left,
+            #     end=ft.alignment.bottom_right,
+            #     colors=["#333333", "#111111"]
+            # ),
+            image=ft.DecorationImage(
+                src="news_background.jpg", 
+                fit=ft.ImageFit.COVER, 
+                color_filter=ft.ColorFilter(
+                    blend_mode=ft.BlendMode.COLOR,
+                    color=ft.Colors.BLUE_300
+                )
+            ),  # Добавляем фоновое изображение
+            # shadow=ft.BoxShadow(
+            # blur_radius=10,
+            # spread_radius=2,
+            # color=ft.Colors.GREY_400,
+            # offset=ft.Offset(2, 2)
+            # ),
             content=ft.Column(
             controls=[
-                ft.Stack(
+                ft.Row(
                 controls=[
-                    ft.Image(
-                    src="news_background.jpg",
-                    border_radius=ft.BorderRadius(20, 20, 20, 20),
-                    fit=ft.ImageFit.CONTAIN,
-                    ),
-                    ft.Container(
-                    content=ft.Column(
-                        controls=[
-                        ft.Row(
-                            controls=[
-                            ft.Icon(icon, size=40, color=ft.Colors.BLUE_300),
-                            ft.Column(
-                                controls=[
-                                ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_300),
-                                ft.Text(date, size=14, color=ft.Colors.GREY_600),
-                                ]
-                            ),
-                            ]
-                        ),
-                        ft.Container(
-                            content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
-                        ),
-                        ]
-                    ),
-                    padding=ft.Padding(10, 10, 10, 10)  # Добавляем отступы для контейнера
+                    ft.Icon(icon, size=40, color=ft.Colors.WHITE),
+                    ft.Column(
+                    controls=[
+                        ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
+                        ft.Text(date, size=14, color=ft.Colors.GREY_300),
+                    ]
                     ),
                 ]
                 ),
+                ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
             ]
             ),
             margin=ft.Margin(10, 10, 10, 10),
@@ -101,6 +107,8 @@ def main(page: ft.Page):
         return ft.Container(
             height=0,  # Начальная высота 0
             animate=ft.Animation(duration=250, curve="decelerate"),
+            # image=ft.DecorationImage(src="news_background.jpg", fit=ft.ImageFit.COVER),
+            # border_radius=ft.BorderRadius(10, 10, 10, 10),
             content=ft.Column(
                 controls=[
                     search_input,
