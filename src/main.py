@@ -13,7 +13,6 @@ def main(page: ft.Page):
     page.horizontal_alignment = 'center'  # Выравнивание по центру
     page.vertical_alignment = 'center'  # Выравнивание по центру
     page.adaptive = False # Отключаем адаптивный дизайн
-
     news_list = [
         {"title": "Новость 1", "content": "Компания КИВИ запускает новый продукт. Подробнее можно узнать на [официальном сайте](https://www.kivi.com).", "icon": ft.Icons.NEW_LABEL, "date": "26 февраля 2025"},
         {"title": "Новость 2", "content": "Компания КИВИ открывает новый офис. Адрес офиса можно найти [здесь](https://www.kivi.com/office).", "icon": ft.Icons.BUSINESS, "date": "25 февраля 2025"},
