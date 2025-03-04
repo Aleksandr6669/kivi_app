@@ -28,7 +28,7 @@ def main(page: ft.Page):
         {"title": "KIVI UA расширяет ассортимент продукции", "content": "Компания KIVI UA расширяет ассортимент своей продукции, добавляя новые модели телевизоров. Подробности на [сайте](https://www.kivi.ua/products).", "icon": ft.Icons.SHOPPING_CART, "date": "23 февраля 2025"},
         {"title": "KIVI UA проводит вебинар по новым технологиям", "content": "Компания KIVI UA организует вебинар, посвященный новым технологиям в телевизорах. Регистрация доступна [здесь](https://www.kivi.ua/webinar).", "icon": ft.Icons.WEB, "date": "22 февраля 2025"},
         {"title": "KIVI UA объявляет о скидках на продукцию", "content": "Компания KIVI UA объявляет о сезонных скидках на свою продукцию. Подробности на [официальном сайте](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 февраля 2025"},
-        {"title": "KIVI UA открывает новые вакансии", "content": "Компания KIVI UA объявляет об открытии новых вакансий. Узнать больше можно [здесь](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 февраля 2025"},
+        {"title": "KIVI UA открывает новые вакансии", "content": "Компания KIVI UA объявляет об открытии новых вакансий. **Узнать больше можно** [здесь](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 февраля 2025"},
     ]
 
     def news_feed_view(page, title, content, icon, date):
@@ -67,7 +67,7 @@ def main(page: ft.Page):
                 ft.Container(
                     padding=ft.Padding(10, 10, 10, 10),
                     border_radius=ft.BorderRadius(10, 10, 10, 10),
-                    blur=ft.Blur(sigma_x=10, sigma_y=10, tile_mode=ft.BlurTileMode.CLAMP),
+                    blur=ft.Blur(sigma_x=20, sigma_y=30, tile_mode=ft.BlurTileMode.CLAMP),
                     content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
                     ),
                 
@@ -103,7 +103,7 @@ def main(page: ft.Page):
         news_controls = [news_feed_view(page, news["title"], news["content"], news["icon"], news["date"]) for news in news_list]
 
         news_list_view = ft.ListView(
-            height=page.height,  # Set the height of the ListView
+            height=page.height,
             controls=news_controls + [ft.Container(height=200)],  # Add spacing at the end
             on_scroll=True,
         )
