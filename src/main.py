@@ -53,10 +53,10 @@ def main(page: ft.Page):
             controls=[
                 ft.Row(
                 controls=[
-                    ft.Icon(icon, size=40, color=ft.Colors.BLUE_500),
+                    ft.Icon(icon, size=40, color=ft.Colors.WHITE),
                     ft.Column(
                     controls=[
-                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_500, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
+                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
                         ft.Text(date, size=12, color=ft.Colors.GREY_300),
                     ],
                     expand=True
@@ -105,7 +105,6 @@ def main(page: ft.Page):
         news_list_view = ft.ListView(
             height=page.height,
             controls=news_controls + [ft.Container(height=250)],  # Add spacing at the end
-            on_scroll=True,
         )
 
         return ft.Container(
@@ -131,7 +130,6 @@ def main(page: ft.Page):
                 controls=[
                     ft.Text("Search Page", size=24, weight=ft.FontWeight.BOLD)
                 ],  # Add spacing at the end
-                on_scroll=True,
             )
         )
 
@@ -144,7 +142,7 @@ def main(page: ft.Page):
                 controls=[
                     ft.Text("Notifications Page", size=24, weight=ft.FontWeight.BOLD)
                 ],  # Add spacing at the end
-                on_scroll=True,
+
             )
         )
 
