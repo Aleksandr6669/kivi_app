@@ -64,7 +64,13 @@ def main(page: ft.Page):
                 ],
                 expand=True
                 ),
-                ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
+                ft.Container(
+                    padding=ft.Padding(10, 10, 10, 10),
+                    border_radius=ft.BorderRadius(10, 10, 10, 10),
+                    blur=ft.Blur(sigma_x=10, sigma_y=10, tile_mode=ft.BlurTileMode.CLAMP),
+                    content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
+                    ),
+                
             ],
             expand=True
             ),
