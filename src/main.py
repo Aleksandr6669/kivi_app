@@ -104,7 +104,7 @@ def main(page: ft.Page):
 
         news_list_view = ft.ListView(
             height=page.height,
-            controls=news_controls + [ft.Container(height=200)],  # Add spacing at the end
+            controls=news_controls + [ft.Container(height=250)],  # Add spacing at the end
             on_scroll=True,
         )
 
@@ -167,18 +167,18 @@ def main(page: ft.Page):
         destinations=[
             ft.NavigationBarDestination(
                 bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(ft.Icons.HOME, size=30, color=ft.Colors.BLUE_300),
-                label="Home"
+                icon=ft.Icon(ft.Icons.NEWSPAPER, size=30, color=ft.Colors.BLUE_300),
+                label="Новини"
             ),
             ft.NavigationBarDestination(
                 bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(ft.Icons.SEARCH, size=30, color=ft.Colors.BLUE_300),
-                label="Search"
+                icon=ft.Icon(ft.Icons.DETAILS, size=30, color=ft.Colors.BLUE_300),
+                label="Деталі"
             ),
             ft.NavigationBarDestination(
                 bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(ft.Icons.NOTIFICATIONS, size=30, color=ft.Colors.BLUE_300),
-                label="Notifications"
+                icon=ft.Icon(ft.Icons.WORK, size=30, color=ft.Colors.BLUE_300),
+                label="Робочій простір"
             ),
         ],
         bgcolor=ft.Colors.with_opacity(1, ft.ThemeMode.SYSTEM ),
