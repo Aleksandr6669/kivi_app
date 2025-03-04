@@ -4,7 +4,7 @@ import asyncio
 def main(page: ft.Page):
     page.title = "Kivi Retail TEST"
     page.version = "0.7"
-    page.description = "MyCoolApp - the best app to do cool things"
+    page.description = "Kivi Retail TEST"
     
     # Загружаем manifest.json для PWA
     page.assets_dir = "assets"  # Путь к папке с ассетами, включая manifest.json и иконки
@@ -19,16 +19,16 @@ def main(page: ft.Page):
 
 
     news_list = [
-        {"title": "Новость 1", "content": "Компания КИВИ запускает новый продукт. Подробнее можно узнать на [официальном сайте](https://www.kivi.com).", "icon": ft.Icons.NEW_LABEL, "date": "26 февраля 2025"},
-        {"title": "Новость 2", "content": "Компания КИВИ открывает новый офис. Адрес офиса можно найти [здесь](https://www.kivi.com/office).", "icon": ft.Icons.BUSINESS, "date": "25 февраля 2025"},
-        {"title": "Новость 3", "content": "Компания КИВИ объявляет о партнерстве с ведущими компаниями. Подробности на [сайте](https://www.kivi.com/partners).", "icon": ft.Icons.HANDSHAKE, "date": "24 февраля 2025"},
-        {"title": "Новость 4", "content": "Компания КИВИ проводит благотворительную акцию. Узнать больше можно [здесь](https://www.kivi.com/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "23 февраля 2025"},
-        {"title": "Новость 5", "content": "Компания КИВИ получила награду за инновации. Подробности на [официальном сайте](https://www.kivi.com/awards).", "icon": ft.Icons.STAR, "date": "22 февраля 2025"},
-        {"title": "Новость 6", "content": "Компания КИВИ запускает новую программу лояльности. Узнать больше можно [здесь](https://www.kivi.com/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "21 февраля 2025"},
-        {"title": "Новость 7", "content": "Компания КИВИ расширяет ассортимент продукции. Подробности на [сайте](https://www.kivi.com/products).", "icon": ft.Icons.SHOPPING_CART, "date": "20 февраля 2025"},
-        {"title": "Новость 8", "content": "Компания КИВИ проводит вебинар по новым технологиям. Регистрация доступна [здесь](https://www.kivi.com/webinar).", "icon": ft.Icons.WEB, "date": "19 февраля 2025"},
-        {"title": "Новость 9", "content": "Компания КИВИ объявляет о скидках на продукцию. Подробности на [официальном сайте](https://www.kivi.com/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "18 февраля 2025"},
-        {"title": "Новость 101", "content": "Компания КИВИ открывает новые вакансии. Узнать больше можно [здесь](https://www.kivi.com/careers).", "icon": ft.Icons.WORK, "date": "17 февраля 2025"},
+        {"title": "KIVI UA запускает новую линейку телевизоров", "content": "Компания KIVI UA анонсировала новую линейку телевизоров с поддержкой 4K и HDR. Подробнее можно узнать на [официальном сайте](https://www.kivi.ua).", "icon": ft.Icons.TV, "date": "1 марта 2025"},
+        {"title": "KIVI UA открывает новый шоурум", "content": "Компания KIVI UA открывает новый шоурум в центре Киева. Адрес шоурума можно найти [здесь](https://www.kivi.ua/showroom).", "icon": ft.Icons.STORE, "date": "28 февраля 2025"},
+        {"title": "KIVI UA объявляет о партнерстве с ведущими производителями", "content": "Компания KIVI UA заключила партнерские соглашения с ведущими производителями электроники. Подробности на [сайте](https://www.kivi.ua/partners).", "icon": ft.Icons.HANDSHAKE, "date": "27 февраля 2025"},
+        {"title": "KIVI UA проводит благотворительную акцию", "content": "Компания KIVI UA организует благотворительную акцию по сбору средств для детских домов. Узнать больше можно [здесь](https://www.kivi.ua/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "26 февраля 2025"},
+        {"title": "KIVI UA получила награду за инновации", "content": "Компания KIVI UA была удостоена награды за инновационные разработки в области телевизоров. Подробности на [официальном сайте](https://www.kivi.ua/awards).", "icon": ft.Icons.STAR, "date": "25 февраля 2025"},
+        {"title": "KIVI UA запускает программу лояльности", "content": "Компания KIVI UA запускает новую программу лояльности для своих клиентов. Узнать больше можно [здесь](https://www.kivi.ua/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "24 февраля 2025"},
+        {"title": "KIVI UA расширяет ассортимент продукции", "content": "Компания KIVI UA расширяет ассортимент своей продукции, добавляя новые модели телевизоров. Подробности на [сайте](https://www.kivi.ua/products).", "icon": ft.Icons.SHOPPING_CART, "date": "23 февраля 2025"},
+        {"title": "KIVI UA проводит вебинар по новым технологиям", "content": "Компания KIVI UA организует вебинар, посвященный новым технологиям в телевизорах. Регистрация доступна [здесь](https://www.kivi.ua/webinar).", "icon": ft.Icons.WEB, "date": "22 февраля 2025"},
+        {"title": "KIVI UA объявляет о скидках на продукцию", "content": "Компания KIVI UA объявляет о сезонных скидках на свою продукцию. Подробности на [официальном сайте](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 февраля 2025"},
+        {"title": "KIVI UA открывает новые вакансии", "content": "Компания KIVI UA объявляет об открытии новых вакансий. Узнать больше можно [здесь](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 февраля 2025"},
     ]
 
     def news_feed_view(page, title, content, icon, date):
@@ -36,12 +36,12 @@ def main(page: ft.Page):
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
             image=ft.DecorationImage(
-                src="news_background.jpg", 
-                fit=ft.ImageFit.COVER, 
-                color_filter=ft.ColorFilter(
-                    blend_mode=ft.BlendMode.COLOR,
-                    color=ft.Colors.BLUE_200
-                )
+            src="news_background.jpg", 
+            fit=ft.ImageFit.COVER, 
+            color_filter=ft.ColorFilter(
+                blend_mode=ft.BlendMode.COLOR,
+                color=ft.Colors.BLUE_200
+            )
             ),  # Добавляем фоновое изображение
             content=ft.Column(
             controls=[
@@ -50,14 +50,17 @@ def main(page: ft.Page):
                     ft.Icon(icon, size=40, color=ft.Colors.WHITE),
                     ft.Column(
                     controls=[
-                        ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
-                        ft.Text(date, size=14, color=ft.Colors.GREY_300),
-                    ]
+                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
+                        ft.Text(date, size=12, color=ft.Colors.GREY_300),
+                    ],
+                    expand=True
                     ),
-                ]
+                ],
+                expand=True
                 ),
                 ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
-            ]
+            ],
+            expand=True
             ),
             margin=ft.Margin(10, 10, 10, 10),
             animate=ft.Animation(duration=350, curve="decelerate"),
