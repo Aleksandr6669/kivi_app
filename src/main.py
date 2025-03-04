@@ -92,7 +92,7 @@ def main(page: ft.Page):
 
         news_list_view = ft.ListView(
             height=page.height,  # Set the height of the ListView
-            controls=news_controls + [ft.Container(height=400)],  # Add spacing at the end
+            controls=news_controls + [ft.Container(height=200)],  # Add spacing at the end
             on_scroll=True,
         )
 
