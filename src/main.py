@@ -35,19 +35,20 @@ def main(page: ft.Page):
         container = ft.Container(
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
-            gradient=ft.LinearGradient(
-                colors=[ft.Colors.BLUE_200, ft.Colors.BLUE_400],
-                begin=ft.alignment.top_left,
-                end=ft.alignment.bottom_right,
-            ),
-            # image=ft.DecorationImage(
-            # src="news_background.jpg", 
-            # fit=ft.ImageFit.COVER, 
+            # gradient=ft.LinearGradient(
+            #     colors=[ft.Colors.BLUE_200, ft.Colors.BLUE_400],
+            #     begin=ft.alignment.top_left,
+            #     end=ft.alignment.bottom_right,
+            # ),
+
+            image=ft.DecorationImage(
+            src="news_background.jpg", 
+            fit=ft.ImageFit.COVER, 
             # color_filter=ft.ColorFilter(
             #     blend_mode=ft.BlendMode.COLOR,
             #     color=ft.Colors.BLUE_200
             # )
-            # ),  # Добавляем фоновое изображение
+            ),  # Добавляем фоновое изображение
             content=ft.Column(
             controls=[
                 ft.Row(
