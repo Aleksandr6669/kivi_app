@@ -44,11 +44,11 @@ def main(page: ft.Page):
                         controls=[
                         ft.Row(
                             controls=[
-                            ft.Icon(icon, size=40, color=ft.Colors.WHITE),
+                            ft.Icon(icon, size=40, color=ft.Colors.BLUE_300),
                             ft.Column(
                                 controls=[
-                                ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
-                                ft.Text(date, size=14, color=ft.Colors.GREY_300),
+                                ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_300),
+                                ft.Text(date, size=14, color=ft.Colors.GREY_600),
                                 ]
                             ),
                             ]
