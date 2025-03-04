@@ -49,9 +49,9 @@ flet run
 Run the app ios:
 
 ```sh
-poetry run flet run -ios
+poetry run flet run --ios  
 ```
 
 ```sh
-flet run -ios
+flet run --ios  
 ```

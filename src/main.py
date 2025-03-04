@@ -19,16 +19,16 @@ def main(page: ft.Page):
 
 
     news_list = [
-        {"title": "KIVI UA запускает новую линейку телевизоров", "content": "Компания KIVI UA анонсировала новую линейку телевизоров с поддержкой 4K и HDR. Подробнее можно узнать на [официальном сайте](https://www.kivi.ua).", "icon": ft.Icons.TV, "date": "1 марта 2025"},
-        {"title": "KIVI UA открывает новый шоурум", "content": "Компания KIVI UA открывает новый шоурум в центре Киева. Адрес шоурума можно найти [здесь](https://www.kivi.ua/showroom).", "icon": ft.Icons.STORE, "date": "28 февраля 2025"},
-        {"title": "KIVI UA объявляет о партнерстве с ведущими производителями", "content": "Компания KIVI UA заключила партнерские соглашения с ведущими производителями электроники. Подробности на [сайте](https://www.kivi.ua/partners).", "icon": ft.Icons.HANDSHAKE, "date": "27 февраля 2025"},
-        {"title": "KIVI UA проводит благотворительную акцию", "content": "Компания KIVI UA организует благотворительную акцию по сбору средств для детских домов. Узнать больше можно [здесь](https://www.kivi.ua/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "26 февраля 2025"},
-        {"title": "KIVI UA получила награду за инновации", "content": "Компания KIVI UA была удостоена награды за инновационные разработки в области телевизоров. Подробности на [официальном сайте](https://www.kivi.ua/awards).", "icon": ft.Icons.STAR, "date": "25 февраля 2025"},
-        {"title": "KIVI UA запускает программу лояльности", "content": "Компания KIVI UA запускает новую программу лояльности для своих клиентов. Узнать больше можно [здесь](https://www.kivi.ua/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "24 февраля 2025"},
-        {"title": "KIVI UA расширяет ассортимент продукции", "content": "Компания KIVI UA расширяет ассортимент своей продукции, добавляя новые модели телевизоров. Подробности на [сайте](https://www.kivi.ua/products).", "icon": ft.Icons.SHOPPING_CART, "date": "23 февраля 2025"},
-        {"title": "KIVI UA проводит вебинар по новым технологиям", "content": "Компания KIVI UA организует вебинар, посвященный новым технологиям в телевизорах. Регистрация доступна [здесь](https://www.kivi.ua/webinar).", "icon": ft.Icons.WEB, "date": "22 февраля 2025"},
-        {"title": "KIVI UA объявляет о скидках на продукцию", "content": "Компания KIVI UA объявляет о сезонных скидках на свою продукцию. Подробности на [официальном сайте](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 февраля 2025"},
-        {"title": "KIVI UA открывает новые вакансии", "content": "Компания KIVI UA объявляет об открытии новых вакансий. **Узнать больше можно** [здесь](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 февраля 2025"},
+        {"title": "KIVI UA запускає нову лінійку телевізорів", "content": "Компанія KIVI UA анонсувала нову лінійку телевізорів з підтримкою 4K та HDR. Детальніше можна дізнатися на [офіційному сайті](https://www.kivi.ua).", "icon": ft.Icons.TV, "date": "1 березня 2025"},
+        {"title": "KIVI UA відкриває новий шоурум", "content": "Компанія KIVI UA відкриває новий шоурум у центрі Києва. Адресу шоуруму можна знайти [тут](https://www.kivi.ua/showroom).", "icon": ft.Icons.STORE, "date": "28 лютого 2025"},
+        {"title": "KIVI UA оголошує про партнерство з провідними виробниками", "content": "Компанія KIVI UA уклала партнерські угоди з провідними виробниками електроніки. Подробиці на [сайті](https://www.kivi.ua/partners).", "icon": ft.Icons.HANDSHAKE, "date": "27 лютого 2025"},
+        {"title": "KIVI UA проводить благодійну акцію", "content": "Компанія KIVI UA організовує благодійну акцію зі збору коштів для дитячих будинків. Дізнатися більше можна [тут](https://www.kivi.ua/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "26 лютого 2025"},
+        {"title": "KIVI UA отримала нагороду за інновації", "content": "Компанія KIVI UA була удостоєна нагороди за інноваційні розробки в галузі телевізорів. Подробиці на [офіційному сайті](https://www.kivi.ua/awards).", "icon": ft.Icons.STAR, "date": "25 лютого 2025"},
+        {"title": "KIVI UA запускає програму лояльності", "content": "Компанія KIVI UA запускає нову програму лояльності для своїх клієнтів. Дізнатися більше можна [тут](https://www.kivi.ua/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "24 лютого 2025"},
+        {"title": "KIVI UA розширює асортимент продукції", "content": "Компанія KIVI UA розширює асортимент своєї продукції, додаючи нові моделі телевізорів. Подробиці на [сайті](https://www.kivi.ua/products).", "icon": ft.Icons.SHOPPING_CART, "date": "23 лютого 2025"},
+        {"title": "KIVI UA проводить вебінар з нових технологій", "content": "Компанія KIVI UA організовує вебінар, присвячений новим технологіям у телевізорах. Реєстрація доступна [тут](https://www.kivi.ua/webinar).", "icon": ft.Icons.WEB, "date": "22 лютого 2025"},
+        {"title": "KIVI UA оголошує про знижки на продукцію", "content": "Компанія KIVI UA оголошує про сезонні знижки на свою продукцію. Подробиці на [офіційному сайті](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 лютого 2025"},
+        {"title": "KIVI UA відкриває нові вакансії", "content": "Компанія KIVI UA оголошує про відкриття нових вакансій. **Дізнатися більше можна** [тут](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 лютого 2025"},
     ]
 
     def news_feed_view(page, title, content, icon, date):
@@ -53,10 +53,10 @@ def main(page: ft.Page):
             controls=[
                 ft.Row(
                 controls=[
-                    ft.Icon(icon, size=40, color=ft.Colors.WHITE),
+                    ft.Icon(icon, size=40, color=ft.Colors.BLUE_500),
                     ft.Column(
                     controls=[
-                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
+                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_500, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
                         ft.Text(date, size=12, color=ft.Colors.GREY_300),
                     ],
                     expand=True
@@ -89,7 +89,7 @@ def main(page: ft.Page):
             news_list_view.update()
 
         search_input = ft.TextField(
-            label="Поиск новостей",
+            label="Пошук новин",
             on_change=search_news,
             border_radius=ft.BorderRadius(10, 10, 10, 10),
             border_color=ft.ThemeMode.SYSTEM,
