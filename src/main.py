@@ -337,31 +337,42 @@ def main(page: ft.Page):
 
         # Создание панели быстрых действий
         quick_actions = ft.Row([
-            ft.ElevatedButton(
-                "Звіт залишків",
-                icon=ft.icons.ADD_SHOPPING_CART,
-                style=ft.ButtonStyle(
-                    color=ft.colors.WHITE,
-                    bgcolor=ft.colors.BLUE_500
+            ft.Container(
+                margin=ft.margin.only(bottom=20),
+                content=ft.ElevatedButton(
+                    "Звіт залишків",
+                    icon=ft.icons.ADD_SHOPPING_CART,
+                    style=ft.ButtonStyle(
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.BLUE_500
+                    )
                 )
             ),
-            ft.ElevatedButton(
-                "Звіт продажів",
-                icon=ft.icons.ASSESSMENT,
-                style=ft.ButtonStyle(
-                    color=ft.colors.WHITE,
-                    bgcolor=ft.colors.GREEN_500
+            ft.Container(
+                margin=ft.margin.only(bottom=20),
+                content=ft.ElevatedButton(
+                    "Звіт продажів",
+                    icon=ft.icons.ASSESSMENT,
+                    style=ft.ButtonStyle(
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.GREEN_500
+                    )
                 )
             ),
-            ft.ElevatedButton(
-                "Тижневий звіт",
-                icon=ft.icons.HELP_OUTLINE,
-                style=ft.ButtonStyle(
-                    color=ft.colors.WHITE,
-                    bgcolor=ft.colors.ORANGE_500
+            ft.Container(
+                margin=ft.margin.only(bottom=20),
+                content=ft.ElevatedButton(
+                    "Тижневий звіт",
+                    icon=ft.icons.HELP_OUTLINE,
+                    style=ft.ButtonStyle(
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.ORANGE_500
+                    )
                 )
             )
-        ], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
+        ],
+        alignment=ft.MainAxisAlignment.SPACE_EVENLY
+        )
 
         # Создание сетки статистики
         stats_grid = ft.Row([
@@ -389,7 +400,9 @@ def main(page: ft.Page):
                 ft.icons.SUPPORT,
                 ft.colors.ORANGE_500
             )
-        ], wrap=True, alignment=ft.MainAxisAlignment.CENTER)
+        ],
+        wrap=True, alignment=ft.MainAxisAlignment.CENTER
+        )
         
         return ft.Container(
             height=0,
@@ -398,16 +411,16 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[quick_actions],
-                        scroll=ft.ScrollMode.AUTO,
+                        scroll=ft.ScrollMode.HIDDEN, 
+
                     )
                 ),
-                ft.Container(height=30),
                 ft.Container(
                     height=page.height - 100,
                     content=ft.Column(
                         controls=[stats_grid],
-                        scroll=ft.ScrollMode.AUTO,
-
+                        scroll=ft.ScrollMode.HIDDEN,
+ 
                     )
                 )
             ])
