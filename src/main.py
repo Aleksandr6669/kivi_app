@@ -194,14 +194,14 @@ def main(page: ft.Page):
         # Список продуктов и сервисов
         details_list = [
             {
-                "title": "Телевізори KIVI",
-                "description": "Сучасні Smart TV з підтримкою 4K HDR",
-                "icon": ft.Icons.TV,
+                "title": "Олексанлр",
+                "description": "Риженков Олександр",
+                "icon": ft.Icons.VERIFIED_USER,
                 "specs": [
-                    "Діагональ: від 32\" до 65\"",
-                    "Роздільна здатність: до 4K UHD",
-                    "Smart TV на базі Android TV",
-                    "Підтримка HDR10+"
+                    "Магазин \"ДМ\" ID 116",
+                    "Промоутер ID 156",
+                    "Видпрацевано днив 12",
+                    "Працюе"
                 ]
             },
             {
