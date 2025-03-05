@@ -399,7 +399,6 @@ def main(page: ft.Page):
                     content=ft.Row(
                         controls=[quick_actions],
                         scroll=ft.ScrollMode.AUTO,
-                        scroll_to_start=True
                     )
                 ),
                 ft.Container(height=30),
@@ -408,7 +407,7 @@ def main(page: ft.Page):
                     content=ft.Column(
                         controls=[stats_grid],
                         scroll=ft.ScrollMode.AUTO,
-                        scroll_to_start=True
+
                     )
                 )
             ])
