@@ -44,7 +44,6 @@ def main(page: ft.Page):
         {"title": "KIVI UA оголошує про знижки на продукцію", "content": "Компанія KIVI UA оголошує про сезонні знижки на свою продукцію. Подробиці на [офіційному сайті](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 лютого 2025"},
         {"title": "KIVI UA відкриває нові вакансії", "content": "Компанія KIVI UA оголошує про відкриття нових вакансій. **Дізнатися більше можна** [тут](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 лютого 2025"},
     ]
-
     def news_feed_view(page, title, content, icon, date):
         """
         Создает карточку новости с заданным оформлением.
@@ -60,49 +59,51 @@ def main(page: ft.Page):
             ft.Container: Контейнер с оформленной новостью
         """
         container = ft.Container(
-            padding=ft.Padding(10, 10, 10, 10),
-            border_radius=ft.BorderRadius(10, 10, 10, 10),
-            # gradient=ft.LinearGradient(
-            #     colors=[ft.Colors.BLUE_200, ft.Colors.BLUE_400],
-            #     begin=ft.alignment.top_left,
-            #     end=ft.alignment.bottom_right,
-            # ),
-
-            image=ft.DecorationImage(
-            src="news_background.jpg", 
-            fit=ft.ImageFit.COVER, 
-            # color_filter=ft.ColorFilter(
-            #     blend_mode=ft.BlendMode.COLOR,
-            #     color=ft.Colors.BLUE_200
-            # )
-            ),  # Добавляем фоновое изображение
-            content=ft.Column(
-            controls=[
-                ft.Row(
-                controls=[
-                    ft.Icon(icon, size=40, color=ft.Colors.WHITE),
-                    ft.Column(
-                    controls=[
-                        ft.Text(title, size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE, italic=True, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS, expand=True),
-                        ft.Text(date, size=12, color=ft.Colors.GREY_300),
-                    ],
-                    expand=True
-                    ),
-                ],
-                expand=True
-                ),
-                ft.Container(
-                    padding=ft.Padding(10, 10, 10, 10),
-                    border_radius=ft.BorderRadius(10, 10, 10, 10),
-                    blur=ft.Blur(sigma_x=20, sigma_y=30, tile_mode=ft.BlurTileMode.CLAMP),
-                    content=ft.Markdown(content, selectable=True, extension_set=ft.MarkdownExtensionSet.GITHUB_WEB),
-                    ),
-                
-            ],
-            expand=True
+            padding=ft.padding.all(20),
+            border_radius=ft.border_radius.all(15),
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.top_center,
+                end=ft.alignment.bottom_center,
+                colors=[ft.colors.BLUE_400, ft.colors.BLUE_700]
             ),
-            margin=ft.Margin(10, 10, 10, 10),
-            animate=ft.Animation(duration=350, curve="decelerate"),
+            content=ft.Column([
+                ft.Row([
+                    ft.Icon(
+                        icon,
+                        size=40,
+                        color=ft.colors.WHITE
+                    ),
+                    ft.Column([
+                        ft.Text(
+                            title,
+                            size=18,
+                            weight=ft.FontWeight.BOLD,
+                            color=ft.colors.WHITE,
+                            max_lines=2,
+                            overflow=ft.TextOverflow.ELLIPSIS
+                        ),
+                        ft.Text(
+                            date,
+                            size=14,
+                            color=ft.colors.WHITE70
+                        )
+                    ], expand=True)
+                ]),
+                ft.Container(height=15),
+                ft.Container(
+                    padding=ft.padding.all(15),
+                    border_radius=ft.border_radius.all(10),
+                    bgcolor=ft.colors.with_opacity(0.1, ft.colors.WHITE),
+                    content=ft.Markdown(
+                        content,
+                        selectable=True,
+                        extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+                        on_tap_link=lambda e: page.launch_url(e.data)
+                    )
+                )
+            ]),
+            margin=ft.margin.all(10),
+            animate=ft.Animation(350, "decelerate")
         )
 
         return container
