@@ -394,7 +394,7 @@ def main(page: ft.Page):
                     icon=ft.icons.ADD_SHOPPING_CART,
                     style=ft.ButtonStyle(
                         color=ft.colors.WHITE,
-                        bgcolor=ft.colors.BLUE_500
+                        bgcolor=ft.colors.PURPLE_500
                     )
                 )
             ),
@@ -458,7 +458,7 @@ def main(page: ft.Page):
                     ft.colors.BLUE_500
                 ),
                 create_stat_card(
-                    f"KIVI кріплення {stats['kivi mounts']['completed']} грн.",
+                    f"Кріплення {stats['kivi mounts']['completed']} грн.",
                     f"{stats['kivi mounts']['completion_percent']} %",
                     ft.icons.BUILD,
                     ft.colors.GREEN_500
