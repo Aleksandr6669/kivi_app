@@ -282,7 +282,7 @@ def main(page: ft.Page):
                 controls=[
                     create_detail_card(detail) 
                     for detail in details_list
-                ] + [ft.Container(height=200)]
+                ] + [ft.Container(height=250)]
             )
         )
 
@@ -332,9 +332,9 @@ def main(page: ft.Page):
                 },
                 "kivi mounts": {
                     "sales": 98,
-                    "revenue": 19600,
-                    "plan": 24000,
-                    "completed": 19600,
+                    "revenue": 1960,
+                    "plan": 2400,
+                    "completed": 1960,
                     "completion_percent": 82
                 }
         }
@@ -377,7 +377,18 @@ def main(page: ft.Page):
         # Создание панели быстрых действий
         quick_actions = ft.Row([
             ft.Container(
-                margin=ft.margin.only(bottom=20),
+                margin=ft.margin.only(bottom=25),
+                content=ft.ElevatedButton(
+                    "Статистика",
+                    icon=ft.icons.ANALYTICS,
+                    style=ft.ButtonStyle(
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.BLUE_500
+                    )
+                )
+            ),
+            ft.Container(
+                margin=ft.margin.only(bottom=25),
                 content=ft.ElevatedButton(
                     "Звіт залишків",
                     icon=ft.icons.ADD_SHOPPING_CART,
@@ -388,7 +399,7 @@ def main(page: ft.Page):
                 )
             ),
             ft.Container(
-                margin=ft.margin.only(bottom=20),
+                margin=ft.margin.only(bottom=25),
                 content=ft.ElevatedButton(
                     "Звіт продажів",
                     icon=ft.icons.ASSESSMENT,
@@ -399,7 +410,7 @@ def main(page: ft.Page):
                 )
             ),
             ft.Container(
-                margin=ft.margin.only(bottom=20),
+                margin=ft.margin.only(bottom=25),
                 content=ft.ElevatedButton(
                     "Тижневий звіт",
                     icon=ft.icons.HELP_OUTLINE,
@@ -415,7 +426,7 @@ def main(page: ft.Page):
 
         # Создание сетки статистики
         stats_grid = ft.Row(
-            [
+            controls=[
                 create_stat_card(
                     f"KIVI {stats['kivi']['completed']} грн.",
                     f"{stats['kivi']['completion_percent']} %",
@@ -467,28 +478,32 @@ def main(page: ft.Page):
             ],
             wrap=True,
             alignment=ft.MainAxisAlignment.CENTER,
-            spacing=10
+            spacing=10,
         )
         
         return ft.Container(
             height=0,
             animate=ft.Animation(duration=250, curve="decelerate"),
             content=ft.Column([
-                # Верхняя панель с кнопками
-                ft.Container(
-                    margin=ft.margin.only(bottom=20),
-                    content=quick_actions
-                ),
-                # Контейнер со статистикой и скроллом
                 ft.Container(
                     expand=True,  # Растягиваем контейнер
-                    content=ft.Column(
-                        controls=[
-                            stats_grid
-                        ],
-                        scroll=ft.ScrollMode.AUTO,  # Включаем автоматический скролл
-                        spacing=20,
-                    )
+                    content=ft.Column([
+                        ft.Row(
+                            controls=[
+                                quick_actions
+                            ],
+                            scroll=ft.ScrollMode.AUTO,  # Включаем автоматический скролл
+                            spacing=20
+                        ),
+                        ft.ListView(
+                            height=page.height,
+                            controls=[
+                                stats_grid,
+                                ft.Container(height=250)
+                            ],
+                        )
+                    ]),
+    
                 )
             ])
         )
@@ -577,7 +592,10 @@ if __name__ == "__main__":
     Точка входа в приложение.
     Запускает приложение с указанной директорией ассетов.
     """
-    ft.app(main, assets_dir="assets")
+    ft.app(
+        target=main,
+        assets_dir="assets",
+    )
 
     # Альтернативный запуск в веб-браузере:
     # ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
