@@ -295,10 +295,48 @@ def main(page: ft.Page):
         """
         # Данные для графиков и статистики
         stats = {
-            "daily_sales": 157,
-            "monthly_growth": "+12.5%",
-            "active_users": 1250,
-            "support_tickets": 23
+                "kivi": {
+                    "sales": 157,  # Количество проданных единиц
+                    "revenue": 47100,  # Доход в грн (157 шт * 300 грн)
+                    "plan": 60000,  # План продаж в грн
+                    "completed": 47100,  # Выполнено в грн
+                    "completion_percent": 78  # Процент выполнения плана
+                },
+                "lenovo": {
+                    "sales": 89,
+                    "revenue": 47000,
+                    "plan": 90000,
+                    "completed": 47000,
+                    "completion_percent": 52
+                },
+                "oppo": {
+                    "sales": 134,
+                    "revenue": 134000,
+                    "plan": 150000,
+                    "completed": 134000,
+                    "completion_percent": 89
+                },
+                "pyramids": {
+                    "sales": 45,
+                    "revenue": 22500,
+                    "plan": 50000,
+                    "completed": 22500,
+                    "completion_percent": 45
+                },
+                "fitnes": {
+                    "sales": 67,
+                    "revenue": 26800,
+                    "plan": 40000,
+                    "completed": 26800,
+                    "completion_percent": 67
+                },
+                "kivi mounts": {
+                    "sales": 98,
+                    "revenue": 19600,
+                    "plan": 24000,
+                    "completed": 19600,
+                    "completion_percent": 82
+                }
         }
 
         def create_stat_card(title, value, icon, color):
@@ -378,28 +416,40 @@ def main(page: ft.Page):
         # Создание сетки статистики
         stats_grid = ft.Row([
             create_stat_card(
-                "Звіт продажів",
-                stats["daily_sales"],
-                ft.icons.TRENDING_UP,
+                f"KIVI {stats['kivi']['completed']} грн.",
+                f"{stats['kivi']['completion_percent']} %",
+                ft.icons.TV,
                 ft.colors.BLUE_500
             ),
             create_stat_card(
-                "Місячне зростання",
-                stats["monthly_growth"],
-                ft.icons.INSERT_CHART,
+                f"Lenovo {stats['lenovo']['completed']} грн.",
+                f"{stats['lenovo']['completion_percent']} %", 
+                ft.icons.LAPTOP,
                 ft.colors.GREEN_500
             ),
             create_stat_card(
-                "Активні користувачі",
-                stats["active_users"],
-                ft.icons.PEOPLE,
+                f"OPPO {stats['oppo']['completed']} грн.",
+                f"{stats['oppo']['completion_percent']} %",
+                ft.icons.PHONE_ANDROID,
                 ft.colors.PURPLE_500
             ),
             create_stat_card(
-                "Запити підтримки",
-                stats["support_tickets"],
-                ft.icons.SUPPORT,
+                f"Pyramids {stats['pyramids']['completed']} грн.",
+                f"{stats['pyramids']['completion_percent']} %",
+                ft.icons.DEVICES,
                 ft.colors.ORANGE_500
+            ),
+            create_stat_card(
+                f"Fitnes {stats['fitnes']['completed']} грн.",
+                f"{stats['fitnes']['completion_percent']} %",
+                ft.icons.FITNESS_CENTER,
+                ft.colors.BLUE_500
+            ),
+            create_stat_card(
+                f"KIVI кріплення {stats['kivi mounts']['completed']} грн.",
+                f"{stats['kivi mounts']['completion_percent']} %",
+                ft.icons.BUILD,
+                ft.colors.GREEN_500
             )
         ],
         wrap=True, alignment=ft.MainAxisAlignment.CENTER
@@ -417,7 +467,7 @@ def main(page: ft.Page):
                     )
                 ),
                 ft.Container(
-                    height=page.height - 100,
+                    height=page.height,
                     content=ft.ListView(
                         controls=[stats_grid],
  
