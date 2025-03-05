@@ -418,9 +418,8 @@ def main(page: ft.Page):
                 ),
                 ft.Container(
                     height=page.height - 100,
-                    content=ft.Column(
+                    content=ft.ListView(
                         controls=[stats_grid],
-                        scroll=ft.ScrollMode.HIDDEN,
  
                     )
                 )
