@@ -344,10 +344,10 @@ def main(page: ft.Page):
             Создает карточку со статистикой.
             """
             return ft.Container(
-                width=160,
-                height=160,
-                padding=ft.padding.all(10),
-                margin=ft.margin.all(10),
+                width=170,
+                height=170,
+                padding=ft.padding.all(5),
+                margin=ft.margin.all(5),
                 border_radius=ft.border_radius.all(10),
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
