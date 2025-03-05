@@ -305,8 +305,8 @@ def main(page: ft.Page):
             Создает карточку со статистикой.
             """
             return ft.Container(
-                width=180,
-                height=180,
+                width=150,
+                height=160,
                 padding=ft.padding.all(10),
                 margin=ft.margin.all(10),
                 border_radius=ft.border_radius.all(10),
@@ -366,7 +366,7 @@ def main(page: ft.Page):
         # Создание сетки статистики
         stats_grid = ft.Row([
             create_stat_card(
-                "Продажі за день",
+                "Звіт продажів",
                 stats["daily_sales"],
                 ft.icons.TRENDING_UP,
                 ft.colors.BLUE_500
@@ -390,23 +390,26 @@ def main(page: ft.Page):
                 ft.colors.ORANGE_500
             )
         ], wrap=True, alignment=ft.MainAxisAlignment.CENTER)
-
+        
         return ft.Container(
             height=0,
             animate=ft.Animation(duration=250, curve="decelerate"),
-            content=ft.ListView(
-                height=page.height,
-                controls=[
-                    ft.Container(
-                        padding=ft.padding.all(10),
-                        content=ft.Column([
-                            quick_actions,
-                            ft.Container(height=30),
-                            stats_grid
-                        ])
+            content=ft.Column([
+                ft.Container(
+                    content=ft.Row(
+                        controls=[quick_actions],
+                        scroll=ft.ScrollMode.ADAPTIVE
                     )
-                ]
-            )
+                ),
+                ft.Container(height=30),
+                ft.Container(
+                    height=page.height - 100,
+                    content=ft.Column(
+                        controls=[stats_grid],
+                        scroll=ft.ScrollMode.ADAPTIVE
+                    )
+                )
+            ])
         )
 
     async def on_nav_change(e):
