@@ -414,75 +414,80 @@ def main(page: ft.Page):
         )
 
         # Создание сетки статистики
-        stats_grid = ft.Row([
-            create_stat_card(
-                f"KIVI {stats['kivi']['completed']} грн.",
-                f"{stats['kivi']['completion_percent']} %",
-                ft.icons.TV,
-                ft.colors.BLUE_500
-            ),
-            create_stat_card(
-                f"Lenovo {stats['lenovo']['completed']} грн.",
-                f"{stats['lenovo']['completion_percent']} %", 
-                ft.icons.LAPTOP,
-                ft.colors.GREEN_500
-            ),
-            create_stat_card(
-                f"OPPO {stats['oppo']['completed']} грн.",
-                f"{stats['oppo']['completion_percent']} %",
-                ft.icons.PHONE_ANDROID,
-                ft.colors.PURPLE_500
-            ),
-            create_stat_card(
-                f"Pyramids {stats['pyramids']['completed']} грн.",
-                f"{stats['pyramids']['completion_percent']} %",
-                ft.icons.DEVICES,
-                ft.colors.ORANGE_500
-            ),
-            create_stat_card(
-                f"Fitnes {stats['fitnes']['completed']} грн.",
-                f"{stats['fitnes']['completion_percent']} %",
-                ft.icons.FITNESS_CENTER,
-                ft.colors.BLUE_500
-            ),
-            create_stat_card(
-                f"KIVI кріплення {stats['kivi mounts']['completed']} грн.",
-                f"{stats['kivi mounts']['completion_percent']} %",
-                ft.icons.BUILD,
-                ft.colors.GREEN_500
-            ),
-            create_stat_card(
-                f"ТЕСТ ?ю",
-                f"321 %",
-                ft.icons.BUILD,
-                ft.colors.GREEN_500
-            ),
-            create_stat_card(
-                f"ТЕСТ !",
-                f"123 %",
-                ft.icons.BUILD,
-                ft.colors.GREEN_500
-            )
-        ],
-        wrap=True, alignment=ft.MainAxisAlignment.CENTER
+        stats_grid = ft.Row(
+            [
+                create_stat_card(
+                    f"KIVI {stats['kivi']['completed']} грн.",
+                    f"{stats['kivi']['completion_percent']} %",
+                    ft.icons.TV,
+                    ft.colors.BLUE_500
+                ),
+                create_stat_card(
+                    f"Lenovo {stats['lenovo']['completed']} грн.",
+                    f"{stats['lenovo']['completion_percent']} %", 
+                    ft.icons.LAPTOP,
+                    ft.colors.GREEN_500
+                ),
+                create_stat_card(
+                    f"OPPO {stats['oppo']['completed']} грн.",
+                    f"{stats['oppo']['completion_percent']} %",
+                    ft.icons.PHONE_ANDROID,
+                    ft.colors.PURPLE_500
+                ),
+                create_stat_card(
+                    f"Pyramids {stats['pyramids']['completed']} грн.",
+                    f"{stats['pyramids']['completion_percent']} %",
+                    ft.icons.DEVICES,
+                    ft.colors.ORANGE_500
+                ),
+                create_stat_card(
+                    f"Fitnes {stats['fitnes']['completed']} грн.",
+                    f"{stats['fitnes']['completion_percent']} %",
+                    ft.icons.FITNESS_CENTER,
+                    ft.colors.BLUE_500
+                ),
+                create_stat_card(
+                    f"KIVI кріплення {stats['kivi mounts']['completed']} грн.",
+                    f"{stats['kivi mounts']['completion_percent']} %",
+                    ft.icons.BUILD,
+                    ft.colors.GREEN_500
+                ),
+                create_stat_card(
+                    f"ТЕСТ ?ю",
+                    f"321 %",
+                    ft.icons.BUILD,
+                    ft.colors.GREEN_500
+                ),
+                create_stat_card(
+                    f"ТЕСТ !",
+                    f"123 %",
+                    ft.icons.BUILD,
+                    ft.colors.GREEN_500
+                )
+            ],
+            wrap=True,
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10
         )
         
         return ft.Container(
             height=0,
             animate=ft.Animation(duration=250, curve="decelerate"),
             content=ft.Column([
+                # Верхняя панель с кнопками
                 ft.Container(
-                    content=ft.Row(
-                        controls=[quick_actions],
-                        scroll=ft.ScrollMode.HIDDEN, 
-
-                    )
+                    margin=ft.margin.only(bottom=20),
+                    content=quick_actions
                 ),
+                # Контейнер со статистикой и скроллом
                 ft.Container(
-                    height=page.height,
-                    content=ft.ListView(
-                        controls=[stats_grid],
- 
+                    expand=True,  # Растягиваем контейнер
+                    content=ft.Column(
+                        controls=[
+                            stats_grid
+                        ],
+                        scroll=ft.ScrollMode.AUTO,  # Включаем автоматический скролл
+                        spacing=20,
                     )
                 )
             ])
@@ -498,9 +503,17 @@ def main(page: ft.Page):
         Args:
             e: Событие изменения выбранной вкладки
         """
+        # Получаем индекс выбранной вкладки из события
         selected_index = e.control.selected_index
+        
+        # Перебираем контейнеры страниц (со 2-го по 4-й элемент в page.controls)
+        # page.controls[0] - это AppBar, поэтому начинаем с [1:4]
         for i, container in enumerate(page.controls[1:4]):
+            # Если индекс текущего контейнера совпадает с выбранной вкладкой,
+            # устанавливаем высоту равной высоте страницы,
+            # иначе устанавливаем высоту 0 чтобы скрыть контейнер
             container.height = page.height if i == selected_index else 0
+            # Обновляем контейнер чтобы применить изменения
             container.update()
 
     # Создание верхней панели приложения
