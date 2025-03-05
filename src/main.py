@@ -305,7 +305,7 @@ def main(page: ft.Page):
             Создает карточку со статистикой.
             """
             return ft.Container(
-                width=150,
+                width=160,
                 height=160,
                 padding=ft.padding.all(10),
                 margin=ft.margin.all(10),
@@ -317,17 +317,17 @@ def main(page: ft.Page):
                 ),
                 content=ft.Column([
                     ft.Icon(icon, size=40, color=ft.colors.WHITE),
-                    ft.Container(height=10),
+                    ft.Container(height=5),
                     ft.Text(
                         title,
                         size=14,
                         color=ft.colors.WHITE70,
                         text_align=ft.TextAlign.CENTER
                     ),
-                    ft.Container(height=10),
+                    ft.Container(height=5),
                     ft.Text(
                         str(value),
-                        size=18,
+                        size=16,
                         weight=ft.FontWeight.BOLD,
                         color=ft.colors.WHITE,
                         text_align=ft.TextAlign.CENTER
@@ -398,7 +398,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Row(
                         controls=[quick_actions],
-                        scroll=ft.ScrollMode.ADAPTIVE
+                        scroll=ft.ScrollMode.HIDDEN
                     )
                 ),
                 ft.Container(height=30),
@@ -406,7 +406,7 @@ def main(page: ft.Page):
                     height=page.height - 100,
                     content=ft.Column(
                         controls=[stats_grid],
-                        scroll=ft.ScrollMode.ADAPTIVE
+                        scroll=ft.ScrollMode.HIDDEN
                     )
                 )
             ])
