@@ -138,7 +138,7 @@ def main(page: ft.Page):
                     news["icon"], 
                     news["date"]
                 ) for news in filtered_news
-            ]
+            ]+ [ft.Container(height=250)]
             news_list_view.update()
 
         # Создание поля поиска
