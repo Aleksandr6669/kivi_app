@@ -492,7 +492,7 @@ def main(page: ft.Page):
                             controls=[
                                 quick_actions
                             ],
-                            scroll=ft.ScrollMode.AUTO,  # Включаем автоматический скролл
+                            scroll=ft.ScrollMode.HIDDEN,  # Включаем автоматический скролл
                             spacing=20
                         ),
                         ft.ListView(
