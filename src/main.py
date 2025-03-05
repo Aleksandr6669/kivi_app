@@ -145,13 +145,13 @@ def main(page: ft.Page):
         search_input = ft.TextField(
             label="Пошук новин",
             on_change=search_news,
-            border_radius=ft.BorderRadius(10, 10, 10, 10),
+            border_radius=ft.BorderRadius(20, 20, 20, 20),
             border_color=ft.Colors.BLUE_200,
             filled=True,
-            fill_color=ft.Colors.with_opacity(0.1, ft.Colors.BLUE_300),
-            label_style=ft.TextStyle(color=ft.Colors.BLUE_300),
+            fill_color=ft.Colors.with_opacity(0.9, ft.Colors.BLUE_300),
+            label_style=ft.TextStyle(color=ft.Colors.WHITE),
             text_style=ft.TextStyle(color=ft.Colors.WHITE),
-            prefix_icon=ft.Icon(ft.Icons.SEARCH, color=ft.Colors.BLUE_400),
+            prefix_icon=ft.Icon(ft.Icons.SEARCH, color=ft.Colors.WHITE),
         )
         
 
