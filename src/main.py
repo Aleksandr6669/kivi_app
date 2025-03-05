@@ -344,10 +344,10 @@ def main(page: ft.Page):
             Создает карточку со статистикой.
             """
             return ft.Container(
-                width=170,
-                height=170,
-                padding=ft.padding.all(5),
-                margin=ft.margin.all(5),
+                width=160,
+                height=160,
+                padding=ft.padding.all(10),
+                margin=ft.margin.all(10),
                 border_radius=ft.border_radius.all(10),
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
@@ -448,6 +448,18 @@ def main(page: ft.Page):
             create_stat_card(
                 f"KIVI кріплення {stats['kivi mounts']['completed']} грн.",
                 f"{stats['kivi mounts']['completion_percent']} %",
+                ft.icons.BUILD,
+                ft.colors.GREEN_500
+            ),
+            create_stat_card(
+                f"ТЕСТ ?ю",
+                f"321 %",
+                ft.icons.BUILD,
+                ft.colors.GREEN_500
+            ),
+            create_stat_card(
+                f"ТЕСТ !",
+                f"123 %",
                 ft.icons.BUILD,
                 ft.colors.GREEN_500
             )
