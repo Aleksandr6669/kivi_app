@@ -146,12 +146,12 @@ def main(page: ft.Page):
             label="Пошук новин",
             on_change=search_news,
             border_radius=ft.BorderRadius(10, 10, 10, 10),
-            border_color=ft.ThemeMode.SYSTEM,
+            border_color=ft.Colors.BLUE_200,
             filled=True,
-            fill_color=ft.Colors.with_opacity(0.1, ft.ThemeMode.SYSTEM),
+            fill_color=ft.Colors.with_opacity(0.1, ft.Colors.BLUE_300),
             label_style=ft.TextStyle(color=ft.Colors.BLUE_300),
             text_style=ft.TextStyle(color=ft.Colors.WHITE),
-            prefix_icon=ft.Icon(ft.Icons.SEARCH, color=ft.ThemeMode.SYSTEM),
+            prefix_icon=ft.Icon(ft.Icons.SEARCH, color=ft.Colors.BLUE_400),
         )
         
 
