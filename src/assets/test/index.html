@@ -1,25 +1,163 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моё приложение</title>
-
-    <!-- Манифест для PWA -->
-    <link rel="manifest" href="manifest.json">
-
+    <title>KIVI MFA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@10.0.0/dist/handsontable.full.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@10.0.0/dist/handsontable.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script> <!-- Для экспорта в Excel -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+        #example {
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
         }
-        h1 {
-            color: #4CAF50;
+
+        /* Стили для шапки таблиці */
+        .handsontable th {
+            white-space: normal !important;  /* Дозволяє переносити текст в клітинках шапки */
+            word-wrap: break-word !important; /* Перенос слів */
+            word-break: break-word !important; /* Розбиття слів */
+            text-align: center; /* Вирівнювання тексту по центру */
+            padding: 5px;
+            max-width: 150px; /* Обмеження ширини */
+        }
+
+        /* Установимо обмеження по ширині для всіх стовпців */
+        .handsontable th, .handsontable td {
+            max-width: 150px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
     </style>
 </head>
 <body>
-    <h1>Привет! Это PWA приложение.</h1>
+
+    <h1 style="text-align: center;">KIVI MFA</h1>
+    <div id="example"></div>
+    <button id="export-btn" style="margin: 20px auto; display: block;">Експортувати в Excel</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Сховище даних
+            const inventoryData = {
+                stores: ['Магазин A', 'Магазин B', 'Магазин C'], // Перелік магазинів
+                modelsInHeader: [
+                    ['Модель 1', 'Модель 2', 'Модель 3'], // Група моделей 1
+                    ['Модель 4', 'Модель 5'],
+                    ['Модель 6', 'Модель 7', 'Модель 8'], // Група моделей 1
+                    ['Модель 9'] // Група моделей 2
+                ],
+                incomingData: [
+                    { model: 'Модель 1', quantity: 5, store: 'Магазин A', date: '2025-03-01' },
+                    { model: 'Модель 2', quantity: 10, store: 'Магазин B', date: '2025-03-01' },
+                    { model: 'Модель 1', quantity: 7, store: 'Магазин C', date: '2025-03-01' },
+                    { model: 'Модель 3', quantity: 12, store: 'Магазин A', date: '2025-03-01' },
+                    { model: 'Модель 2', quantity: 3, store: 'Магазин C', date: '2025-03-01' },
+                    { model: 'Модель 3', quantity: 5, store: 'Магазин B', date: '2025-03-01' },
+                    { model: 'Модель 4', quantity: 8, store: 'Магазин A', date: '2025-03-01' },
+                    { model: 'Модель 5', quantity: 14, store: 'Магазин B', date: '2025-03-01' },
+                    { model: 'Модель 4', quantity: 6, store: 'Магазин C', date: '2025-03-01' },
+                    { model: 'Модель 5', quantity: 9, store: 'Магазин C', date: '2025-03-01' }
+                ],
+                inventoryDate: '2025-03-01' // Дата інвентаризації
+            };
+
+            // Формуємо шапку таблиці
+            const colHeaders = ['Магазини'];
+            inventoryData.modelsInHeader.forEach(group => {
+                colHeaders.push(group.join(' / ')); // Об’єднуємо моделі в один рядок
+            });
+            colHeaders.push('Дата формування: ' + inventoryData.inventoryDate);  // Додаємо дату інвентаризації
+
+            // Формуємо дані для таблиці
+            const tableData = [];
+            const stores = inventoryData.stores; // Отримуємо список магазинів
+
+            stores.forEach(store => {
+                // Починаємо формувати рядки для кожного магазину
+                const row = [store];
+                
+                // Підсумовуємо кількість для кожної групи моделей в шапці
+                inventoryData.modelsInHeader.forEach(group => {
+                    let totalQuantity = 0;
+                    group.forEach(model => {
+                        const modelData = inventoryData.incomingData.filter(item => item.store === store && item.model === model);
+                        const modelQuantity = modelData.reduce((acc, item) => acc + item.quantity, 0);
+                        totalQuantity += modelQuantity; // Підсумовуємо кількість усіх моделей в групі
+                    });
+                    row.push(totalQuantity);  // Додаємо суму по групі моделей
+                });
+                
+                row.push(''); // Місце для дати інвентаризації
+                tableData.push(row);
+            });
+
+            // Додаємо контейнер для таблиці
+            const container = document.querySelector("#example");
+
+            // Налаштуємо Handsontable
+            const hot = new Handsontable(container, {
+                data: tableData,
+                colHeaders: colHeaders,  // Використовуємо динамічно сформовану шапку
+                columns: [
+                    { type: 'text' },  // Магазин
+                    ...Array(inventoryData.modelsInHeader.length).fill({ type: 'numeric' }),  // Кількість для кожної групи моделей
+                ],
+                contextMenu: {
+                    items: {
+                        "copy": {
+                            name: 'Копіювати',
+                            callback: function() {
+                                hot.selectCells(hot.getSelected()); // Копирование выбранных ячеек
+                            }
+                        },
+                        "row_above": {
+                            name: 'Вставити рядок зверху',
+                            callback: function() {
+                                hot.alter('insert_row', hot.getSelected()[0]);
+                            }
+                        },
+                        "row_below": {
+                            name: 'Вставити рядок знизу',
+                            callback: function() {
+                                hot.alter('insert_row', hot.getSelected()[0] + 1);
+                            }
+                        },
+                        "col_left": {
+                            name: 'Вставити стовпчик зліва',
+                            callback: function() {
+                                hot.alter('insert_col', hot.getSelected()[1]);
+                            }
+                        },
+                        "col_right": {
+                            name: 'Вставити стовпчик справа',
+                            callback: function() {
+                                hot.alter('insert_col', hot.getSelected()[1] + 1);
+                            }
+                        }
+                    }
+                },
+                language: 'uk-UA',  // Мова українська
+                manualColumnMove: true,  // Дозволяє переміщати стовпці
+                manualColumnResize: true,  // Дозволяє змінювати ширину стовпців
+                columnSorting: true,  // Включає сортування
+                readOnly: true,  // Вимикає редагування
+                licenseKey: 'non-commercial-and-evaluation', // Ліцензія
+                colWidths: [150, 150, 150, 150, 150],  // Встановлюємо фіксовану ширину для всіх стовпців
+            });
+
+            // Функція для експорту таблиці в Excel з шапкою
+            document.getElementById('export-btn').addEventListener('click', function() {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet([colHeaders, ...tableData]); // Додаємо шапку в Excel
+                XLSX.utils.book_append_sheet(wb, ws, inventoryData.inventoryDate);
+                XLSX.writeFile(wb, 'MFA.xlsx');
+            });
+        });
+    </script>
+
 </body>
 </html>

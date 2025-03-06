@@ -590,10 +590,10 @@ if __name__ == "__main__":
     Точка входа в приложение.
     Запускает приложение с указанной директорией ассетов.
     """
-    ft.app(
-        target=main,
-        assets_dir="assets",
-    )
+    # ft.app(
+    #     target=main,
+    #     assets_dir="assets",
+    # )
 
     # Альтернативный запуск в веб-браузере:
-    # ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
+    ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
