@@ -19,11 +19,25 @@ jobs:
           brew install python
           pip install flet
 
-      - name: Install Xcode and dependencies
+      - name: Check and install Xcode dependencies
         run: |
-          xcode-select --install
-          sudo gem install cocoapods
-          pod install
+          if ! xcode-select -p &>/dev/null; then
+            xcode-select --install
+          else
+            echo "Xcode command line tools уже установлены."
+          fi
+
+          if ! gem list cocoapods -i > /dev/null; then
+            sudo gem install cocoapods
+          else
+            echo "CocoaPods уже установлен."
+          fi
+
+          if [ -f "ios/Podfile" ]; then
+            pod install
+          else
+            echo "Podfile не найден, пропускаем pod install."
+          fi
 
       - name: Build iOS app
         run: |
