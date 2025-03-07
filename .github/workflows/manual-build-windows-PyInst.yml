@@ -25,7 +25,7 @@ jobs:
         pyinstaller --onefile --name MyFletApp main.py
 
     - name: Upload EXE
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MyFletApp
         path: build/**/*.exe
