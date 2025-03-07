@@ -16,11 +16,14 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet pyinstaller
+    - name: Install Flet
+      run: pip install flet
 
     - name: Build EXE
-      run: |
-        pyinstaller --onefile src/main.py
+      run: flet build windows  # Команда для сборки .exe
+
+    - name: Upload EXE as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: flet-app
+        path: */*app.exe  # Замените на фактический путь к вашему .exe файлу
