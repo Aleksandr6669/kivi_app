@@ -41,7 +41,7 @@ jobs:
 
       - name: Build iOS app
         run: |
-          flet build ios
+          flet build ipa
 
       - name: Find app name dynamically
         id: find_app
