@@ -21,3 +21,9 @@ jobs:
 
     - name: Build APK
       run: flet build apk  # Твоя команда для билда
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: flet-app-apk
+        path: build/**/*.apk  # Для Android
