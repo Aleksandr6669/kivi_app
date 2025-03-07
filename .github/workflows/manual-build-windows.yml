@@ -1,0 +1,23 @@
+name: Manual EXE Build for Flet
+
+on:
+  workflow_dispatch:  # Ручной запуск по кнопке
+
+jobs:
+  build:
+    runs-on: windows-latest  # Используем Windows для сборки .exe
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Install Flet
+      run: pip install flet
+
+    - name: Build EXE
+      run: flet build exe  # Команда для сборки .exe
