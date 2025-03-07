@@ -23,9 +23,11 @@ jobs:
       run: chcp 65001
 
     - name: Build EXE
-      run: chcp 65001
-      run: flet build windows  # Команда для сборки .exe
-    
+      shell: cmd
+      run: |
+        chcp 65001
+        flet build windows  # Команда для сборки .exe
+
     - name: Upload macOS App
       uses: actions/upload-artifact@v4
       with:
