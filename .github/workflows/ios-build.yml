@@ -1,47 +1,50 @@
-name: Build IPA for iOS
+name: Build iOS App
 
 on:
+  workflow_dispatch:  # Запуск вручную
   push:
     branches:
-      - main
-  workflow_dispatch: 
+      - main  # Запуск при пуше в main
 
 jobs:
-  build:
-    runs-on: macos-latest
+  build-ios:
+    runs-on: macos-latest  # GitHub использует macOS для сборки
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.9'
+      - name: Install Python and dependencies
+        run: |
+          brew install python
+          pip install flet
 
-    - name: Install dependencies
-      run: |
-        pip install flet
-        sudo gem install cocoapods
-        pod install
+      - name: Install Xcode and dependencies
+        run: |
+          xcode-select --install
+          sudo gem install cocoapods
+          pod install
 
-    - name: Print environment variables
-      run: env
+      - name: Build iOS app
+        run: |
+          flet build ios
 
-    - name: List files in current directory
-      run: ls -la
+      - name: Find app name dynamically
+        id: find_app
+        run: |
+          APP_NAME=$(ls build/ios | grep .xcarchive | sed 's/.xcarchive//')
+          echo "App name found: $APP_NAME"
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
 
-    - name: Setup Xcode and create archive
-      run: |
-        sudo xcode-select --switch /Applications/Xcode_12.5.app
-        xcodebuild -workspace YourProject.xcworkspace -scheme YourScheme archive -archivePath $PWD/build/YourApp.xcarchive
+      - name: Export IPA file
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "build/ios/$APP_NAME.xcarchive" \
+            -exportPath "build/ios/$APP_NAME.ipa" \
+            -exportOptionsPlist ExportOptions.plist
 
-    - name: Export IPA
-      run: |
-        xcodebuild -exportArchive -archivePath $PWD/build/YourApp.xcarchive -exportPath $PWD/build/YourApp.ipa -exportOptionsPlist ExportOptions.plist
-
-    - name: Upload IPA as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: flet-app-ipa
-        path: build/**/*.ipa
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flet-ios-app
+          path: build/ios/*.ipa
