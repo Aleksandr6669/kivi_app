@@ -1,7 +1,7 @@
 name: Manual APK Build for Flet
 
 on:
-  workflow_dispatch:  # Это делает процесс ручным, его можно запускать кнопкой
+  workflow_dispatch:  # Ручной запуск по кнопке
 
 jobs:
   build:
@@ -14,19 +14,10 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.9'  # Можно изменить на нужную версию Python
+        python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet
+    - name: Install Flet
+      run: pip install flet
 
     - name: Build APK
-      run: |
-        flet build apk  # Команда для сборки APK
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v2
-      with:
-        name: flet-app-apk
-        path: ./build/*.apk  # Путь к скомпилированному файлу APK
+      run: flet build apk  # Твоя команда для билда
