@@ -19,5 +19,8 @@ jobs:
     - name: Install Flet
       run: pip install flet
 
+    - name: Set console code page to UTF-8
+      run: chcp 65001
+
     - name: Build EXE
       run: flet build windows  # Команда для сборки .exe
