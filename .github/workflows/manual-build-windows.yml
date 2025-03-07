@@ -19,17 +19,8 @@ jobs:
     - name: Install Flet
       run: pip install flet
 
-    - name: Set console code page to UTF-8
+    - name: Set code page to UTF-8
       run: chcp 65001
 
     - name: Build EXE
-      shell: cmd
-      run: |
-        chcp 65001
-        flet build windows  # Команда для сборки .exe
-
-    - name: Upload macOS App
-      uses: actions/upload-artifact@v4
-      with:
-        name: flet-app-macos
-        path: build/**/*.app
+      run: flet build windows  # Команда для сборки .exe
