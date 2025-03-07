@@ -1,64 +1,50 @@
 name: Build iOS App
 
 on:
-  workflow_dispatch:  # Запуск вручную
   push:
     branches:
-      - main  # Запуск при пуше в main
+      - main
 
 jobs:
-  build-ios:
-    runs-on: macos-latest  # GitHub использует macOS для сборки
+  build:
+    runs-on: macos-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # Проверяем, что у нас есть доступ к репозиторию
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Install Python and dependencies
-        run: |
-          brew install python
-          pip install flet
+    # Устанавливаем необходимые зависимости (Xcode, CocoaPods)
+    - name: Install dependencies
+      run: |
+        sudo gem install cocoapods
+        pod install
 
-      - name: Check and install Xcode dependencies
-        run: |
-          if ! xcode-select -p &>/dev/null; then
-            xcode-select --install
-          else
-            echo "Xcode command line tools уже установлены."
-          fi
+    # Проверяем наличие ExportOptions.plist
+    - name: Check ExportOptions.plist
+      run: ls -la ExportOptions.plist
 
-          if ! gem list cocoapods -i > /dev/null; then
-            sudo gem install cocoapods
-          else
-            echo "CocoaPods уже установлен."
-          fi
+    # Собираем проект и архивируем его
+    - name: Build and Archive iOS App
+      run: |
+        xcodebuild -workspace YourProject.xcworkspace \
+          -scheme YourScheme \
+          -sdk iphoneos \
+          -configuration Release \
+          -archivePath build/ios/YourApp.xcarchive \
+          archive
 
-          if [ -f "ios/Podfile" ]; then
-            pod install
-          else
-            echo "Podfile не найден, пропускаем pod install."
-          fi
+    # Экспортируем .ipa файл без подписания
+    - name: Export IPA file
+      run: |
+        xcodebuild -exportArchive \
+          -archivePath "build/ios/YourApp.xcarchive" \
+          -exportPath "build/ios/" \
+          -exportOptionsPlist ExportOptions.plist
 
-      - name: Build iOS app
-        run: |
-          flet build ipa
-
-      - name: Find app name dynamically
-        id: find_app
-        run: |
-          APP_NAME=$(ls build/ios | grep .xcarchive | sed 's/.xcarchive//')
-          echo "App name found: $APP_NAME"
-          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-
-      - name: Export IPA file
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath "build/ios/$APP_NAME.xcarchive" \
-            -exportPath "build/ios/$APP_NAME.ipa" \
-            -exportOptionsPlist ExportOptions.plist
-
-      - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: flet-ios-app
-          path: build/ios/*.ipa
+    # Загружаем артефакт (.ipa файл)
+    - name: Upload IPA as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app-ipa
+        path: build/ios/*.ipa
