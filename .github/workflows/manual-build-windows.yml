@@ -23,6 +23,7 @@ jobs:
       run: chcp 65001
 
     - name: Build EXE
+      run: chcp 65001
       run: flet build windows  # Команда для сборки .exe
     
     - name: Upload macOS App
