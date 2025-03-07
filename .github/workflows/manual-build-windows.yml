@@ -16,11 +16,11 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install Flet
-      run: pip install flet
-
-    - name: Set code page to UTF-8
-      run: chcp 65001
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flet pyinstaller
 
     - name: Build EXE
-      run: flet build windows  # Команда для сборки .exe
+      run: |
+        pyinstaller --onefile src/main.py
