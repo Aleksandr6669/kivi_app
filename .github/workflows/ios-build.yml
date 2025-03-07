@@ -5,38 +5,44 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest   # Убедись, что у тебя macOS runner
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Шаг 1: Клонируем репозиторий
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        sudo gem install cocoapods
-        pod install
+      # Шаг 2: Устанавливаем зависимости, если они есть
+      - name: Install dependencies
+        run: |
+          sudo gem install cocoapods
+          pod install
 
-    - name: Check ExportOptions.plist
-      run: ls -la ExportOptions.plist
+      # Шаг 3: Проверяем, что файл ExportOptions.plist существует
+      - name: Check ExportOptions.plist
+        run: ls -la ExportOptions.plist
 
-    - name: Build and Archive iOS App
-      run: |
-        xcodebuild -workspace YourProject.xcworkspace \
-          -scheme YourScheme \
-          -sdk iphoneos \
-          -configuration Release \
-          -archivePath build/ios/YourApp.xcarchive \
-          archive
+      # Шаг 4: Собираем проект и создаем архив .xcarchive
+      - name: Build and Archive iOS App
+        run: |
+          xcodebuild -workspace YourProject.xcworkspace \
+            -scheme YourScheme \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/ios/YourApp.xcarchive \
+            archive
 
-    - name: Export IPA file
-      run: |
-        xcodebuild -exportArchive \
-          -archivePath "build/ios/YourApp.xcarchive" \
-          -exportPath "build/ios/" \
-          -exportOptionsPlist ExportOptions.plist
+      # Шаг 5: Экспортируем .ipa файл
+      - name: Export IPA file
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "build/ios/YourApp.xcarchive" \
+            -exportPath "build/ios/" \
+            -exportOptionsPlist ExportOptions.plist
 
-    - name: Upload IPA as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ios-app-ipa
-        path: build/ios/*.ipa
+      # Шаг 6: Загружаем .ipa файл как артефакт
+      - name: Upload IPA as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-app-ipa
+          path: build/ios/*.ipa
