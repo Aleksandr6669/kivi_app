@@ -1,30 +1,24 @@
 name: Build iOS App
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Это позволяет запускать билд вручную через GitHub Actions UI
 
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-    # Проверяем, что у нас есть доступ к репозиторию
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Устанавливаем необходимые зависимости (Xcode, CocoaPods)
     - name: Install dependencies
       run: |
         sudo gem install cocoapods
         pod install
 
-    # Проверяем наличие ExportOptions.plist
     - name: Check ExportOptions.plist
       run: ls -la ExportOptions.plist
 
-    # Собираем проект и архивируем его
     - name: Build and Archive iOS App
       run: |
         xcodebuild -workspace YourProject.xcworkspace \
@@ -34,7 +28,6 @@ jobs:
           -archivePath build/ios/YourApp.xcarchive \
           archive
 
-    # Экспортируем .ipa файл без подписания
     - name: Export IPA file
       run: |
         xcodebuild -exportArchive \
@@ -42,7 +35,6 @@ jobs:
           -exportPath "build/ios/" \
           -exportOptionsPlist ExportOptions.plist
 
-    # Загружаем артефакт (.ipa файл)
     - name: Upload IPA as artifact
       uses: actions/upload-artifact@v3
       with:
