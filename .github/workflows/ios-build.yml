@@ -21,7 +21,7 @@ jobs:
 
     - name: Install Xcode dependencies
       run: |
-        sudo gem install cocoapods
+        sudo gem install cocoapods -v 1.16.2  # Указываем нужную версию cocoapods
         pod install
 
     - name: Build iOS
