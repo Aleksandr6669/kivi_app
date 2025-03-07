@@ -19,10 +19,10 @@ jobs:
     - name: Install Flet
       run: pip install flet
 
-    - name: Install Xcode dependencies
+    - name: Install Xcode Command Line Tools
       run: |
-        sudo gem install cocoapods -v 1.16.2  # Указываем нужную версию cocoapods
-        pod install
+        sudo xcode-select --switch /Applications/Xcode_12.5.app/Contents/Developer
+        sudo xcodebuild -license accept
 
     - name: Build iOS
       run: flet build ios  # Твоя команда для билда iOS
