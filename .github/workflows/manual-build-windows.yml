@@ -24,3 +24,9 @@ jobs:
 
     - name: Build EXE
       run: flet build windows  # Команда для сборки .exe
+    
+    - name: Upload macOS App
+      uses: actions/upload-artifact@v4
+      with:
+        name: flet-app-macos
+        path: build/**/*.app
