@@ -26,4 +26,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: flet-app
-        path: */*app.exe  # Замените на фактический путь к вашему .exe файлу
+        path: build/**/*.exe  # Замените на фактический путь к вашему .exe файлу
