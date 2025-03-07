@@ -1,0 +1,45 @@
+name: Build IPA for iOS
+
+on:
+  push:
+    branches:
+      - main  # Событие, когда пушим в главную ветку
+  workflow_dispatch:  # Позволяет запускать сборку вручную
+
+jobs:
+  build:
+    runs-on: macos-latest  # Для iOS сборки нужен macOS-агент
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3  # Клонируем код из репозитория
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Install Flet (или нужный инструмент для сборки)
+      run: pip install flet  # или нужная команда для твоего фреймворка
+
+    - name: Build iOS project
+      run: flet build ios  # Используется команда для сборки iOS проекта
+
+    - name: Setup Xcode and create IPA
+      run: |
+        # Устанавливаем Xcode для создания IPA
+        sudo xcode-select --switch /Applications/Xcode_12.5.app  # Убедись, что у тебя есть нужная версия Xcode
+        sudo gem install cocoapods  # Если есть зависимости через CocoaPods
+        pod install  # Запуск установок зависимостей
+        xcodebuild -workspace YourProject.xcworkspace -scheme YourScheme archive -archivePath $PWD/build/YourApp.xcarchive  # Архивируем проект
+
+    - name: Export IPA
+      run: |
+        xcodebuild -exportArchive -archivePath $PWD/build/YourApp.xcarchive -exportPath $PWD/build/YourApp.ipa -exportOptionsPlist ExportOptions.plist
+        # Экспортируем IPA с помощью файла настроек ExportOptions.plist
+
+    - name: Upload IPA as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: flet-app-ipa
+        path: build/**/*.ipa  # Путь к созданному IPA файлу
