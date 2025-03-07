@@ -26,7 +26,7 @@ jobs:
         flet build apk  # Команда для сборки APK
 
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: flet-app-apk
         path: ./build/*.apk  # Путь к скомпилированному файлу APK
