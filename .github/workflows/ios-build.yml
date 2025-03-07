@@ -1,57 +1,47 @@
-name: Manual Build IPA for iOS
+name: Build IPA for iOS
 
 on:
   push:
     branches:
-      - main  # Работает при пуше в главную ветку
-  workflow_dispatch:  # Позволяет запускать сборку вручную
+      - main
+  workflow_dispatch: 
 
 jobs:
   build:
-    runs-on: macos-latest  # Для сборки iOS необходим macOS-агент
+    runs-on: macos-latest
 
     steps:
-    # 1. Клонируем репозиторий
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Устанавливаем Python (если используется Flet или другие зависимости на Python)
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.9'  # Можно использовать другую версию Python, если нужно
+        python-version: '3.9'
 
-    # 3. Устанавливаем Flet или другие зависимости
     - name: Install dependencies
       run: |
-        pip install flet  # Устанавливаем Flet (или нужный фреймворк)
+        pip install flet
+        sudo gem install cocoapods
+        pod install
 
-    # 4. Сборка проекта для iOS (через Flet или другой инструмент)
-    - name: Build iOS project
-      run: |
-        flet build ios  # Собираем проект для iOS
+    - name: Print environment variables
+      run: env
 
-    # 5. Устанавливаем зависимости проекта (например, для CocoaPods)
-    - name: Install CocoaPods dependencies
-      run: |
-        sudo gem install cocoapods  # Устанавливаем CocoaPods
-        pod install  # Устанавливаем зависимости
+    - name: List files in current directory
+      run: ls -la
 
-    # 6. Настроим Xcode и создадим .xcarchive (архив для iOS)
     - name: Setup Xcode and create archive
       run: |
-        # Выбираем нужную версию Xcode (если нужно)
-        sudo xcode-select --switch /Applications/Xcode_12.5.app  # Можно заменить на актуальную версию
+        sudo xcode-select --switch /Applications/Xcode_12.5.app
         xcodebuild -workspace YourProject.xcworkspace -scheme YourScheme archive -archivePath $PWD/build/YourApp.xcarchive
 
-    # 7. Экспортируем IPA-файл
     - name: Export IPA
       run: |
         xcodebuild -exportArchive -archivePath $PWD/build/YourApp.xcarchive -exportPath $PWD/build/YourApp.ipa -exportOptionsPlist ExportOptions.plist
 
-    # 8. Загружаем IPA-файл как артефакт
     - name: Upload IPA as artifact
       uses: actions/upload-artifact@v4
       with:
         name: flet-app-ipa
-        path: build/**/*.ipa  # Путь к созданному IPA
+        path: build/**/*.ipa
