@@ -1,11 +1,11 @@
 name: Manual iOS Build for Flet
 
 on:
-  workflow_dispatch:  # Ручной запуск по кнопке
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest  # Запуск на macOS
+    runs-on: macos-latest
 
     steps:
     - name: Checkout code
@@ -25,19 +25,28 @@ jobs:
         sudo xcodebuild -license accept
 
     - name: Build iOS IPA
-      run: flet build ipa  # Flet-команда для сборки
+      run: flet build ipa
 
     - name: Check IPA files
-      run: ls -R build/ipa  # Проверяем, какие файлы есть в папке
+      run: ls -R build/ios/archive
 
     - name: Create IPA manually if missing
       run: |
         if [ ! -f build/ipa/*.ipa ]; then
           echo "IPA file not found, creating manually..."
-          mkdir -p build/ipa/Payload
-          mv build/ipa/Runner.xcarchive/Products/Applications/Runner.app build/ipa/Payload/
-          cd build/ipa
-          zip -r Runner.ipa Payload/
+          
+          # Проверяем правильный путь к Runner.app
+          APP_PATH="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
+          
+          if [ -d "$APP_PATH" ]; then
+            mkdir -p build/ipa/Payload
+            cp -r "$APP_PATH" build/ipa/Payload/
+            cd build/ipa
+            zip -r Runner.ipa Payload/
+          else
+            echo "ERROR: Runner.app not found at $APP_PATH"
+            exit 1
+          fi
         else
           echo "IPA file exists, skipping manual creation."
         fi
@@ -46,4 +55,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: flet-app-ipa
-        path: build/ipa/*.ipa  # Загружаем .ipa файл
+        path: build/ipa/*.ipa
