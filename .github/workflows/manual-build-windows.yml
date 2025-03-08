@@ -20,9 +20,11 @@ jobs:
       run: pip install flet
 
     - name: Set code page to UTF-8
+      shell: cmd
       run: chcp 65001
 
     - name: Build EXE
+      shell: pwsh
       run: flet build windows  # Команда для сборки .exe
 
     - name: Upload EXE as artifact
