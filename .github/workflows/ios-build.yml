@@ -27,24 +27,33 @@ jobs:
     - name: Build iOS IPA
       run: flet build ipa
 
-    - name: Check IPA files
-      run: ls -R build/ios/archive
+    - name: Debug Paths
+      run: |
+        echo "Checking build directories..."
+        ls -R build || echo "No build directory"
+        ls -R build/ios || echo "No build/ios directory"
+        ls -R build/ipa || echo "No build/ipa directory"
+
+    - name: Find Runner.app
+      run: |
+        echo "Searching for Runner.app..."
+        find build -name "Runner.app" || echo "Runner.app not found"
 
     - name: Create IPA manually if missing
       run: |
         if [ ! -f build/ipa/*.ipa ]; then
           echo "IPA file not found, creating manually..."
-          
-          # Проверяем правильный путь к Runner.app
-          APP_PATH="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
-          
+
+          # Ищем Runner.app в разных местах
+          APP_PATH=$(find build -name "Runner.app" | head -n 1)
+
           if [ -d "$APP_PATH" ]; then
             mkdir -p build/ipa/Payload
             cp -r "$APP_PATH" build/ipa/Payload/
             cd build/ipa
             zip -r Runner.ipa Payload/
           else
-            echo "ERROR: Runner.app not found at $APP_PATH"
+            echo "ERROR: Runner.app not found anywhere in build/"
             exit 1
           fi
         else
