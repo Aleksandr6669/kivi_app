@@ -20,13 +20,10 @@ jobs:
       run: pip install flet
 
     - name: Set UTF-8 Environment Variable
-      run: |
-        [System.Environment]::SetEnvironmentVariable("PYTHONUTF8", "1", [System.EnvironmentVariableTarget]::Process)
-      shell: pwsh
+      run: echo "PYTHONIOENCODING=utf-8" >> $GITHUB_ENV
 
     - name: Build EXE
       run: flet build windows  # Команда для сборки .exe
-      shell: pwsh
 
     - name: Upload EXE as artifact
       uses: actions/upload-artifact@v4
