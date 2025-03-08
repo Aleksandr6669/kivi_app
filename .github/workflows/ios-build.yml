@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest  # macOS runner для сборки iOS-приложений
+    runs-on: macos-latest  # Запуск на macOS
 
     steps:
     - name: Checkout code
@@ -24,11 +24,14 @@ jobs:
         sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
         sudo xcodebuild -license accept
 
-    - name: Build iOS
-      run: flet build ipa  # Твоя команда для билда iOS
+    - name: Build iOS IPA
+      run: flet build ipa  # Flet-команда для сборки
+
+    - name: Check IPA files
+      run: ls -R build/ipa  # Проверяем, что лежит в папке
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
         name: flet-app-ipa
-        path: build/ipa  # Путь к файлу .ipa для iOS
+        path: build/ipa/*.ipa  # Загружаем .ipa файл
