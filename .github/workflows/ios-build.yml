@@ -35,7 +35,7 @@ jobs:
         if [ ! -f build/ipa/*.ipa ]; then
           echo "IPA file not found, creating manually..."
           mkdir -p build/ipa/Payload
-          mv build/ipa/Runner.app build/ipa/Payload/
+          mv build/ipa/Runner.xcarchive/Products/Applications/Runner.app build/ipa/Payload/
           cd build/ipa
           zip -r Runner.ipa Payload/
         else
