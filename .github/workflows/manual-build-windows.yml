@@ -19,8 +19,13 @@ jobs:
     - name: Install Flet
       run: pip install flet
 
+    - name: Set UTF-8 Environment Variable
+      run: |
+        echo "PYTHONIOENCODING=utf-8" >> $GITHUB_ENV
+        echo "PYTHONUTF8=1" >> $GITHUB_ENV
+
     - name: Build EXE
-      run: python -X utf8 -m flet build windows  # Команда для сборки .exe
+      run: flet build windows  # Команда для сборки .exe
 
     - name: Upload EXE as artifact
       uses: actions/upload-artifact@v4
