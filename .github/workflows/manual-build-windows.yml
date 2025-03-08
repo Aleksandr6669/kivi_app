@@ -16,24 +16,17 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Set code page to UTF-8
-      run: |
-        $OutputEncoding = [System.Text.Encoding]::UTF8
-
     - name: Install Flet
       run: pip install flet
 
-    - name: Check Python version
-      run: python --version
-
-    - name: Check Flet version
-      run: pip show flet
+    - name: Set code page to UTF-8
+      run: chcp 65001
 
     - name: Build EXE
-      run: flet build windows --no-ansi
+      run: flet build windows  # Команда для сборки .exe
 
     - name: Upload EXE as artifact
       uses: actions/upload-artifact@v4
       with:
         name: flet-app
-        path: build/windows/**/*.exe  # Замените на фактический путь к вашему .exe файлу
+        path: build/**/*.exe  # Замените на фактический путь к вашему .exe файлу
