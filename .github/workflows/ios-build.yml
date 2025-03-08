@@ -28,7 +28,19 @@ jobs:
       run: flet build ipa  # Flet-команда для сборки
 
     - name: Check IPA files
-      run: ls -R build/ipa  # Проверяем, что лежит в папке
+      run: ls -R build/ipa  # Проверяем, какие файлы есть в папке
+
+    - name: Create IPA manually if missing
+      run: |
+        if [ ! -f build/ipa/*.ipa ]; then
+          echo "IPA file not found, creating manually..."
+          mkdir -p build/ipa/Payload
+          mv build/ipa/Runner.app build/ipa/Payload/
+          cd build/ipa
+          zip -r Runner.ipa Payload/
+        else
+          echo "IPA file exists, skipping manual creation."
+        fi
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
