@@ -21,7 +21,7 @@ jobs:
 
     - name: Install Xcode Command Line Tools
       run: |
-        sudo xcode-select --switch /Applications/Xcode_12.5.app/Contents/Developer
+        sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
         sudo xcodebuild -license accept
 
     - name: Build iOS
