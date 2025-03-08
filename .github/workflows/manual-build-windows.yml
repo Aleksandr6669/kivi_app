@@ -19,13 +19,14 @@ jobs:
     - name: Install Flet
       run: pip install flet
 
-    - name: Set code page to UTF-8
-      shell: cmd
-      run: chcp 65001
+    - name: Set UTF-8 Environment Variable
+      run: |
+        [System.Environment]::SetEnvironmentVariable("PYTHONUTF8", "1", [System.EnvironmentVariableTarget]::Process)
+      shell: pwsh
 
     - name: Build EXE
-      shell: pwsh
       run: flet build windows  # Команда для сборки .exe
+      shell: pwsh
 
     - name: Upload EXE as artifact
       uses: actions/upload-artifact@v4
