@@ -1,5 +1,5 @@
 [project]
-name = "my_flet_app"  # Изменено с "flet" на другое название
+name = "KIVI Retail DEV"  # Изменено с "flet" на другое название
 version = "0.1.3"
 description = ""
 readme = "README.md"
@@ -13,16 +13,16 @@ dependencies = [
 
 [tool.flet]
 # org name в формате reverse domain name notation
-org = "com.mycompany"
+org = "com.kivi.app.retail"
 
 # Отображаемое имя проекта
-product = "flet"
+product = "Retail"
 
 # Название компании
-company = "Flet"
+company = "KIVI UA"
 
 # Копирайт
-copyright = "Copyright (C) 2025 by Flet"
+copyright = "Copyright (C) 2025 by KIVI"
 
 [tool.flet.app]
 path = "src"
