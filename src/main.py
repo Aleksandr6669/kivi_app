@@ -246,14 +246,18 @@ def main(page: ft.Page):
                             detail["title"],
                             size=24,
                             weight=ft.FontWeight.BOLD,
-                            color=ft.colors.WHITE
+                            color=ft.colors.WHITE,
+                            max_lines=2,
+                            overflow=ft.TextOverflow.ELLIPSIS
                         )
                     ], alignment=ft.MainAxisAlignment.START),
                     ft.Container(height=10),
                     ft.Text(
                         detail["description"],
                         size=16,
-                        color=ft.colors.WHITE70
+                        color=ft.colors.WHITE70,
+                        max_lines=2,
+                        overflow=ft.TextOverflow.ELLIPSIS
                     ),
                     ft.Container(height=20),
                     ft.Column([
@@ -337,7 +341,7 @@ def main(page: ft.Page):
                 }
         }
 
-        def create_stat_card(title, value, icon, color):
+        def create_stat_card(title, value, icon, color, key_int):
             """
             Создает карточку со статистикой.
             """
@@ -355,21 +359,37 @@ def main(page: ft.Page):
             ),
             content=ft.Column([
                 ft.Icon(icon, size=40, color=ft.colors.WHITE),
+                ft.Container(height=3),
+                ft.Text(
+                    title,
+                    size=14,
+                    color=ft.colors.WHITE70,
+                    text_align=ft.TextAlign.CENTER
+                    ),
+                ft.Container(height=3),
+                ft.Text(
+                    str(value),
+                    size=14,
+                    weight=ft.FontWeight.BOLD,
+                    color=ft.colors.WHITE,
+                    text_align=ft.TextAlign.CENTER
+                    ),
+                ft.Container(height=15),
+                ft.Text(
+                    "Тестові данні для відображення",
+                    size=26,
+                    weight=ft.FontWeight.BOLD,
+                    color=ft.colors.WHITE,
+                    text_align=ft.TextAlign.CENTER
+                    ),
                 ft.Container(height=5),
                 ft.Text(
-                title,
-                size=14,
-                color=ft.colors.WHITE70,
-                text_align=ft.TextAlign.CENTER
-                ),
-                ft.Container(height=5),
-                ft.Text(
-                str(value),
-                size=16,
-                weight=ft.FontWeight.BOLD,
-                color=ft.colors.WHITE,
-                text_align=ft.TextAlign.CENTER
-                )
+                    "Деталі",
+                    size=26,
+                    weight=ft.FontWeight.BOLD,
+                    color=ft.colors.WHITE,
+                    text_align=ft.TextAlign.CENTER
+                    )
             ], 
                 alignment=ft.MainAxisAlignment.CENTER),
                 animate=ft.Animation(300, "duration"),
@@ -382,6 +402,11 @@ def main(page: ft.Page):
                     card.width = 160
                     card.height = 160
                 else:
+                    # Перемещаем карточку в начало списка
+                    # stats_grid.controls.remove(card)
+                    # stats_grid.controls.insert(0, card)
+                    # stats_grid.scroll_to(key=key_int, duration=1000)  # Скролим к началу списка
+                    # stats_grid.update()
                     for c in stats_grid.controls:
                         c.width = 160
                         c.height = 160
@@ -389,13 +414,8 @@ def main(page: ft.Page):
                     card.width = 340
                     card.height = 450
                 card.update()
+                stats_grid.scroll_to(key=key_int, duration=1000)  # Скролим к началу списка
                 
-               
-                page.scroll_to(
-                        duration=1000,
-                        curve=ft.AnimationCurve.DECELERATE
-                    )
-
             card.on_click = on_tap
             return card
 
@@ -467,54 +487,63 @@ def main(page: ft.Page):
                     f"KIVI {stats['kivi']['completed']} грн.",
                     f"{stats['kivi']['completion_percent']} %",
                     ft.icons.TV,
-                    ft.colors.BLUE_500
+                    ft.colors.BLUE_500,
+                    0
                 ),
                 create_stat_card(
                     f"Lenovo {stats['lenovo']['completed']} грн.",
                     f"{stats['lenovo']['completion_percent']} %", 
                     ft.icons.LAPTOP,
-                    ft.colors.GREEN_500
+                    ft.colors.GREEN_500,
+                    1
                 ),
                 create_stat_card(
                     f"OPPO {stats['oppo']['completed']} грн.",
                     f"{stats['oppo']['completion_percent']} %",
                     ft.icons.PHONE_ANDROID,
-                    ft.colors.PURPLE_500
+                    ft.colors.PURPLE_500,
+                    2
                 ),
                 create_stat_card(
                     f"Pyramids {stats['pyramids']['completed']} грн.",
                     f"{stats['pyramids']['completion_percent']} %",
                     ft.icons.DEVICES,
-                    ft.colors.ORANGE_500
+                    ft.colors.ORANGE_500,
+                    3
                 ),
                 create_stat_card(
                     f"Fitnes {stats['fitnes']['completed']} грн.",
                     f"{stats['fitnes']['completion_percent']} %",
                     ft.icons.FITNESS_CENTER,
-                    ft.colors.BLUE_500
+                    ft.colors.BLUE_500,
+                    4
                 ),
                 create_stat_card(
                     f"Кріплення {stats['kivi mounts']['completed']} грн.",
                     f"{stats['kivi mounts']['completion_percent']} %",
                     ft.icons.BUILD,
-                    ft.colors.GREEN_500
+                    ft.colors.GREEN_500,
+                    5
                 ),
                 create_stat_card(
                     f"ТЕСТ ?ю",
                     f"321 %",
                     ft.icons.BUILD,
-                    ft.colors.GREEN_500
+                    ft.colors.GREEN_500,
+                    6
                 ),
                 create_stat_card(
                     f"ТЕСТ !",
                     f"123 %",
                     ft.icons.BUILD,
-                    ft.colors.GREEN_500
+                    ft.colors.GREEN_500,
+                    7
                 )
             ],
             wrap=True,
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,
+            scroll=ft.ScrollMode.ALWAYS,
         )
         
         return ft.Container(
