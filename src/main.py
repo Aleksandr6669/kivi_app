@@ -341,39 +341,59 @@ def main(page: ft.Page):
             """
             Создает карточку со статистикой.
             """
-            return ft.Container(
-                width=160,
-                height=160,
-                padding=ft.padding.all(10),
-                margin=ft.margin.all(10),
-                border_radius=ft.border_radius.all(10),
-                gradient=ft.LinearGradient(
-                    begin=ft.alignment.top_center,
-                    end=ft.alignment.bottom_center,
-                    colors=[color, ft.colors.with_opacity(0.7, color)]
-                ),
-                content=ft.Column([
-                    ft.Icon(icon, size=40, color=ft.colors.WHITE),
-                    ft.Container(height=5),
-                    ft.Text(
-                        title,
-                        size=14,
-                        color=ft.colors.WHITE70,
-                        text_align=ft.TextAlign.CENTER
+            card = ft.Container(
+            width=160,
+            height=160,
+            padding=ft.padding.all(10),
+            margin=ft.margin.all(10),
+            border_radius=ft.border_radius.all(10),
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.top_center,
+                end=ft.alignment.bottom_center,
+                colors=[color, ft.colors.with_opacity(0.7, color)]
+            ),
+            content=ft.Column([
+                ft.Icon(icon, size=40, color=ft.colors.WHITE),
+                ft.Container(height=5),
+                ft.Text(
+                    title,
+                    size=14,
+                    color=ft.colors.WHITE70,
+                    text_align=ft.TextAlign.CENTER
                     ),
-                    ft.Container(height=5),
-                    ft.Text(
-                        str(value),
-                        size=16,
-                        weight=ft.FontWeight.BOLD,
-                        color=ft.colors.WHITE,
-                        text_align=ft.TextAlign.CENTER
+                ft.Container(height=5),
+                ft.Text(
+                    str(value),
+                    size=16,
+                    weight=ft.FontWeight.BOLD,
+                    color=ft.colors.WHITE,
+                    text_align=ft.TextAlign.CENTER
                     )
-                ], alignment=ft.MainAxisAlignment.CENTER)
+            ], alignment=ft.MainAxisAlignment.CENTER),
+            animate=ft.Animation(200, "ease_in_out")
             )
+
+            def on_tap(e):
+                card.width = 180 if card.width == 160 else 160
+                card.height = 180 if card.height == 160 else 160
+                card.update()
+
+            card.on_tap = on_tap
+            return card
 
         # Создание панели быстрых действий
         quick_actions = ft.Row([
+            ft.Container(
+                margin=ft.margin.only(bottom=25),
+                content=ft.ElevatedButton(
+                    "Відмітка на роботі",
+                    icon=ft.icons.ANALYTICS,
+                    style=ft.ButtonStyle(
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.BLUE_500
+                    )
+                )
+            ),
             ft.Container(
                 margin=ft.margin.only(bottom=25),
                 content=ft.ElevatedButton(
@@ -590,10 +610,7 @@ if __name__ == "__main__":
     Точка входа в приложение.
     Запускает приложение с указанной директорией ассетов.
     """
-    # ft.app(
-    #     target=main,
-    #     assets_dir="assets",
-    # )
+    ft.app(main, assets_dir="assets")
 
     # Альтернативный запуск в веб-браузере:
-    ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
+    # ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
