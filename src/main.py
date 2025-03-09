@@ -347,6 +347,7 @@ def main(page: ft.Page):
             padding=ft.padding.all(10),
             margin=ft.margin.all(10),
             border_radius=ft.border_radius.all(10),
+            
             gradient=ft.LinearGradient(
                 begin=ft.alignment.top_center,
                 end=ft.alignment.bottom_center,
@@ -356,29 +357,46 @@ def main(page: ft.Page):
                 ft.Icon(icon, size=40, color=ft.colors.WHITE),
                 ft.Container(height=5),
                 ft.Text(
-                    title,
-                    size=14,
-                    color=ft.colors.WHITE70,
-                    text_align=ft.TextAlign.CENTER
-                    ),
+                title,
+                size=14,
+                color=ft.colors.WHITE70,
+                text_align=ft.TextAlign.CENTER
+                ),
                 ft.Container(height=5),
                 ft.Text(
-                    str(value),
-                    size=16,
-                    weight=ft.FontWeight.BOLD,
-                    color=ft.colors.WHITE,
-                    text_align=ft.TextAlign.CENTER
-                    )
-            ], alignment=ft.MainAxisAlignment.CENTER),
-            animate=ft.Animation(200, "ease_in_out")
+                str(value),
+                size=16,
+                weight=ft.FontWeight.BOLD,
+                color=ft.colors.WHITE,
+                text_align=ft.TextAlign.CENTER
+                )
+            ], 
+                alignment=ft.MainAxisAlignment.CENTER),
+                animate=ft.Animation(300, "duration"),
+                
+
             )
 
             def on_tap(e):
-                card.width = 180 if card.width == 160 else 160
-                card.height = 180 if card.height == 160 else 160
+                if card.width == 340:
+                    card.width = 160
+                    card.height = 160
+                else:
+                    for c in stats_grid.controls:
+                        c.width = 160
+                        c.height = 160
+                        c.update()
+                    card.width = 340
+                    card.height = 450
                 card.update()
+                
+               
+                page.scroll_to(
+                        duration=1000,
+                        curve=ft.AnimationCurve.DECELERATE
+                    )
 
-            card.on_tap = on_tap
+            card.on_click = on_tap
             return card
 
         # Создание панели быстрых действий
