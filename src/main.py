@@ -138,7 +138,7 @@ def main(page: ft.Page):
                     news["icon"], 
                     news["date"]
                 ) for news in filtered_news
-            ]+ [ft.Container(height=250)]
+            ]+ [ft.Container(height=450)]
             news_list_view.update()
 
         # Создание поля поиска
@@ -168,7 +168,7 @@ def main(page: ft.Page):
 
         news_list_view = ft.ListView(
             height=page.height,
-            controls=news_controls + [ft.Container(height=250)]
+            controls=news_controls + [ft.Container(height=450)]
         )
 
         return ft.Container(
@@ -280,7 +280,7 @@ def main(page: ft.Page):
                 controls=[
                     create_detail_card(detail) 
                     for detail in details_list
-                ] + [ft.Container(height=250)]
+                ] + [ft.Container(height=450)]
             )
         )
 
@@ -497,7 +497,7 @@ def main(page: ft.Page):
                             height=page.height,
                             controls=[
                                 stats_grid,
-                                ft.Container(height=250)
+                                ft.Container(height=450)
                             ],
                         )
                     ]),
