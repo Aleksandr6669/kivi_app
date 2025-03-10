@@ -414,7 +414,6 @@ def main(page: ft.Page):
                     card.width = 340
                     card.height = 450
                 card.update()
-                stats_grid.scroll_to(key=key_int, duration=1000)  # Скролим к началу списка
                 
             card.on_click = on_tap
             return card
