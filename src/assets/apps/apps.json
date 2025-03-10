@@ -170,7 +170,7 @@
     {
       "name": "KIVI Retail",
       "version": "0.1.3",
-      "icon": "https://flet-rebz.onrender.com//icon.png",
+      "icon": "https://flet-rebz.onrender.com/icon.png",
       "down": "https://flet-rebz.onrender.com/apps/kivi.ipa",
       "description": "DEV KIVI APP",
       "bundleID": "com.kivi.app.retail",
