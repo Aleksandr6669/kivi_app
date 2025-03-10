@@ -405,7 +405,7 @@ def main(page: ft.Page):
                     # Перемещаем карточку в начало списка
                     stats_grid.controls.remove(card)
                     stats_grid.controls.insert(0, card)
-                    stats_grid.scroll_to(offset=0, duration=1000)  # Скролим к началу списка
+                    scroll_grid.scroll_to(offset=0, duration=1000)  # Скролим к началу списка
                     stats_grid.update()
                     for c in stats_grid.controls:
                         c.width = 160
@@ -550,7 +550,7 @@ def main(page: ft.Page):
                             scroll=ft.ScrollMode.HIDDEN,  # Включаем автоматический скролл
                             spacing=20
                         ),
-                        ft.ListView(
+                        scroll_grid = ft.ListView(
                             height=page.height,
                             controls=[
                                 stats_grid,
