@@ -557,7 +557,7 @@ def main(page: ft.Page):
                                 stats_grid,
                                 ft.Container(height=450)
                             ],
-                            scroll=ft.ScrollMode.ALWAYS
+                            scroll=ft.ScrollMode.ALWAYS,
                         )
                     ]),
     
