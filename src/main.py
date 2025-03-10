@@ -405,7 +405,7 @@ def main(page: ft.Page):
                     # Перемещаем карточку в начало списка
                     stats_grid.controls.remove(card)
                     stats_grid.controls.insert(0, card)
-                    stats_grid_scroll.scroll_to(offset=0, duration=500)  # Скролим к началу списка
+                    stats_grid_scroll.scroll_to(offset=0, duration=1500)  # Скролим к началу списка
                     page.update()
                     stats_grid.update()
                     for c in stats_grid.controls:
