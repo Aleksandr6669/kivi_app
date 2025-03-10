@@ -406,6 +406,7 @@ def main(page: ft.Page):
                     stats_grid.controls.remove(card)
                     stats_grid.controls.insert(0, card)
                     stats_grid.scroll_to(offset=0, duration=1000)  # Скролим к началу списка
+                    page.update()
                     stats_grid.update()
                     for c in stats_grid.controls:
                         c.width = 160
