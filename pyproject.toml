@@ -16,7 +16,7 @@ dependencies = [
 org = "com.kivi.app.retail"
 
 # Отображаемое имя проекта
-product = "Retail"
+product = "KIVI Retail DEV"
 
 # Название компании
 company = "KIVI UA"
