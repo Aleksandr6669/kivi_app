@@ -408,7 +408,7 @@ def main(page: ft.Page):
                     stats_grid_scroll.scroll_to(offset=0, duration=500)  # Скролим к началу списка
                     page.update()
                     # Ждём 1 секунду перед увеличением карточки
-                    await asyncio.sleep(1)
+                    ft.time.sleep(1)
                     stats_grid.update()
                     for c in stats_grid.controls:
                         c.width = 160
