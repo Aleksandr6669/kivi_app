@@ -341,7 +341,7 @@ def main(page: ft.Page):
                 }
         }
 
-        def create_stat_card(title, value, icon, color, key_int):
+        def create_stat_card(title, value, icon, color):
             """
             Создает карточку со статистикой.
             """
@@ -488,56 +488,48 @@ def main(page: ft.Page):
                     f"{stats['kivi']['completion_percent']} %",
                     ft.icons.TV,
                     ft.colors.BLUE_500,
-                    0
                 ),
                 create_stat_card(
                     f"Lenovo {stats['lenovo']['completed']} грн.",
                     f"{stats['lenovo']['completion_percent']} %", 
                     ft.icons.LAPTOP,
                     ft.colors.GREEN_500,
-                    1
                 ),
                 create_stat_card(
                     f"OPPO {stats['oppo']['completed']} грн.",
                     f"{stats['oppo']['completion_percent']} %",
                     ft.icons.PHONE_ANDROID,
                     ft.colors.PURPLE_500,
-                    2
                 ),
                 create_stat_card(
                     f"Pyramids {stats['pyramids']['completed']} грн.",
                     f"{stats['pyramids']['completion_percent']} %",
                     ft.icons.DEVICES,
                     ft.colors.ORANGE_500,
-                    3
                 ),
                 create_stat_card(
                     f"Fitnes {stats['fitnes']['completed']} грн.",
                     f"{stats['fitnes']['completion_percent']} %",
                     ft.icons.FITNESS_CENTER,
                     ft.colors.BLUE_500,
-                    4
                 ),
                 create_stat_card(
                     f"Кріплення {stats['kivi mounts']['completed']} грн.",
                     f"{stats['kivi mounts']['completion_percent']} %",
                     ft.icons.BUILD,
                     ft.colors.GREEN_500,
-                    5
                 ),
                 create_stat_card(
                     f"ТЕСТ ?ю",
                     f"321 %",
                     ft.icons.BUILD,
                     ft.colors.GREEN_500,
-                    6
                 ),
                 create_stat_card(
                     f"ТЕСТ !",
                     f"123 %",
                     ft.icons.BUILD,
                     ft.colors.GREEN_500,
-                    7
                 )
             ],
             wrap=True,
