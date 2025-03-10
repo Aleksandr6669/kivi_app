@@ -529,7 +529,8 @@ def main(page: ft.Page):
                     f"123 %",
                     ft.icons.BUILD,
                     ft.colors.GREEN_500,
-                )
+                ),
+                ft.Container(height=450)
             ],
             wrap=True,
             alignment=ft.MainAxisAlignment.CENTER,
@@ -553,8 +554,7 @@ def main(page: ft.Page):
                         ft.ListView(
                             height=page.height,
                             controls=[
-                                stats_grid,
-                                ft.Container(height=450)
+                                stats_grid
                             ]
                         )
                     ]),
