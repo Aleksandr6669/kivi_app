@@ -542,8 +542,7 @@ def main(page: ft.Page):
             ],
             wrap=True,
             alignment=ft.MainAxisAlignment.CENTER,
-            spacing=10,
-            scroll=ft.ScrollMode.ALWAYS,
+            spacing=10
         )
         
         return ft.Container(
@@ -566,6 +565,7 @@ def main(page: ft.Page):
                                 stats_grid,
                                 ft.Container(height=450)
                             ],
+                            scroll=ft.ScrollMode.ALWAYS
                         )
                     ]),
     
