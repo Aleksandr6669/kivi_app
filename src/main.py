@@ -531,7 +531,6 @@ def main(page: ft.Page):
                     ft.icons.BUILD,
                     ft.colors.GREEN_500,
                 ),
-                ft.Container(height=450)
             ],
             wrap=True,
             alignment=ft.MainAxisAlignment.CENTER,
@@ -541,7 +540,8 @@ def main(page: ft.Page):
         stats_grid_scroll = ft.ListView(
                             height=page.height,
                             controls=[
-                                stats_grid
+                                stats_grid,
+                                ft.Container(height=450)
                             ]
                         )
         
