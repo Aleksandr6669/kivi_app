@@ -403,10 +403,10 @@ def main(page: ft.Page):
                     card.height = 160
                 else:
                     # Перемещаем карточку в начало списка
-                    # stats_grid.controls.remove(card)
-                    # stats_grid.controls.insert(0, card)
-                    # stats_grid.scroll_to(key=key_int, duration=1000)  # Скролим к началу списка
-                    # stats_grid.update()
+                    stats_grid.controls.remove(card)
+                    stats_grid.controls.insert(0, card)
+                    stats_grid.scroll_to(0, duration=1000)  # Скролим к началу списка
+                    stats_grid.update()
                     for c in stats_grid.controls:
                         c.width = 160
                         c.height = 160
