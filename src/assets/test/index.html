@@ -83,7 +83,7 @@
           const modelNames = groupItems.map(item => {
             const modelObj = data.incomingModelName.find(m => m.model_id === item.model);
             return modelObj ? modelObj.model_name : 'Unknown';
-          }).join('/ ');
+          }).join('/');
           const groupRow = [`+ ${modelNames}`];
           for (let i = 1; i < data.modelsInHeader.length - 1; i++) {
             const date = data.modelsInHeader[i];
