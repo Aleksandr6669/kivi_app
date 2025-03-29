@@ -26,7 +26,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.SYSTEM
     page.horizontal_alignment = 'center'
     page.vertical_alignment = 'center'
-    page.adaptive = False  # Отключаем адаптивный дизайн
+    page.adaptive = True  # Отключаем адаптивный дизайн
     page.language = "ua"
     page.favicon = "favicon.png"
     page.fonts = {"default": "Roboto"}
