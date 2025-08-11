@@ -3,655 +3,556 @@ import asyncio
 
 def main(page: ft.Page):
     """
-    Главная функция приложения KIVI Retail.
-    
-    Инициализирует и настраивает основной интерфейс приложения, включая:
-    - Настройки страницы и PWA
-    - Ленту новостей
-    - Навигационную панель
-    - Поиск по новостям
-    
-    Args:
-        page (ft.Page): Основной объект страницы Flet
+    Головна функція програми KIVI Retail.
     """
-    page.title = "Kivi Retail TEST"
+    page.title = "Vika AI"
     page.version = "0.7"
-    page.description = "Kivi Retail TEST"
-    
-    # Настройки PWA (Progressive Web Application)
+    page.description = "Vika AI"
+
     page.assets_dir = "assets"
-    page.manifest = "manifest.json" 
-    
-    # Настройки интерфейса
-    page.theme_mode = ft.ThemeMode.SYSTEM
-    page.horizontal_alignment = 'center'
-    page.vertical_alignment = 'center'
-    page.adaptive = False  # Отключаем адаптивный дизайн
+    page.manifest = "manifest.json"
+
+    page.theme_mode = ft.ThemeMode.DARK
+    page.horizontal_alignment = ft.MainAxisAlignment.CENTER
+    page.vertical_alignment = ft.CrossAxisAlignment.CENTER
+    page.adaptive = False
     page.language = "ua"
     page.favicon = "favicon.png"
     page.fonts = {"default": "Roboto"}
+    page.padding = 0
 
-    # Список новостей компании
-    news_list = [
-        {"title": "KIVI UA запускає нову лінійку телевізорів", "content": "Компанія KIVI UA анонсувала нову лінійку телевізорів з підтримкою 4K та HDR. Детальніше можна дізнатися на [офіційному сайті](https://www.kivi.ua).", "icon": ft.Icons.TV, "date": "1 березня 2025"},
-        {"title": "KIVI UA відкриває новий шоурум", "content": "Компанія KIVI UA відкриває новий шоурум у центрі Києва. Адресу шоуруму можна знайти [тут](https://www.kivi.ua/showroom).", "icon": ft.Icons.STORE, "date": "28 лютого 2025"},
-        {"title": "KIVI UA оголошує про партнерство з провідними виробниками", "content": "Компанія KIVI UA уклала партнерські угоди з провідними виробниками електроніки. Подробиці на [сайті](https://www.kivi.ua/partners).", "icon": ft.Icons.HANDSHAKE, "date": "27 лютого 2025"},
-        {"title": "KIVI UA проводить благодійну акцію", "content": "Компанія KIVI UA організовує благодійну акцію зі збору коштів для дитячих будинків. Дізнатися більше можна [тут](https://www.kivi.ua/charity).", "icon": ft.Icons.VOLUNTEER_ACTIVISM, "date": "26 лютого 2025"},
-        {"title": "KIVI UA отримала нагороду за інновації", "content": "Компанія KIVI UA була удостоєна нагороди за інноваційні розробки в галузі телевізорів. Подробиці на [офіційному сайті](https://www.kivi.ua/awards).", "icon": ft.Icons.STAR, "date": "25 лютого 2025"},
-        {"title": "KIVI UA запускає програму лояльності", "content": "Компанія KIVI UA запускає нову програму лояльності для своїх клієнтів. Дізнатися більше можна [тут](https://www.kivi.ua/loyalty).", "icon": ft.Icons.CARD_GIFTCARD, "date": "24 лютого 2025"},
-        {"title": "KIVI UA розширює асортимент продукції", "content": "Компанія KIVI UA розширює асортимент своєї продукції, додаючи нові моделі телевізорів. Подробиці на [сайті](https://www.kivi.ua/products).", "icon": ft.Icons.SHOPPING_CART, "date": "23 лютого 2025"},
-        {"title": "KIVI UA проводить вебінар з нових технологій", "content": "Компанія KIVI UA організовує вебінар, присвячений новим технологіям у телевізорах. Реєстрація доступна [тут](https://www.kivi.ua/webinar).", "icon": ft.Icons.WEB, "date": "22 лютого 2025"},
-        {"title": "KIVI UA оголошує про знижки на продукцію", "content": "Компанія KIVI UA оголошує про сезонні знижки на свою продукцію. Подробиці на [офіційному сайті](https://www.kivi.ua/discounts).", "icon": ft.Icons.LOCAL_OFFER, "date": "21 лютого 2025"},
-        {"title": "KIVI UA відкриває нові вакансії", "content": "Компанія KIVI UA оголошує про відкриття нових вакансій. **Дізнатися більше можна** [тут](https://www.kivi.ua/careers).", "icon": ft.Icons.WORK, "date": "20 лютого 2025"},
+    # Загальні дані
+    tests_data = [
+        {"title": "Знання продукту KIVI TV", "status": "passed", "score": "10/10"},
+        {"title": "Техніки продажів", "status": "failed", "score": "4/10"},
+        {"title": "Стандарти мерчендайзингу", "status": "assigned"},
+        {"title": "Нова лінійка саундбарів", "status": "assigned"},
+        {"title": "Робота із запереченнями", "status": "passed", "score": "8/10"},
+        {"title": "Ще один тест", "status": "assigned"},
+        {"title": "І ще один", "status": "assigned"},
+        {"title": "Останній тест", "status": "failed", "score": "2/10"},
+        {"title": "Новий пройдений тест 1", "status": "passed", "score": "9/10"},
+        {"title": "Новий пройдений тест 2", "status": "passed", "score": "10/10"},
+        {"title": "Новий пройдений тест 3", "status": "passed", "score": "7/10"},
+        {"title": "Новий пройдений тест 4", "status": "passed", "score": "8/10"},
+        {"title": "Новий пройдений тест 5", "status": "passed", "score": "10/10"},
+        {"title": "Новий пройдений тест 6", "status": "passed", "score": "9/10"},
+        {"title": "Новий пройдений тест 7", "status": "passed", "score": "10/10"},
+        {"title": "Новий пройдений тест 8", "status": "passed", "score": "7/10"},
+        {"title": "Новий пройдений тест 9", "status": "passed", "score": "8/10"},
+        {"title": "Новий пройдений тест 10", "status": "passed", "score": "10/10"},
+        {"title": "Новий не пройдений тест 1", "status": "failed", "score": "3/10"},
+        {"title": "Новий не пройдений тест 2", "status": "failed", "score": "4/10"},
+        {"title": "Новий не пройдений тест 3", "status": "failed", "score": "1/10"},
+        {"title": "Новий не пройдений тест 4", "status": "failed", "score": "2/10"},
+        # Додано 15 нових навчальних матеріалів для демонстрації прокручування та пошуку
+        {"title": "Основи електроніки KIVI", "status": "assigned", "material_status": "learned"},
+        {"title": "Маркетингові акції на вересень", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Як працювати з CRM-системою", "status": "assigned", "material_status": "learned"},
+        {"title": "Просунуті техніки продажів", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Презентація нових моделей", "status": "assigned", "material_status": "learned"},
+        {"title": "Правила оформлення вітрин", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Майстер-клас зі спілкування", "status": "assigned", "material_status": "learned"},
+        {"title": "Технічні характеристики ТВ KIVI", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Як боротися із запереченнями клієнтів", "status": "assigned", "material_status": "learned"},
+        {"title": "Порівняння з конкурентами", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Інструкція з налаштування", "status": "assigned", "material_status": "learned"},
+        {"title": "Новинки аудіо-техніки KIVI", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Історія компанії KIVI", "status": "assigned", "material_status": "learned"},
+        {"title": "Особливості виробництва", "status": "assigned", "material_status": "not_learned"},
+        {"title": "Секрети успішних продажів", "status": "passed", "score": "10/10"},
     ]
-    def news_feed_view(page, title, content, icon, date):
+
+    # Створення Ref-об'єктів для кожної сторінки
+    home_view_ref = ft.Ref[ft.Container]()
+    search_view_ref = ft.Ref[ft.Container]()
+    progress_view_ref = ft.Ref[ft.Container]()
+    history_view_ref = ft.Ref[ft.Container]()
+    profile_view_ref = ft.Ref[ft.Container]()
+    bottom_navigation_bar_ref = ft.Ref[ft.NavigationBar]()
+
+    def create_test_item(test):
         """
-        Создает карточку новости с заданным оформлением.
-        
-        Args:
-            page: Объект страницы
-            title (str): Заголовок новости
-            content (str): Содержание новости в формате Markdown
-            icon (ft.Icon): Иконка для новости
-            date (str): Дата публикации
-            
-        Returns:
-            ft.Container: Контейнер с оформленной новостью
+        Допоміжна функція для створення картки тесту або навчального матеріалу.
         """
-        container = ft.Container(
-            padding=ft.padding.all(20),
-            border_radius=ft.border_radius.all(15),
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.top_center,
-                end=ft.alignment.bottom_center,
-                colors=[ft.colors.BLUE_400, ft.colors.BLUE_700]
-            ),
-            content=ft.Column([
-                ft.Row([
-                    ft.Icon(
-                        icon,
-                        size=40,
-                        color=ft.colors.WHITE
-                    ),
-                    ft.Column([
-                        ft.Text(
-                            title,
-                            size=18,
-                            weight=ft.FontWeight.BOLD,
-                            color=ft.colors.WHITE,
-                            max_lines=2,
-                            overflow=ft.TextOverflow.ELLIPSIS
-                        ),
-                        ft.Text(
-                            date,
-                            size=14,
-                            color=ft.colors.WHITE70
-                        )
-                    ], expand=True)
-                ]),
-                ft.Container(height=15),
-                ft.Container(
-                    padding=ft.padding.all(15),
-                    border_radius=ft.border_radius.all(10),
-                    bgcolor=ft.colors.with_opacity(0.1, ft.colors.WHITE),
-                    content=ft.Markdown(
-                        content,
-                        selectable=True,
-                        extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
-                        on_tap_link=lambda e: page.launch_url(e.data)
-                    )
-                )
-            ]),
-            margin=ft.margin.all(10),
-            animate=ft.Animation(350, "decelerate")
-        )
-
-        return container
-
-    def home_page():
-        """
-        Создает главную страницу приложения с лентой новостей и поиском.
-        
-        Returns:
-            ft.Container: Контейнер с содержимым главной страницы
-        """
-        def search_news(e):
-            """
-            Обработчик поиска по новостям.
-            
-            Фильтрует новости по введенному тексту в поисковой строке.
-            
-            Args:
-                e: Событие изменения текста в поле поиска
-            """
-            query = e.control.value.lower()
-            filtered_news = [
-                news for news in news_list 
-                if query in news["title"].lower() or 
-                   query in news["content"].lower()
-            ]
-            news_list_view.controls = [
-                news_feed_view(
-                    page, 
-                    news["title"], 
-                    news["content"], 
-                    news["icon"], 
-                    news["date"]
-                ) for news in filtered_news
-            ]+ [ft.Container(height=450)]
-            news_list_view.update()
-
-        # Создание поля поиска
-        search_input = ft.TextField(
-            label="Пошук новин",
-            on_change=search_news,
-            border_radius=ft.BorderRadius(20, 20, 20, 20),
-            border_color=ft.Colors.BLUE_200,
-            filled=True,
-            fill_color=ft.Colors.with_opacity(0.9, ft.Colors.BLUE_300),
-            label_style=ft.TextStyle(color=ft.Colors.WHITE),
-            text_style=ft.TextStyle(color=ft.Colors.WHITE),
-            prefix_icon=ft.Icon(ft.Icons.SEARCH, color=ft.Colors.WHITE),
-        )
-        
-
-        # Создание списка новостей
-        news_controls = [
-            news_feed_view(
-                page, 
-                news["title"], 
-                news["content"], 
-                news["icon"], 
-                news["date"]
-            ) for news in news_list
-        ]
-
-        news_list_view = ft.ListView(
-            height=page.height,
-            controls=news_controls + [ft.Container(height=450)]
-        )
-
-        return ft.Container(
-            height=0,
-            animate=ft.Animation(duration=250, curve="decelerate"),
-            content=ft.Column(
-                controls=[
-                    search_input,
-                    news_list_view,
-                ]
-            )
-        )
-
-
-
-    def details_page():
-        """
-        Создает страницу деталей с информацией о продуктах и сервисах.
-        
-        Returns:
-            ft.Container: Контейнер страницы деталей
-        """
-        # Список продуктов и сервисов
-        details_list = [
-            {
-                "title": "Олександр",
-                "description": "Риженков Олександр Олександрович",
-                "icon": ft.Icons.PERSON_2,
-                "specs": [
-                    "Магазин \"ДМ\" ID 116",
-                    "Промоутер ID 156",
-                ]
-            },
-            {
-                "title": "Завдання",
-                "description": "Завданя від РМ ДП",
-                "icon": ft.Icons.TASK,
-                "specs": [
-                    "✅ Пройти тести",
-                    "✅ Зробити тіжневий звіт",
-                    "❌ Консультація",
-                    "❌ Відправити залишки"
-                ]
-            },
-            {
-                "title": "Програма лояльності",
-                "description": "Спеціальні пропозиції для клієнтів",
-                "icon": ft.Icons.CARD_GIFTCARD,
-                "specs": [
-                    "Бонусна програма",
-                    "Спеціальні знижки",
-                    "Подарунки до покупок",
-                    "Ексклюзивні пропозиції"
-                ]
-            }
-        ]
-
-        def create_detail_card(detail):
-            """
-            Создает карточку с детальной информацией о продукте или сервисе.
-            """
-            return ft.Container(
-                padding=ft.padding.all(20),
-                margin=ft.margin.all(10),
-                border_radius=ft.border_radius.all(15),
-                gradient=ft.LinearGradient(
-                    begin=ft.alignment.top_left,
-                    end=ft.alignment.bottom_right,
-                    colors=[ft.colors.BLUE_400, ft.colors.BLUE_900],
-                ),
-                content=ft.Column([
-                    ft.Row([
-                        ft.Icon(detail["icon"], size=40, color=ft.colors.WHITE),
-                        ft.Text(
-                            detail["title"],
-                            size=24,
-                            weight=ft.FontWeight.BOLD,
-                            color=ft.colors.WHITE,
-                            max_lines=2,
-                            overflow=ft.TextOverflow.ELLIPSIS
-                        )
-                    ], alignment=ft.MainAxisAlignment.START),
-                    ft.Container(height=10),
-                    ft.Text(
-                        detail["description"],
-                        size=16,
-                        color=ft.colors.WHITE70,
-                        max_lines=2,
-                        overflow=ft.TextOverflow.ELLIPSIS
-                    ),
-                    ft.Container(height=20),
-                    ft.Column([
-                        ft.Container(
-                            padding=ft.padding.all(10),
-                            margin=ft.margin.symmetric(vertical=5),
-                            border_radius=ft.border_radius.all(10),
-                            bgcolor=ft.colors.with_opacity(0.1, ft.colors.WHITE),
-                            content=ft.Text(
-                                spec,
-                                color=ft.colors.WHITE,
-                                size=14
-                            )
-                        ) for spec in detail["specs"]
-                    ])
-                ])
-            )
-
-        return ft.Container(
-            height=0,
-            animate=ft.Animation(duration=250, curve="decelerate"),
-            content=ft.ListView(
-                height=page.height,
-                controls=[
-                    create_detail_card(detail) 
-                    for detail in details_list
-                ] + [ft.Container(height=450)]
-            )
-        )
-
-    def workspace_page():
-        """
-        Создает рабочее пространство с инструментами и статистикой.
-        
-        Returns:
-            ft.Container: Контейнер рабочего пространства
-        """
-        # Данные для графиков и статистики
-        stats = {
-                "kivi": {
-                    "sales": 157,  # Количество проданных единиц
-                    "revenue": 47100,  # Доход в грн (157 шт * 300 грн)
-                    "plan": 60000,  # План продаж в грн
-                    "completed": 47100,  # Выполнено в грн
-                    "completion_percent": 78  # Процент выполнения плана
-                },
-                "lenovo": {
-                    "sales": 89,
-                    "revenue": 47000,
-                    "plan": 90000,
-                    "completed": 47000,
-                    "completion_percent": 52
-                },
-                "oppo": {
-                    "sales": 134,
-                    "revenue": 134000,
-                    "plan": 150000,
-                    "completed": 134000,
-                    "completion_percent": 89
-                },
-                "pyramids": {
-                    "sales": 45,
-                    "revenue": 22500,
-                    "plan": 50000,
-                    "completed": 22500,
-                    "completion_percent": 45
-                },
-                "fitnes": {
-                    "sales": 67,
-                    "revenue": 26800,
-                    "plan": 40000,
-                    "completed": 26800,
-                    "completion_percent": 67
-                },
-                "kivi mounts": {
-                    "sales": 98,
-                    "revenue": 1960,
-                    "plan": 2400,
-                    "completed": 1960,
-                    "completion_percent": 82
-                }
+        status_map = {
+            "passed": {"icon": ft.Icons.CHECK_CIRCLE, "color": ft.Colors.GREEN, "text": "Пройдено"},
+            "failed": {"icon": ft.Icons.CANCEL, "color": ft.Colors.RED, "text": "Не пройдено"},
+            "assigned": {"icon": ft.Icons.ASSIGNMENT, "color": ft.Colors.BLUE, "text": "Призначено"},
         }
 
-        def create_stat_card(title, value, icon, color):
-            """
-            Создает карточку со статистикой.
-            """
-            card = ft.Container(
-            width=160,
-            height=160,
-            padding=ft.padding.all(10),
-            margin=ft.margin.all(10),
-            border_radius=ft.border_radius.all(10),
+        # Логіка для визначення статусу навчального матеріалу
+        if "score" not in test and "material_status" in test:
+            material_status = test.get("material_status", "not_learned")
+            if material_status == "learned":
+                icon = ft.Icons.CHECK_CIRCLE
+                color = ft.Colors.GREEN
+                text = "Вивчено"
+            else:
+                icon = ft.Icons.PENDING
+                color = ft.Colors.AMBER
+                text = "Не вивчено"
             
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.top_center,
-                end=ft.alignment.bottom_center,
-                colors=[color, ft.colors.with_opacity(0.7, color)]
-            ),
-            content=ft.Column([
-                ft.Icon(icon, size=40, color=ft.colors.WHITE),
-                ft.Container(height=3),
-                ft.Text(
-                    title,
-                    size=14,
-                    color=ft.colors.WHITE70,
-                    text_align=ft.TextAlign.CENTER
-                    ),
-                ft.Container(height=3),
-                ft.Text(
-                    str(value),
-                    size=14,
-                    weight=ft.FontWeight.BOLD,
-                    color=ft.colors.WHITE,
-                    text_align=ft.TextAlign.CENTER
-                    ),
-                ft.Container(height=15),
-                ft.Text(
-                    "Тестові данні для відображення",
-                    size=26,
-                    weight=ft.FontWeight.BOLD,
-                    color=ft.colors.WHITE,
-                    text_align=ft.TextAlign.CENTER
-                    ),
-                ft.Container(height=5),
-                ft.Text(
-                    "Деталі",
-                    size=26,
-                    weight=ft.FontWeight.BOLD,
-                    color=ft.colors.WHITE,
-                    text_align=ft.TextAlign.CENTER
-                    )
-            ], 
-                alignment=ft.MainAxisAlignment.CENTER),
-                animate=ft.Animation(300, "duration"),
-                
-
-            )
-
-            def on_tap(e):
-                if card.width == 340:
-                    card.width = 160
-                    card.height = 160
-                else:
-                    # Перемещаем карточку в начало списка
-                    stats_grid.controls.remove(card)
-                    stats_grid.controls.insert(0, card)
-                    stats_grid_scroll.scroll_to(offset=0, duration=1500)  # Скролим к началу списка
-                    page.update()
-                    stats_grid.update()
-                    for c in stats_grid.controls:
-                        c.width = 160
-                        c.height = 160
-                        c.update()
-                    card.width = 340
-                    card.height = 450
-                card.update()
-                
-            card.on_click = on_tap
-            return card
-
-        # Создание панели быстрых действий
-        quick_actions = ft.Row([
-            ft.Container(
-                margin=ft.margin.only(bottom=25),
-                content=ft.ElevatedButton(
-                    "Відмітка на роботі",
-                    icon=ft.icons.ANALYTICS,
-                    style=ft.ButtonStyle(
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.BLUE_500
-                    )
-                )
-            ),
-            ft.Container(
-                margin=ft.margin.only(bottom=25),
-                content=ft.ElevatedButton(
-                    "Статистика",
-                    icon=ft.icons.ANALYTICS,
-                    style=ft.ButtonStyle(
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.BLUE_500
-                    )
-                )
-            ),
-            ft.Container(
-                margin=ft.margin.only(bottom=25),
-                content=ft.ElevatedButton(
-                    "Звіт залишків",
-                    icon=ft.icons.ADD_SHOPPING_CART,
-                    style=ft.ButtonStyle(
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.PURPLE_500
-                    )
-                )
-            ),
-            ft.Container(
-                margin=ft.margin.only(bottom=25),
-                content=ft.ElevatedButton(
-                    "Звіт продажів",
-                    icon=ft.icons.ASSESSMENT,
-                    style=ft.ButtonStyle(
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.GREEN_500
-                    )
-                )
-            ),
-            ft.Container(
-                margin=ft.margin.only(bottom=25),
-                content=ft.ElevatedButton(
-                    "Тижневий звіт",
-                    icon=ft.icons.HELP_OUTLINE,
-                    style=ft.ButtonStyle(
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.ORANGE_500
-                    )
+            return ft.Card(
+                elevation=2,
+                content=ft.ListTile(
+                    leading=ft.Icon(icon, color=color),
+                    title=ft.Text(test["title"]),
+                    subtitle=ft.Text(f"Статус: {text}"),
+                    trailing=ft.Text("", weight=ft.FontWeight.BOLD),
                 )
             )
-        ],
-        alignment=ft.MainAxisAlignment.SPACE_EVENLY
+
+        # Логіка для тестів
+        else:
+            current_status = status_map.get(test.get("status"), {"icon": ft.Icons.ASSIGNMENT, "color": ft.Colors.BLUE, "text": "Призначено"})
+            return ft.Card(
+                elevation=2,
+                content=ft.ListTile(
+                    leading=ft.Icon(current_status["icon"], color=current_status["color"]),
+                    title=ft.Text(test["title"]),
+                    subtitle=ft.Text(f"Статус: {current_status['text']}"),
+                    trailing=ft.Text(test.get("score", ""), weight=ft.FontWeight.BOLD),
+                )
+            )
+
+    def create_progress_bar(title, value, total, color):
+        return ft.Column(
+            spacing=5,
+            controls=[
+                ft.Row(
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    controls=[
+                        ft.Text(f"{title}"),
+                        ft.Text(f"{value}/{total}")
+                    ]
+                ),
+                ft.ProgressBar(value=value/total if total > 0 else 0, color=color, bgcolor=ft.Colors.with_opacity(0.2, color)),
+            ]
         )
 
-        # Создание сетки статистики
-        stats_grid = ft.Row(
+
+    def home_page(ref, nav_bar_ref):
+        """
+        Створює головну сторінку.
+        """
+        user_info = {"name": "Олександр Риженков", "role": "Промоутер"}
+
+        passed_count = len([t for t in tests_data if t["status"] == "passed"])
+        failed_count = len([t for t in tests_data if t["status"] == "failed"])
+        assigned_count = len([t for t in tests_data if t["status"] == "assigned"])
+        total_tests = len(tests_data)
+
+        user_card = ft.Card(
+            elevation=4,
+            content=ft.Container(
+                padding=15,
+                border_radius=10,
+                bgcolor=ft.Colors.BLUE_GREY_800,
+                content=ft.Row(
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    controls=[
+                        ft.Column([
+                            ft.Text("Вітаємо,", size=16, color=ft.Colors.WHITE70),
+                            ft.Text(user_info["name"], size=22, weight=ft.FontWeight.BOLD),
+                            ft.Text(user_info["role"], size=16, color=ft.Colors.WHITE70),
+                        ]),
+                        ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=50, color=ft.Colors.BLUE_200)
+                    ]
+                )
+            )
+        )
+
+        assigned_button_with_badge = ft.Stack(
+            [
+                ft.ElevatedButton("Призначені", icon=ft.Icons.ASSIGNMENT, width=150),
+                ft.Container(
+                    content=ft.Text(
+                        value=str(assigned_count),
+                        size=12,
+                        color="white",
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    bgcolor="red",
+                    shape=ft.BoxShape.CIRCLE,
+                    right=0,
+                    top=0,
+                    visible=assigned_count > 0,
+                ),
+            ]
+        )
+
+        quick_links = ft.Row(
+            spacing=10,
+            alignment=ft.MainAxisAlignment.START,
+            scroll=ft.ScrollMode.AUTO,
             controls=[
-                create_stat_card(
-                    f"KIVI {stats['kivi']['completed']} грн.",
-                    f"{stats['kivi']['completion_percent']} %",
-                    ft.icons.TV,
-                    ft.colors.BLUE_500,
-                ),
-                create_stat_card(
-                    f"Lenovo {stats['lenovo']['completed']} грн.",
-                    f"{stats['lenovo']['completion_percent']} %", 
-                    ft.icons.LAPTOP,
-                    ft.colors.GREEN_500,
-                ),
-                create_stat_card(
-                    f"OPPO {stats['oppo']['completed']} грн.",
-                    f"{stats['oppo']['completion_percent']} %",
-                    ft.icons.PHONE_ANDROID,
-                    ft.colors.PURPLE_500,
-                ),
-                create_stat_card(
-                    f"Pyramids {stats['pyramids']['completed']} грн.",
-                    f"{stats['pyramids']['completion_percent']} %",
-                    ft.icons.DEVICES,
-                    ft.colors.ORANGE_500,
-                ),
-                create_stat_card(
-                    f"Fitnes {stats['fitnes']['completed']} грн.",
-                    f"{stats['fitnes']['completion_percent']} %",
-                    ft.icons.FITNESS_CENTER,
-                    ft.colors.BLUE_500,
-                ),
-                create_stat_card(
-                    f"Кріплення {stats['kivi mounts']['completed']} грн.",
-                    f"{stats['kivi mounts']['completion_percent']} %",
-                    ft.icons.BUILD,
-                    ft.colors.GREEN_500,
-                ),
-                create_stat_card(
-                    f"ТЕСТ ?ю",
-                    f"321 %",
-                    ft.icons.BUILD,
-                    ft.colors.GREEN_500,
-                ),
-                create_stat_card(
-                    f"ТЕСТ !",
-                    f"123 %",
-                    ft.icons.BUILD,
-                    ft.colors.GREEN_500,
-                ),
-            ],
-            wrap=True,
-            alignment=ft.MainAxisAlignment.CENTER,
+                ft.ElevatedButton("Навчання", icon=ft.Icons.SCHOOL, width=150),
+                ft.ElevatedButton("Всі тести", icon=ft.Icons.QUIZ, width=150),
+                assigned_button_with_badge,
+            ]
+        )
+
+        progress_bars = ft.Column(
+            spacing=10,
+            controls=[
+                create_progress_bar("Пройдено", passed_count, total_tests, ft.Colors.GREEN),
+                create_progress_bar("Не пройдено", failed_count, total_tests, ft.Colors.RED),
+                create_progress_bar("Призначено", assigned_count, total_tests, ft.Colors.BLUE),
+            ]
+        )
+
+        chart_container = ft.Card(
+            elevation=4,
+            content=ft.Container(
+                padding=15,
+                border_radius=10,
+                bgcolor=ft.Colors.BLUE_GREY_800,
+                content=ft.Column([
+                    ft.Text("Прогрес Тестів", size=18, weight=ft.FontWeight.BOLD),
+                    ft.Container(height=10),
+                    progress_bars,
+                    ft.Container(height=10),
+                    ft.Text(f"Усього тестів: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.WHITE70)
+                ])
+            )
+        )
+
+        visible_tests_count = ft.Ref[int]()
+        visible_tests_count.current = 2
+
+        filtered_tests = ft.Ref[list]()
+
+        test_list_view = ft.Column(
             spacing=10
         )
-        
-        stats_grid_scroll = ft.ListView(
-                            height=page.height,
-                            controls=[
-                                stats_grid,
-                                ft.Container(height=450)
-                            ]
-                        )
-        
-        return ft.Container(
-            height=0,
-            animate=ft.Animation(duration=250, curve="decelerate"),
-            content=ft.Column([
-                ft.Container(
-                    expand=True,  # Растягиваем контейнер
-                    content=ft.Column([
-                        ft.Row(
-                            controls=[
-                                quick_actions
-                            ],
-                            scroll=ft.ScrollMode.HIDDEN,  # Включаем автоматический скролл
-                            spacing=20
-                        ),
-                        stats_grid_scroll
-                        
-                    ]),
-    
-                )
-            ])
+
+        show_all_button = ft.TextButton(
+            "Показати все",
         )
 
-    async def on_nav_change(e):
-        """
-        Обработчик переключения между страницами в навигационной панели.
-        
-        Реализует анимированное переключение между страницами путем
-        изменения их высоты.
-        
-        Args:
-            e: Событие изменения выбранной вкладки
-        """
-        # Получаем индекс выбранной вкладки из события
-        selected_index = e.control.selected_index
-        
-        # Перебираем контейнеры страниц (со 2-го по 4-й элемент в page.controls)
-        # page.controls[0] - это AppBar, поэтому начинаем с [1:4]
-        for i, container in enumerate(page.controls[1:4]):
-            # Если индекс текущего контейнера совпадает с выбранной вкладкой,
-            # устанавливаем высоту равной высоте страницы,
-            # иначе устанавливаем высоту 0 чтобы скрыть контейнер
-            container.height = page.height if i == selected_index else 0
-            # Обновляем контейнер чтобы применить изменения
-            container.update()
+        def go_to_history(e):
+            nav_bar_ref.current.selected_index = 3
+            on_nav_change(ft.ControlEvent(target=nav_bar_ref.current, name='change', data='3', control=nav_bar_ref.current, page=page))
 
-    # Создание верхней панели приложения
+        def go_to_progress(e):
+            nav_bar_ref.current.selected_index = 2
+            on_nav_change(ft.ControlEvent(target=nav_bar_ref.current, name='change', data='2', control=nav_bar_ref.current, page=page))
+
+        def update_test_list(status_filter="passed"):
+            nonlocal show_all_button
+           
+            filtered_tests.current = [t for t in tests_data if t["status"] == status_filter]
+
+            visible_tests_count.current = 2
+
+            test_list_view.controls = [
+                create_test_item(t) for t in filtered_tests.current[:visible_tests_count.current]
+            ]
+
+            if status_filter in ["passed", "failed"]:
+                show_all_button.on_click = go_to_history
+            elif status_filter == "assigned":
+                show_all_button.on_click = go_to_progress
+            else:
+                show_all_button.on_click = None
+
+            show_all_button.visible = len(filtered_tests.current) > 2
+            page.update()
+
+        def filter_button_clicked(e):
+            status_map = {
+                "Пройдені": "passed",
+                "Не пройдені": "failed",
+                "Призначені": "assigned",
+            }
+            update_test_list(status_filter=status_map[e.control.text])
+
+        filter_buttons = ft.Row(
+            alignment=ft.MainAxisAlignment.SPACE_AROUND,
+            controls=[
+                ft.ElevatedButton("Пройдені", on_click=filter_button_clicked, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5))),
+                ft.ElevatedButton("Не пройдені", on_click=filter_button_clicked, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5))),
+                ft.ElevatedButton("Призначені", on_click=filter_button_clicked, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5))),
+            ]
+        )
+
+        update_test_list()
+
+        return ft.Container(
+            ref=ref,
+            expand=True,
+            visible=False,
+            padding=ft.padding.only(left=15, right=15, top=15),
+            content=ft.Column(
+                spacing=15,
+                controls=[
+                    user_card,
+                    quick_links,
+                    chart_container,
+                    filter_buttons,
+                    test_list_view,
+                    show_all_button,
+                ]
+            )
+        )
+
+    def search_page(ref):
+        """
+        Сторінка пошуку з полем для введення та списком навчального матеріалу.
+        """
+        # Фільтруємо всі тести, щоб залишити лише навчальний матеріал (без оцінки)
+        educational_materials = [t for t in tests_data if "score" not in t]
+        
+        # Створюємо Ref для списку, щоб оновлювати його після пошуку
+        search_list_view = ft.Ref[ft.Column]()
+
+        def filter_materials(e):
+            query = e.control.value.lower()
+            filtered_list = [
+                create_test_item(t) for t in educational_materials 
+                if query in t["title"].lower()
+            ]
+            search_list_view.current.controls = filtered_list
+            page.update()
+
+        return ft.Container(
+            ref=ref,
+            visible=False,
+            expand=True,
+            padding=ft.padding.all(15),
+            content=ft.Column(
+                spacing=10,
+                controls=[
+                    ft.Text("Навчальний матеріал", size=24, weight=ft.FontWeight.BOLD),
+                    ft.TextField(
+                        hint_text="Пошук...",
+                        prefix_icon=ft.Icons.SEARCH,
+                        on_change=filter_materials
+                    ),
+                    ft.Column(
+                        ref=search_list_view,
+                        spacing=10,
+                        controls=[create_test_item(t) for t in educational_materials],
+                        scroll=ft.ScrollMode.ADAPTIVE,
+                        expand=True
+                    )
+                ]
+            )
+        )
+
+    def progress_page(ref):
+        """
+        Сторінка прогресу з графіком та списком призначених тестів.
+        """
+        assigned_items = [t for t in tests_data if t.get("status") == "assigned"]
+        
+        passed_count = len([t for t in tests_data if t["status"] == "passed"])
+        failed_count = len([t for t in tests_data if t["status"] == "failed"])
+        assigned_count = len([t for t in tests_data if t["status"] == "assigned"])
+        total_tests = len(tests_data)
+
+        return ft.Container(
+            ref=ref,
+            visible=False,
+            expand=True,
+            padding=ft.padding.all(15),
+            content=ft.Column(
+                spacing=15,
+                controls=[
+                    ft.Text("Прогрес", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Card(
+                        content=ft.Container(
+                            padding=15,
+                            content=ft.Column([
+                                ft.Text("Прогрес Тестів", size=18, weight=ft.FontWeight.BOLD),
+                                ft.Container(height=10),
+                                create_progress_bar("Пройдено", passed_count, total_tests, ft.Colors.GREEN),
+                                create_progress_bar("Не пройдено", failed_count, total_tests, ft.Colors.RED),
+                                create_progress_bar("Призначено", assigned_count, total_tests, ft.Colors.BLUE),
+                                ft.Container(height=10),
+                                ft.Text(f"Усього тестів: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.WHITE70)
+                            ])
+                        )
+                    ),
+                    ft.Text("Призначені завдання та навчання", size=18, weight=ft.FontWeight.BOLD),
+                    ft.ListView(
+                        expand=True,
+                        spacing=10,
+                        controls=[create_test_item(t) for t in assigned_items],
+                    )
+                ]
+            )
+        )
+
+    def history_page(ref):
+        completed_tests = [t for t in tests_data if t["status"] in ["passed", "failed"]]
+
+        return ft.Container(
+            ref=ref,
+            visible=False,
+            expand=True,
+            padding=ft.padding.all(15),
+            content=ft.Column(
+                spacing=10,
+                controls=[
+                    ft.Text("Історія Тестів", size=24, weight=ft.FontWeight.BOLD),
+                    ft.ListView(
+                        expand=True,
+                        spacing=10,
+                        controls=[create_test_item(t) for t in completed_tests],
+                    )
+                ]
+            )
+        )
+
+    def profile_page(ref):
+        """
+        Сторінка профілю з інформацією про користувача.
+        """
+        user_info = {
+            "name": "Олександр Риженков",
+            "role": "Промоутер",
+            "phone": "+380 66 017 5627",
+            "email": "oleksandr.ryzhenkov@example.com",
+            "about": "Креативний та відповідальний промоутер з досвідом роботи в роздрібній торгівлі."
+        }
+
+        return ft.Container(
+            ref=ref,
+            visible=False,
+            expand=True,
+            padding=ft.padding.all(15),
+            content=ft.Column(
+                spacing=15,
+                controls=[
+                    ft.Text("Профіль", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Card(
+                        content=ft.Container(
+                            padding=15,
+                            content=ft.Column([
+                                ft.Row([
+                                    ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=50, color=ft.Colors.BLUE_200),
+                                    ft.Column([
+                                        ft.Text(user_info["name"], size=22, weight=ft.FontWeight.BOLD),
+                                        ft.Text(user_info["role"], size=16, color=ft.Colors.WHITE70),
+                                    ])
+                                ], alignment=ft.MainAxisAlignment.START),
+                                ft.Divider(height=20, color=ft.Colors.with_opacity(0.5, ft.Colors.WHITE)),
+                                ft.Text("Контактна інформація", size=18, weight=ft.FontWeight.BOLD),
+                                ft.ListTile(
+                                    leading=ft.Icon(ft.Icons.PHONE),
+                                    title=ft.Text(user_info["phone"]),
+                                    subtitle=ft.Text("Телефон")
+                                ),
+                                ft.ListTile(
+                                    leading=ft.Icon(ft.Icons.EMAIL),
+                                    title=ft.Text(user_info["email"]),
+                                    subtitle=ft.Text("Електронна пошта")
+                                ),
+                                ft.Divider(height=20, color=ft.Colors.with_opacity(0.5, ft.Colors.WHITE)),
+                                ft.Text("Про себе", size=18, weight=ft.FontWeight.BOLD),
+                                ft.Text(user_info["about"]),
+                            ])
+                        )
+                    )
+                ]
+            )
+        )
+
+    def on_nav_change(e):
+        selected_index = e.control.selected_index
+        views = [
+            home_view_ref.current,
+            search_view_ref.current,
+            progress_view_ref.current,
+            history_view_ref.current,
+            profile_view_ref.current,
+        ]
+
+        for i, view in enumerate(views):
+            if view:
+                view.visible = (i == selected_index)
+        page.update()
+
     top_appbar = ft.AppBar(
         title=ft.Text(
-            "KIVI Retail DEV",
+            "Школа",
             size=32,
             weight=ft.FontWeight.BOLD,
-            color=ft.Colors.BLUE_600
+            color=ft.Colors.GREY_400
         ),
         actions=[
             ft.IconButton(
-                ft.CupertinoIcons.INFO,
+                ft.Icons.INFO,
                 style=ft.ButtonStyle(padding=0)
             )
         ],
         bgcolor=ft.Colors.with_opacity(1, ft.ThemeMode.SYSTEM),
     )
 
-    # Создание нижней навигационной панели
     bottom_navigation_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(
-                bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(
-                    ft.Icons.NEWSPAPER,
-                    size=30,
-                    color=ft.Colors.BLUE_300
-                ),
-                label="Новини"
+                bgcolor=ft.Colors.INDIGO_700,
+                icon=ft.Icon(ft.Icons.HOME, size=30, color=ft.Colors.INDIGO_200),
+                label="Головна",
+                adaptive=True
             ),
             ft.NavigationBarDestination(
-                bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(ft.Icons.DETAILS, size=30, color=ft.Colors.BLUE_300),
-                label="Деталі"
+                bgcolor=ft.Colors.INDIGO_700,
+                icon=ft.Icon(ft.Icons.SEARCH, size=30, color=ft.Colors.INDIGO_200),
+                label="Пошук",
+                adaptive=True
             ),
             ft.NavigationBarDestination(
-                bgcolor=ft.Colors.BLUE_500,
-                icon=ft.Icon(ft.Icons.WORK, size=30, color=ft.Colors.BLUE_300),
-                label="Робочій простір"
+                bgcolor=ft.Colors.INDIGO_700,
+                icon=ft.Icon(ft.Icons.GRAPHIC_EQ, size=30, color=ft.Colors.INDIGO_200),
+                label="Прогрес",
+                adaptive=True
+            ),
+            ft.NavigationBarDestination(
+                bgcolor=ft.Colors.INDIGO_700,
+                icon=ft.Icon(ft.Icons.HISTORY, size=30, color=ft.Colors.INDIGO_200),
+                label="Історія",
+                adaptive=True
+            ),
+            ft.NavigationBarDestination(
+                bgcolor=ft.Colors.INDIGO_700,
+                icon=ft.Icon(ft.Icons.PERSON, size=30, color=ft.Colors.INDIGO_200),
+                label="Профіль",
+                adaptive=True
             ),
         ],
-        bgcolor=ft.Colors.with_opacity(1, ft.ThemeMode.SYSTEM),
         label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED,
-        on_change=on_nav_change
+        on_change=on_nav_change,
+        selected_index=0,
+        ref=bottom_navigation_bar_ref
     )
 
-    # Инициализация интерфейса
     page.add(top_appbar)
-    page.add(home_page())
-    page.add(details_page())
-    page.add(workspace_page())
+
+    main_content_area = ft.Column(expand=True, controls=[
+        home_page(home_view_ref, bottom_navigation_bar_ref),
+        search_page(search_view_ref),
+        progress_page(progress_view_ref),
+        history_page(history_view_ref),
+        profile_page(profile_view_ref)
+    ])
+    page.add(main_content_area)
     page.add(bottom_navigation_bar)
 
-    # Установка начальной страницы
-    page.controls[1].height = page.height
-    page.controls[1].update()
+    # Встановлення початкової сторінки
+    home_view_ref.current.visible = True
+    page.update()
+
 
 if __name__ == "__main__":
-    """
-    Точка входа в приложение.
-    Запускает приложение с указанной директорией ассетов.
-    """
-    ft.app(main, assets_dir="assets")
-
-    # Альтернативный запуск в веб-браузере:
-    # ft.app(main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
+    ft.app(main,
+        assets_dir="assets",
+        view=ft.AppView.WEB_BROWSER,
+        port=9002
+     )

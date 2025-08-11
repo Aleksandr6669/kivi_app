@@ -36,7 +36,7 @@ def main(page: ft.Page):
             padding=ft.Padding(10, 10, 10, 10),
             border_radius=ft.BorderRadius(10, 10, 10, 10),
             gradient=ft.LinearGradient(
-                colors=[ft.Colors.BLUE_200, ft.Colors.BLUE_400],
+                colors=[ft.Colors.BLUE_200, "blue400"],
                 begin=ft.alignment.top_left,
                 end=ft.alignment.bottom_right,
             ),
