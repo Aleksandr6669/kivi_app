@@ -1,6 +1,6 @@
 [project]
 name = "KIVI Retail DEV"  # Изменено с "flet" на другое название
-version = "0.1.3"
+version = "0.1.4"
 description = ""
 readme = "README.md"
 requires-python = ">=3.9"
@@ -8,7 +8,7 @@ authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
-    "flet==0.26.0"  # Основная зависимость
+    "flet==0.28.3"  # Основная зависимость
 ]
 
 [tool.flet]
