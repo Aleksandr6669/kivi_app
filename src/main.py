@@ -511,8 +511,9 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(main,
-        assets_dir="assets",
-        view=ft.AppView.WEB_BROWSER,
-        port=9002
-     )
+    ft.app(main)
+    # ft.app(main,
+    #     assets_dir="assets",
+    #     view=ft.AppView.WEB_BROWSER,
+    #     port=9002
+    #  )
