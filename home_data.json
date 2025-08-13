@@ -1,0 +1,196 @@
+{
+    "user_info": {
+        "name": "Олександр Риженков )",
+        "role": "Розробник",
+        "phone": "+380 66 017 5627",
+        "email": "oleksandr.ryzhenkov@example.com",
+        "about": "Креативний та відповідальний промоутер..."
+    },
+    "tests_data": [
+        {
+            "title": "Знання продукту KIVI TV",
+            "status": "passed",
+            "score": "10/10"
+        },
+        {
+            "title": "Техніки продажів",
+            "status": "passed",
+            "score": "9/10"
+        },
+        {
+            "title": "Стандарти мерчендайзингу",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Нова лінійка саундбарів",
+            "status": "passed",
+            "score": "9/10"
+        },
+        {
+            "title": "Робота із запереченнями",
+            "status": "passed",
+            "score": "8/10"
+        },
+        {
+            "title": "Ще один тест",
+            "status": "assigned",
+            "score": ""
+        },
+        {
+            "title": "І ще один",
+            "status": "assigned",
+            "score": ""
+        },
+        {
+            "title": "Останній тест",
+            "status": "failed",
+            "score": "2/10"
+        },
+        {
+            "title": "Новий пройдений тест 1",
+            "status": "passed",
+            "score": "9/10"
+        },
+        {
+            "title": "Новий пройдений тест 2",
+            "status": "passed",
+            "score": "10/10"
+        },
+        {
+            "title": "Новий пройдений тест 3",
+            "status": "passed",
+            "score": "7/10"
+        },
+        {
+            "title": "Новий пройдений тест 4",
+            "status": "passed",
+            "score": "8/10"
+        },
+        {
+            "title": "Новий пройдений тест 5",
+            "status": "passed",
+            "score": "10/10"
+        },
+        {
+            "title": "Новий пройдений тест 6",
+            "status": "passed",
+            "score": "9/10"
+        },
+        {
+            "title": "Новий пройдений тест 7",
+            "status": "passed",
+            "score": "10/10"
+        },
+        {
+            "title": "Новий пройдений тест 8",
+            "status": "passed",
+            "score": "7/10"
+        },
+        {
+            "title": "Новий пройдений тест 9",
+            "status": "passed",
+            "score": "8/10"
+        },
+        {
+            "title": "Новий пройдений тест 10",
+            "status": "passed",
+            "score": "10/10"
+        },
+        {
+            "title": "Новий не пройдений тест 1",
+            "status": "passed",
+            "score": "3/10"
+        },
+        {
+            "title": "Новий не пройдений тест 2",
+            "status": "passed",
+            "score": "4/10"
+        },
+        {
+            "title": "Новий не пройдений тест 3",
+            "status": "failed",
+            "score": "1/10"
+        },
+        {
+            "title": "Новий не пройдений тест 4",
+            "status": "failed",
+            "score": "2/10"
+        },
+        {
+            "title": "Основи електроніки KIVI",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Маркетингові акції на вересень",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Як працювати з CRM-системою",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Просунуті техніки продажів",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Презентація нових моделей",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Правила оформлення вітрин",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Майстер-клас зі спілкування",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Технічні характеристики ТВ KIVI",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Як боротися із запереченнями клієнтів",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Порівняння з конкурентами",
+            "status": "assigned",
+            "score": ""
+        },
+        {
+            "title": "Інструкція з налаштування",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Новинки аудіо-техніки KIVI",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Історія компанії KIVI",
+            "status": "learned",
+            "score": ""
+        },
+        {
+            "title": "Особливості виробництва",
+            "status": "not_learned",
+            "score": ""
+        },
+        {
+            "title": "Секрети успішних продажів",
+            "status": "not_learned",
+            "score": ""
+        }
+    ]
+}
