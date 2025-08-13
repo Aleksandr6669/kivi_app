@@ -8,7 +8,10 @@ authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
-    "flet==0.28.3"  # Основная зависимость
+    "flet==0.28.3",  # Основная зависимость
+    "requests",
+    "urllib3",
+    "asyncio"
 ]
 
 [tool.flet]
