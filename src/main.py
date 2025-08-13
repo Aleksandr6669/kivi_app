@@ -72,4 +72,6 @@ async def main(page: ft.Page):
     await show_login_view()
 
 if __name__ == "__main__":
-    ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    ft.app(main)
+
+    # ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
