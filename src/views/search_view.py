@@ -55,12 +55,11 @@ class SearchView(ft.Container):
                     ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.TextField(
-                    hint_text="Пошук...",
-                    prefix_icon=ft.Icons.SEARCH,
+                    label="Пошук...",
+                    icon=ft.Icons.SEARCH,
                     on_change=filter_materials,
                     border=ft.border.all(1, ft.Colors.OUTLINE),
                     border_radius=ft.border_radius.all(10),
-                    hint_style=ft.TextStyle(color=ft.Colors.BLUE_GREY_400),
                     content_padding=ft.padding.only(left=10, right=10)
                 ),
                 self.search_list_view

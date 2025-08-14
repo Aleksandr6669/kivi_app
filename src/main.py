@@ -11,6 +11,7 @@ async def main(page: ft.Page):
     page.title = "Тестування"
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 0
+    page.adaptive = True
 
     async def show_login_view():
         page.controls.clear()
