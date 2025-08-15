@@ -3,13 +3,14 @@ import asyncio
 from components.test_item import create_test_item
 from components.progress_bar import create_progress_bar
 from components.data import fetch_data_from_api
+from views.test_details_view import TestDetailsView  # Import the new view
 
 class ProgressView(ft.Container):
     def __init__(self):
         super().__init__(expand=True, visible=False, padding=ft.padding.all(10))
         self.loading_indicator = ft.Column(
             [
-                ft.Text("Завантаження прогресу...", color=ft.Colors.BLUE_GREY_400),
+                ft.Text("Завантаження навчання...", color=ft.Colors.BLUE_GREY_400),
                 ft.Container(height=10),  # Отступ снизу
                 ft.Container(
                     content=ft.ProgressBar(
@@ -27,22 +28,49 @@ class ProgressView(ft.Container):
 
     async def initialize_data(self):
         tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
-        self.assigned_items = [t for t in tests_data if t.get("status") == "assigned"]
         self.tests_data = tests_data
+
+        # Шаг 1: Получаем множество названий всех заданий со статусом 'learned'.
+        # Это ключевая информация для наших правил.
+        learned_titles = {t['title'] for t in self.tests_data if t.get('status') == 'learned'}
+
+        # Шаг 2: Создаем список активных заданий, применяя правила для каждого элемента.
+        self.active_items = []
+        for t in self.tests_data:
+            status = t.get("status")
+            title = t.get("title")
+
+            # Правило для 'not_learned'
+            if status == "not_learned":
+                self.active_items.append(t)
+                continue  # Переходим к следующему элементу
+
+            # Правило для обычного 'assigned'
+            if status == "assigned" and title not in learned_titles:
+                self.active_items.append(t)
+                continue
+
+            # НОВОЕ ПРАВИЛО для 'assigned_learned'
+            if status == "assigned_learned" and title in learned_titles:
+                self.active_items.append(t)
+                continue
+
         self.build_view()
         self.update()
 
     def build_view(self):
         passed_count = len([t for t in self.tests_data if t["status"] == "passed"])
         failed_count = len([t for t in self.tests_data if t["status"] == "failed"])
-        assigned_count = len(self.assigned_items)
+        assigned_count = len(self.active_items)
         total_tests = len(self.tests_data)
 
+        # VVV Добавляем expand=True, чтобы ListView мог расшириться VVV
         self.content = ft.Column(
+            expand=True, 
             spacing=10,
             controls=[
                 ft.Row(controls=[
-                    ft.Text("Прогрес", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Навчання", size=24, weight=ft.FontWeight.BOLD),
                     ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Card(
@@ -63,7 +91,12 @@ class ProgressView(ft.Container):
                 ft.ListView(
                     expand=True,
                     spacing=10,
-                    controls=[create_test_item(t) for t in self.assigned_items],
+                    # VVV ИСПРАВЛЕНИЕ ЗДЕСЬ VVV
+                    controls=[
+                        # Теперь передаем метод напрямую, без lambda
+                        create_test_item(t, on_click=self.handle_test_click)
+                        for t in self.active_items
+                    ],
                 )
             ]
         )
@@ -72,3 +105,12 @@ class ProgressView(ft.Container):
         self.content = self.loading_indicator
         self.update()
         await self.initialize_data()
+
+    async def handle_test_click(self, e: ft.ControlEvent):
+        test_data = e.control.data
+
+        print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
+        
+        details_view = TestDetailsView(page=self.page, test_data=test_data)
+        self.page.views.append(details_view)
+        self.page.update()

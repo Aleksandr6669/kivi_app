@@ -50,11 +50,18 @@ async def main(page: ft.Page):
         navigation_bar = ft.NavigationBar(
             selected_index=0,
             on_change=on_nav_change,
-            destinations=[ft.NavigationBarDestination(icon=ft.Icons.HOME, label="Головна"),
-                          ft.NavigationBarDestination(icon=ft.Icons.SEARCH, label="Пошук"),
-                          ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, label="Навчання"),
-                          ft.NavigationBarDestination(icon=ft.Icons.HISTORY, label="Історія"),
-                          ft.NavigationBarDestination(icon=ft.Icons.PERSON, label="Профіль")]
+            adaptive=False,
+            animation_duration=500,
+            label_behavior=ft.NavigationBarLabelBehavior.ONLY_SHOW_SELECTED,
+            destinations=[
+                ft.NavigationBarDestination(icon=ft.Icons.HOME, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
+                ft.NavigationBarDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.SEARCH, color=ft.Colors.BLUE_400), label="Пошук"),
+                ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
+                ft.NavigationBarDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY, color=ft.Colors.BLUE_400), label="Історія"),
+                ft.NavigationBarDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль")
+            ]
+
+
         )
 
         page.add(ft.Column([home_view, search_view, history_view, progress_view, profile_view, navigation_bar],
@@ -74,6 +81,6 @@ async def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(main)
+    # ft.app(main)
 
-    # ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)

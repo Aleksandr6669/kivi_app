@@ -29,16 +29,45 @@ class HomeView(ft.Container):
     async def initialize_data(self):
         # Завантаження даних
         self.user_info = await asyncio.to_thread(fetch_data_from_api, "user_info")
-        self.tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
+        tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
+        self.tests_data = tests_data
+
+        # Шаг 1: Получаем множество названий всех заданий со статусом 'learned'.
+        # Это ключевая информация для наших правил.
+        learned_titles = {t['title'] for t in self.tests_data if t.get('status') == 'learned'}
+
+        # Шаг 2: Создаем список активных заданий, применяя правила для каждого элемента.
+        self.active_items = []
+        for t in self.tests_data:
+            status = t.get("status")
+            title = t.get("title")
+
+            # Правило для 'not_learned'
+            if status == "not_learned":
+                self.active_items.append(t)
+                continue  # Переходим к следующему элементу
+
+            # Правило для обычного 'assigned'
+            if status == "assigned" and title not in learned_titles:
+                self.active_items.append(t)
+                continue
+
+            # НОВОЕ ПРАВИЛО для 'assigned_learned'
+            if status == "assigned_learned" and title in learned_titles:
+                self.active_items.append(t)
+                continue
+
+        self.build_view()
+        self.update()
         
         # Побудова UI після завантаження
         self.build_view()
         self.update()
 
     def build_view(self):
-        passed_count = len([t for t in self.tests_data if t.get("status") == "passed"])
-        failed_count = len([t for t in self.tests_data if t.get("status") == "failed"])
-        assigned_count = len([t for t in self.tests_data if t.get("status") == "assigned"])
+        passed_count = len([t for t in self.tests_data if t["status"] == "passed"])
+        failed_count = len([t for t in self.tests_data if t["status"] == "failed"])
+        assigned_count = len(self.active_items)
         total_tests = len(self.tests_data)
 
         user_card = ft.Card(
@@ -86,10 +115,45 @@ class HomeView(ft.Container):
             )
         )
         
-        assigned_tests = [t for t in self.tests_data if t.get("status") == "assigned"]
         test_list_view = ft.Column(
-            spacing=10,
-            controls=[create_test_item(t) for t in assigned_tests[:2]]
+            controls=[create_test_item(t) for t in self.active_items[:2]]
+        )
+
+        show_all_button = ft.Container(
+            # Оборачиваем Stack в кликабельный контейнер
+            # on_click=self.go_to_progress,
+            border_radius=8,
+            ink=True, # Добавляем эффект "ряби" при нажатии
+            padding=ft.padding.only(top=14, right=14), # Даем место для кружка уведомления
+            content=ft.Stack(
+                clip_behavior=ft.ClipBehavior.NONE,
+                controls=[
+                    # 1. Нижний слой: Текст
+                    ft.Text(
+                        "Усі завдання",
+                        color=ft.Colors.BLUE_300,
+                        weight=ft.FontWeight.W_500
+                    ),
+
+                    # 2. Верхний слой: Кружок уведомления
+                    ft.Container(
+                        content=ft.Text(
+                            f"{assigned_count}",
+                            size=10,
+                            color="white",
+                            text_align=ft.TextAlign.CENTER
+                        ),
+                        width=18,
+                        height=18,
+                        bgcolor=ft.Colors.RED_ACCENT_700,
+                        shape=ft.BoxShape.CIRCLE,
+                        alignment=ft.alignment.center,
+                        # Позиционируем кружок в правом верхнем углу
+                        right=-14,
+                        top=-5,
+                    ),
+                ]
+            )
         )
 
         self.content = ft.Column(
@@ -103,6 +167,7 @@ class HomeView(ft.Container):
                 chart_container,
                 ft.Row(controls=[ft.Text("Призначені завдання", size=18, weight=ft.FontWeight.BOLD)]),
                 test_list_view,
+                show_all_button if assigned_count > 0 else ft.Container()
             ]
         )
 

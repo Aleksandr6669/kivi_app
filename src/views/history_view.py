@@ -27,7 +27,7 @@ class HistoryView(ft.Container):
 
     async def initialize_data(self):
         tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
-        self.completed_tests = [t for t in tests_data if t["status"] in ["passed", "failed"]]
+        self.completed_tests = [t for t in tests_data if t["status"] in ["passed", "failed"] and t["item_type"] in ["test"]]
         self.build_view()
         self.update()
 

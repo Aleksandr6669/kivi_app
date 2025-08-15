@@ -8,9 +8,10 @@ def create_login_view(on_login_success):
         on_login_success (function): Функция обратного вызова, вызываемая при успешном входе.
     """
     username_field = ft.TextField(
-        label="Имя пользователя",
-        autofocus=True,
+        label="Почта",
+        # autofocus=True,
         width=300,
+        adaptive=True,
         border_radius=ft.border_radius.all(10),
         border_color=ft.Colors.INDIGO_200
     )
@@ -20,6 +21,7 @@ def create_login_view(on_login_success):
         password=True,
         can_reveal_password=True,
         width=300,
+        adaptive=True,
         border_radius=ft.border_radius.all(10),
         border_color=ft.Colors.INDIGO_200
     )
@@ -32,30 +34,42 @@ def create_login_view(on_login_success):
             error_text.visible = False
             await on_login_success()
         else:
-            error_text.value = "Пожалуйста, введите имя пользователя и пароль."
+            error_text.value = "Будьласко, введіть почту та пароль"
             error_text.visible = True
         e.page.update()
 
     login_button = ft.ElevatedButton(
-        text="Войти",
+        text="УВІЙТИ",
         on_click=login_clicked,
-        width=300,
+        width=150,
         height=40,
         style=ft.ButtonStyle(
             shape=ft.RoundedRectangleBorder(radius=10),
             bgcolor=ft.Colors.INDIGO_700,
-        )
+        ),
     )
 
     return ft.Container(
         content=ft.Column(
             [
-                ft.Text("Авторизация", size=24, weight=ft.FontWeight.BOLD),
-                ft.Divider(height=20, color="transparent"),
-                username_field,
-                password_field,
-                login_button,
-                error_text,
+                ft.Container(
+                    content=ft.Column(
+                        [
+                            ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=100, color=ft.Colors.INDIGO_700),
+                            ft.Text("Авторизация", size=28, weight=ft.FontWeight.BOLD),
+                            ft.Divider(height=5, color="transparent"),
+                            username_field,
+                            password_field,
+                            login_button,
+                            error_text,
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20,
+                    ),
+                    padding=ft.padding.all(10),
+                    
+                ),
+
+                ft.Text("© 2025 KIVI UA. Усі права захищено.", size=10)
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,

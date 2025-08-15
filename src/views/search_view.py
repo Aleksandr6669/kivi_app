@@ -2,6 +2,7 @@ import flet as ft
 import asyncio
 from components.test_item import create_test_item
 from components.data import fetch_data_from_api
+from views.test_details_view import TestDetailsView
 
 class SearchView(ft.Container):
     def __init__(self):
@@ -26,16 +27,16 @@ class SearchView(ft.Container):
 
     async def initialize_data(self):
         tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
-        self.educational_materials = [t for t in tests_data if not t.get("score")]
+        self.educational_materials = [t for t in tests_data if t["item_type"] in ["material"]]
         self.build_view()
         self.update()
 
     def build_view(self):
         self.search_list_view = ft.Column(
             spacing=10,
-            controls=[create_test_item(t) for t in self.educational_materials],
+            controls=[create_test_item(t, on_click=self.handle_item_click) for t in self.educational_materials],
             scroll=ft.ScrollMode.ADAPTIVE,
-            expand=True
+            expand=True,
         )
 
         def filter_materials(e):
@@ -56,11 +57,10 @@ class SearchView(ft.Container):
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.TextField(
                     label="Пошук...",
-                    icon=ft.Icons.SEARCH,
                     on_change=filter_materials,
-                    border=ft.border.all(1, ft.Colors.OUTLINE),
+                    border=ft.border.all(4, ft.Colors.OUTLINE),
                     border_radius=ft.border_radius.all(10),
-                    content_padding=ft.padding.only(left=10, right=10)
+                    content_padding=ft.padding.only(left=20, right=20),
                 ),
                 self.search_list_view
             ]
@@ -70,3 +70,14 @@ class SearchView(ft.Container):
         self.content = self.loading_indicator
         self.update()
         await self.initialize_data()
+
+    async def handle_item_click(self, e: ft.ControlEvent):
+        # Получаем данные из элемента, по которому кликнули
+        item_data = e.control.data
+        
+        print(f'Открываем детали для: {item_data.get("title")}')
+        
+        # Создаем и открываем новый View
+        details_view = TestDetailsView(page=self.page, test_data=item_data)
+        self.page.views.append(details_view)
+        self.page.update()
