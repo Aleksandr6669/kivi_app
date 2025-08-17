@@ -13,31 +13,70 @@ def create_test_item(test, on_click=None):
     }
 
     type_map = {
-        "material": {"type": "Материал"},
-        "test": {"type": "Тестування"}
+        "material": {"icon": ft.Icons.MENU_BOOK_OUTLINED, "tooltip": "Матеріал"},
+        "test": {"icon": ft.Icons.RULE_OUTLINED, "tooltip": "Тестування"}
     }
 
 
 
     current_status = status_map.get(test.get("status"), {"icon": ft.Icons.ASSIGNMENT, "color": ft.Colors.BLUE, "text": "Призначено"})
     type_info = type_map.get(test.get("item_type"), {})
+
+    # ИЗМЕНЕНИЕ 2: Собираем spans для одного Text виджета
+    trailing_spans = []
+    
+    trailing_controls = []
+    if type_info:
+        trailing_controls.append(ft.Icon(name=type_info.get("icon"), tooltip=type_info.get("tooltip"), color=ft.Colors.WHITE70))
+    score = test.get("score")
+    if score:
+        trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14))
+    
+    # --- Создаем всю карточку вручную ---
     return ft.Card(
-        elevation=2,
-        content=ft.ListTile(
-        leading=ft.Icon(current_status["icon"], color=current_status["color"]),
-        title=ft.Text(test["title"]),
-        subtitle=ft.Text(f"Статус: {current_status['text']}"),
-        trailing=ft.Row(
+        elevation=3,
+        margin=3,
+        content=ft.Container( # Контейнер для отступов и обработки нажатий
+            on_click=on_click,
+            data=test,
+            padding=ft.padding.symmetric(vertical=6, horizontal=12),
+            border_radius=ft.border_radius.all(8),
+            content=ft.Row( # Главная строка, которая имитирует ListTile
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    # Сначала тип, например "Тест" или "Матеріал"
-                    ft.Text(type_info.get("type", ""), weight=ft.FontWeight.NORMAL),
-                    # Затем счёт
-                    ft.Text(test.get("score", ""), weight=ft.FontWeight.BOLD),
+                    # 1. Левый элемент (leading)
+                    ft.Icon(current_status["icon"], color=current_status["color"], size=28),
+
+                    # 2. Центральная колонка (title + subtitle)
+                    # expand=True заставляет эту колонку занять всё доступное место
+                    ft.Column(
+                        [
+                            ft.Text(
+                                value=test.get("title", "Без назви"),
+                                max_lines=2,
+                                overflow=ft.TextOverflow.ELLIPSIS,
+                                weight=ft.FontWeight.W_500,
+                                size=15
+                            ),
+                            ft.Text(
+                                f"Статус: {current_status['text']}",
+                                color=ft.Colors.WHITE70,
+                                size=12
+                            ),
+                        ],
+                        spacing=2,
+                        expand=True, # <--- ЭТО КЛЮЧЕВОЕ СВОЙСТВО
+                    ),
+
+                    # 3. Правый элемент (trailing)
+                    ft.Row(
+                        controls=trailing_controls,
+                        spacing=8,
+                        vertical_alignment=ft.CrossAxisAlignment.CENTER
+                    ),
                 ],
-                spacing=10  # Добавляем немного отступа между элементами
             ),
-        data=test,
-        on_click=on_click
         ),
     )
 

@@ -12,6 +12,8 @@ async def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
     page.padding = 0
     page.adaptive = True
+    # page.fonts = {"MaterialIcons": ft.Icons.MATERIAL_ICONS}
+
 
     async def show_login_view():
         page.controls.clear()
@@ -81,6 +83,6 @@ async def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    # ft.app(main)
+    ft.app(main)
 
-    ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    # ft.app(main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)

@@ -3,6 +3,7 @@ import asyncio
 from components.test_item import create_test_item
 from components.progress_bar import create_progress_bar
 from components.data import fetch_data_from_api
+from views.test_details_view import TestDetailsView
 
 class HomeView(ft.Container):
     def __init__(self):
@@ -67,8 +68,8 @@ class HomeView(ft.Container):
     def build_view(self):
         passed_count = len([t for t in self.tests_data if t["status"] == "passed"])
         failed_count = len([t for t in self.tests_data if t["status"] == "failed"])
+        total_tests = len([t for t in self.tests_data if t.get('status')  != "assigned_learned" and t.get('status') != "learned" ])
         assigned_count = len(self.active_items)
-        total_tests = len(self.tests_data)
 
         user_card = ft.Card(
             elevation=4,
@@ -116,7 +117,7 @@ class HomeView(ft.Container):
         )
         
         test_list_view = ft.Column(
-            controls=[create_test_item(t) for t in self.active_items[:2]]
+            controls=[create_test_item(t, on_click=self.handle_test_click) for t in self.active_items[:2]]
         )
 
         show_all_button = ft.Container(
@@ -175,3 +176,21 @@ class HomeView(ft.Container):
         self.content = self.loading_indicator
         self.update()
         await self.initialize_data()
+
+    
+    async def handle_test_click(self, e: ft.ControlEvent):
+        test_data = e.control.data
+        print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
+
+        # Шаг 1: Проверяем, является ли текущий верхний View уже окном деталей
+        # `isinstance` проверяет тип объекта, а не конкретный экземпляр
+        if self.page.views and isinstance(self.page.views[-1], TestDetailsView):
+            print("An old TestDetailsView is already open. Removing it first.")
+            self.page.views.pop()
+
+        # Шаг 2: Создаем и добавляем новый View деталей
+        details_view = TestDetailsView(page=self.page, test_data=test_data)
+        self.page.views.append(details_view)
+        
+        # Шаг 3: Обновляем страницу, чтобы показать новый View
+        self.page.update()

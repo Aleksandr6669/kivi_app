@@ -59,10 +59,10 @@ class ProgressView(ft.Container):
         self.update()
 
     def build_view(self):
-        passed_count = len([t for t in self.tests_data if t["status"] == "passed"])
-        failed_count = len([t for t in self.tests_data if t["status"] == "failed"])
+        passed_count = len([t for t in self.tests_data if t.get('status')  == "passed"])
+        failed_count = len([t for t in self.tests_data if t.get('status')  == "failed"])
+        total_tests = len([t for t in self.tests_data if t.get('status')  != "assigned_learned" and t.get('status')  != "learned" ])
         assigned_count = len(self.active_items)
-        total_tests = len(self.tests_data)
 
         # VVV Добавляем expand=True, чтобы ListView мог расшириться VVV
         self.content = ft.Column(
@@ -108,9 +108,18 @@ class ProgressView(ft.Container):
 
     async def handle_test_click(self, e: ft.ControlEvent):
         test_data = e.control.data
-
         print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
-        
+
+        # Шаг 1: Проверяем, является ли текущий верхний View уже окном деталей
+        # `isinstance` проверяет тип объекта, а не конкретный экземпляр
+        if self.page.views and isinstance(self.page.views[-1], TestDetailsView):
+            print("An old TestDetailsView is already open. Removing it first.")
+            self.page.views.pop()
+
+        # Шаг 2: Создаем и добавляем новый View деталей
         details_view = TestDetailsView(page=self.page, test_data=test_data)
         self.page.views.append(details_view)
+        
+        # Шаг 3: Обновляем страницу, чтобы показать новый View
         self.page.update()
+            

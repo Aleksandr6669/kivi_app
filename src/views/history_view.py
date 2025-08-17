@@ -23,7 +23,7 @@ class HistoryView(ft.Container):
             spacing=5
         )
         self.content = self.loading_indicator
-
+    
 
     async def initialize_data(self):
         tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
@@ -45,6 +45,7 @@ class HistoryView(ft.Container):
                     ft.Text("Історія Тестів", size=24, weight=ft.FontWeight.BOLD),
                     ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                ft.Text("Ви не можете повторно відкрити тест.", size=16, weight=ft.FontWeight.BOLD),
                 self.history_list_view
             ]
         )
