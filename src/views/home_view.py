@@ -116,6 +116,7 @@ class HomeView(ft.Container):
             )
         )
         
+        
         test_list_view = ft.Column(
             controls=[create_test_item(t, on_click=self.handle_test_click) for t in self.active_items[:2]]
         )
@@ -167,8 +168,14 @@ class HomeView(ft.Container):
                 user_card,
                 chart_container,
                 ft.Row(controls=[ft.Text("Призначені завдання", size=18, weight=ft.FontWeight.BOLD)]),
-                test_list_view,
+                # test_list_view,
+                ft.ListView(
+                    expand=True,
+                    spacing=10,
+                    controls=[test_list_view]
+                ),
                 show_all_button if assigned_count > 0 else ft.Container()
+                
             ]
         )
 
