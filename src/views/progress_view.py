@@ -3,31 +3,30 @@ import asyncio
 from components.test_item import create_test_item
 from components.progress_bar import create_progress_bar
 from components.data import fetch_data_from_api
+from components.database_manager import get_user_profile, get_assigned_tests_for_user
 from views.test_details_view import TestDetailsView  # Import the new view
 
 class ProgressView(ft.Container):
     def __init__(self):
         super().__init__(expand=True, visible=False, padding=ft.padding.all(10))
+
         self.loading_indicator = ft.Column(
             [
-                ft.Text("Завантаження навчання...", color=ft.Colors.BLUE_GREY_400),
-                ft.Container(height=10),  # Отступ снизу
-                ft.Container(
-                    content=ft.ProgressBar(
-                        color=ft.Colors.BLUE, bgcolor=ft.Colors.BLUE_GREY_100, height=10,
-                        border_radius=ft.border_radius.all(5),
-                    ),
-                    # width=200,
-                ),
-                ft.Container(height=10)  # Отступ снизу
+                ft.ProgressRing(width=32, height=32),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=5
+            alignment=ft.MainAxisAlignment.CENTER,
+            expand=True
         )
+
         self.content = self.loading_indicator
 
     async def initialize_data(self):
-        tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
+        current_username = self.page.session.get("username")
+        tests_data = []
+        if current_username:
+            tests_data = await asyncio.to_thread(get_assigned_tests_for_user, current_username)
+        
         self.tests_data = tests_data
 
         # Шаг 1: Получаем множество названий всех заданий со статусом 'learned'.
@@ -54,6 +53,7 @@ class ProgressView(ft.Container):
             if status == "assigned_learned" and title in learned_titles:
                 self.active_items.append(t)
                 continue
+            
 
         self.build_view()
         self.update()
@@ -77,17 +77,17 @@ class ProgressView(ft.Container):
                     content=ft.Container(
                         padding=10,
                         content=ft.Column([
-                            ft.Text("Прогрес Тестів", size=16, weight=ft.FontWeight.BOLD),
+                            ft.Text("Прогрес завдань", size=16, weight=ft.FontWeight.BOLD),
                             ft.Container(height=5),
                             create_progress_bar("Пройдено", passed_count, total_tests, ft.Colors.GREEN),
                             create_progress_bar("Не пройдено", failed_count, total_tests, ft.Colors.RED),
-                            create_progress_bar("Призначено", assigned_count, total_tests, ft.Colors.BLUE),
+                            create_progress_bar("Призначено/ не вивчено", assigned_count, total_tests, ft.Colors.BLUE),
                             ft.Container(height=5),
-                            ft.Text(f"Усього тестів: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.WHITE70, size=12)
+                            ft.Text(f"Усього завдань: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.BLUE_GREY_400, size=12)
                         ])
                     )
                 ),
-                ft.Text("Призначені завдання", size=18, weight=ft.FontWeight.BOLD),
+                ft.Text("Усі завданя", size=20, weight=ft.FontWeight.BOLD),
                 ft.ListView(
                     expand=True,
                     spacing=10,
@@ -97,6 +97,7 @@ class ProgressView(ft.Container):
                         create_test_item(t, on_click=self.handle_test_click)
                         for t in self.active_items
                     ],
+                    
                 )
             ]
         )
@@ -104,7 +105,9 @@ class ProgressView(ft.Container):
     async def refresh_data(self, e):
         self.content = self.loading_indicator
         self.update()
+
         await self.initialize_data()
+
 
     async def handle_test_click(self, e: ft.ControlEvent):
         test_data = e.control.data
@@ -117,9 +120,9 @@ class ProgressView(ft.Container):
             self.page.views.pop()
 
         # Шаг 2: Создаем и добавляем новый View деталей
-        details_view = TestDetailsView(page=self.page, test_data=test_data)
+        details_view = TestDetailsView(page=self.page, test_data=test_data, parent_view=self)
         self.page.views.append(details_view)
+
         
         # Шаг 3: Обновляем страницу, чтобы показать новый View
         self.page.update()
-            

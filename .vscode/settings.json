@@ -1,5 +1,14 @@
 {
     "IDX.aI.enableInlineCompletion": true,
     "IDX.aI.enableCodebaseIndexing": true,
-    "IDX.agenticWorkspace": false
+    "IDX.agenticWorkspace": false,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "src/app_data.db",
+            "name": "test"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }

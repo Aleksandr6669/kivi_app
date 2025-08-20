@@ -27,10 +27,10 @@ def create_test_item(test, on_click=None):
     
     trailing_controls = []
     if type_info:
-        trailing_controls.append(ft.Icon(name=type_info.get("icon"), tooltip=type_info.get("tooltip"), color=ft.Colors.WHITE70))
+        trailing_controls.append(ft.Icon(name=type_info.get("icon"), tooltip=type_info.get("tooltip"), color=ft.Colors.BLUE_GREY_400))
     score = test.get("score")
     if score:
-        trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14))
+        trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
     
     # --- Создаем всю карточку вручную ---
     return ft.Card(
@@ -61,7 +61,7 @@ def create_test_item(test, on_click=None):
                             ),
                             ft.Text(
                                 f"Статус: {current_status['text']}",
-                                color=ft.Colors.WHITE70,
+                                color=ft.Colors.BLUE_GREY_400,
                                 size=12
                             ),
                         ],

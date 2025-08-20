@@ -4,6 +4,8 @@ from components.test_item import create_test_item
 from components.progress_bar import create_progress_bar
 from components.data import fetch_data_from_api
 from views.test_details_view import TestDetailsView
+from views.history_view import HistoryView
+from components.database_manager import get_user_profile, get_assigned_tests_for_user
 
 class HomeView(ft.Container):
     def __init__(self):
@@ -11,26 +13,33 @@ class HomeView(ft.Container):
         
         self.loading_indicator = ft.Column(
             [
-                ft.Text("Завантаження головної сторінки...", color=ft.Colors.BLUE_GREY_400),
-                ft.Container(height=10),  # Отступ снизу
-                ft.Container(
-                    content=ft.ProgressBar(
-                        color=ft.Colors.BLUE, bgcolor=ft.Colors.BLUE_GREY_100, height=10,
-                        border_radius=ft.border_radius.all(5),
-                    ),
-                    # width=200,
-                ),
-                ft.Container(height=10)  # Отступ снизу
+                ft.ProgressRing(width=32, height=32),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=5
+            alignment=ft.MainAxisAlignment.CENTER,
+            expand=True
         )
+
         self.content = self.loading_indicator
 
     async def initialize_data(self):
         # Завантаження даних
-        self.user_info = await asyncio.to_thread(fetch_data_from_api, "user_info")
-        tests_data = await asyncio.to_thread(fetch_data_from_api, "tests_data")
+        # Получаем логин текущего пользователя из сессии
+        current_username = self.page.session.get("username")
+        
+        user_info = None
+        if current_username:
+            # Если пользователь залогинен, загружаем его профиль из базы данных
+            user_info = await asyncio.to_thread(get_user_profile, current_username)
+
+        # Если профиль не найден (или пользователь не вошел), используем "заглушку"
+        
+        self.user_info = user_info
+
+        tests_data = []
+        if current_username:
+            tests_data = await asyncio.to_thread(get_assigned_tests_for_user, current_username)
+        
         self.tests_data = tests_data
 
         # Шаг 1: Получаем множество названий всех заданий со статусом 'learned'.
@@ -42,6 +51,7 @@ class HomeView(ft.Container):
         for t in self.tests_data:
             status = t.get("status")
             title = t.get("title")
+            item_type = t.get("item_type")
 
             # Правило для 'not_learned'
             if status == "not_learned":
@@ -58,16 +68,15 @@ class HomeView(ft.Container):
                 self.active_items.append(t)
                 continue
 
+            
+
         self.build_view()
         self.update()
         
-        # Побудова UI після завантаження
-        self.build_view()
-        self.update()
 
     def build_view(self):
-        passed_count = len([t for t in self.tests_data if t["status"] == "passed"])
-        failed_count = len([t for t in self.tests_data if t["status"] == "failed"])
+        passed_count = len([t for t in self.tests_data if t.get('status') == "passed"])
+        failed_count = len([t for t in self.tests_data if t.get('status') == "failed"])
         total_tests = len([t for t in self.tests_data if t.get('status')  != "assigned_learned" and t.get('status') != "learned" ])
         assigned_count = len(self.active_items)
 
@@ -76,14 +85,14 @@ class HomeView(ft.Container):
             content=ft.Container(
                 padding=10,
                 border_radius=10,
-                bgcolor=ft.Colors.BLUE_GREY_800,
+                # bgcolor=ft.Colors.BLUE_GREY_100,
                 content=ft.Row(
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     controls=[
                         ft.Column([
-                            ft.Text("Вітаємо,", size=20, color=ft.Colors.WHITE70),
-                            ft.Text(self.user_info.get("name", ""), size=24, weight=ft.FontWeight.BOLD),
-                            ft.Text(self.user_info.get("role", ""), size=14, color=ft.Colors.WHITE70),
+                            ft.Text("Вітаємо,", size=20),
+                            ft.Text(self.user_info.get("full_name", ""), size=24, weight=ft.FontWeight.BOLD, max_lines=2 ,overflow=ft.TextOverflow.ELLIPSIS),
+                            ft.Text(self.user_info.get("role", ""), size=14,color=ft.Colors.BLUE_GREY_400),
                         ]),
                         ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60, color=ft.Colors.BLUE_200)
                     ]
@@ -96,7 +105,7 @@ class HomeView(ft.Container):
             controls=[
                 create_progress_bar("Пройдено", passed_count, total_tests, ft.Colors.GREEN),
                 create_progress_bar("Не пройдено", failed_count, total_tests, ft.Colors.RED),
-                create_progress_bar("Призначено", assigned_count, total_tests, ft.Colors.BLUE),
+                create_progress_bar("Призначено/ не вивчено", assigned_count, total_tests, ft.Colors.BLUE),
             ]
         )
 
@@ -105,13 +114,13 @@ class HomeView(ft.Container):
             content=ft.Container(
                 padding=10,
                 border_radius=10,
-                bgcolor=ft.Colors.BLUE_GREY_800,
+                # bgcolor=ft.Colors.BLUE_GREY_100,
                 content=ft.Column([
-                    ft.Text("Прогрес Тестів", size=16, weight=ft.FontWeight.BOLD),
+                    ft.Text("Прогрес завдань", size=16, weight=ft.FontWeight.BOLD),
                     ft.Container(height=10),
                     progress_bars,
                     ft.Container(height=10),
-                    ft.Text(f"Усього тестів: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.WHITE70, size=12)
+                    ft.Text(f"Усього завдань: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.BLUE_GREY_400, size=12)
                 ])
             )
         )
@@ -167,7 +176,7 @@ class HomeView(ft.Container):
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 user_card,
                 chart_container,
-                ft.Row(controls=[ft.Text("Призначені завдання", size=18, weight=ft.FontWeight.BOLD)]),
+                ft.Row(controls=[ft.Text("Завдяння", size=18, weight=ft.FontWeight.BOLD)]),
                 # test_list_view,
                 ft.ListView(
                     expand=True,
@@ -182,9 +191,12 @@ class HomeView(ft.Container):
     async def refresh_data(self, e):
         self.content = self.loading_indicator
         self.update()
-        await self.initialize_data()
 
-    
+        await self.initialize_data()
+        
+
+
+
     async def handle_test_click(self, e: ft.ControlEvent):
         test_data = e.control.data
         print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
@@ -196,7 +208,7 @@ class HomeView(ft.Container):
             self.page.views.pop()
 
         # Шаг 2: Создаем и добавляем новый View деталей
-        details_view = TestDetailsView(page=self.page, test_data=test_data)
+        details_view = TestDetailsView(page=self.page, test_data=test_data, parent_view=self)
         self.page.views.append(details_view)
         
         # Шаг 3: Обновляем страницу, чтобы показать новый View
