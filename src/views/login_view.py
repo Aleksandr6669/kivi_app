@@ -3,7 +3,7 @@ import asyncio
 # Импортируем только функцию для входа
 from components.database_manager import login_user
 
-def create_login_view(on_login_success):
+def create_login_view(page: ft.Page, on_login_success):
     """
     Создает представление страницы входа.
     """
@@ -51,7 +51,7 @@ def create_login_view(on_login_success):
 
         if is_success:
             # Сохраняем логин в сессии и переходим на главный экран
-            await e.page.client_storage.set_async("username", username_field.value)
+            await page.client_storage.set_async("username", username_field.value)
             e.page.session.set("username", username_field.value)
             await on_login_success()
         else:

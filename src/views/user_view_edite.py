@@ -1,0 +1,143 @@
+import flet as ft
+import asyncio
+from components.database_manager import create_or_update_user_profile, register_user
+
+class UserEdite(ft.View):
+    def __init__(self, page: ft.Page, parent_view, user_data: dict = None):
+
+        is_editing = user_data is not None
+        route_prefix = "edit" if is_editing else "add"
+        # Цей рядок призведе до помилки TypeError, тому що route відсутній
+        super().__init__() 
+        self.page = page
+        self.parent_view = parent_view
+        self.user_data = user_data
+        
+        # Динамічний текст для заголовка та кнопки
+        page_title = "Редагування профілю" if is_editing else "Додавання користувача"
+        card_title = "Картка користувача" if is_editing else "Створення нового користувача"
+        button_text = "Зберегти зміни" if is_editing else "Додати користувача"
+        
+        # Поля форми
+        self.username_field = ft.TextField(
+            label="Ім'я користувача",
+            value=self.user_data.get("username", "") if is_editing else "",
+            disabled=is_editing, # Забороняємо редагування імені користувача
+        )
+        self.full_name_field = ft.TextField(
+            label="Повне ім'я",
+            value=self.user_data.get("full_name", "") if is_editing else ""
+        )
+        self.email_field = ft.TextField(
+            label="Електронна пошта",
+            prefix_icon=ft.Icons.EMAIL_OUTLINED,
+            value=self.user_data.get("email", "") if is_editing else ""
+        )
+        self.phone_field = ft.TextField(
+            label="Телефон",
+            prefix_icon=ft.Icons.PHONE_OUTLINED,
+            value=self.user_data.get("phone", "") if is_editing else ""
+        )
+        self.password_field = ft.TextField(
+            label="Пароль",
+            hint_text="Залиште пустим, щоб не змінювати" if is_editing else "Обов'язковий для нового користувача",
+            password=True,
+            can_reveal_password=True,
+        )
+        self.about_field = ft.TextField(
+            label="Про себе",
+            multiline=True,
+            value=self.user_data.get("about", "") if is_editing else ""
+        )
+        
+        self.submit_button = ft.ElevatedButton(
+            text=button_text,
+            on_click=self.submit_form,
+            icon=ft.Icons.SAVE if is_editing else ft.Icons.ADD,
+            style=ft.ButtonStyle(
+                bgcolor=ft.Colors.BLUE_400,
+                color=ft.Colors.WHITE,
+                shape=ft.RoundedRectangleBorder(radius=ft.border_radius.all(10)),
+                padding=ft.padding.symmetric(horizontal=25, vertical=15)
+            ),
+            icon_color=ft.Colors.WHITE
+        )
+        
+        form_card = ft.Card(
+            content=ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text(card_title, size=20, weight=ft.FontWeight.BOLD),
+                        ft.Divider(),
+                        self.username_field,
+                        self.full_name_field,
+                        self.email_field,
+                        self.phone_field,
+                        self.password_field,
+                        self.about_field,
+                    ],
+                    spacing=15,
+                    expand=True,
+                    scroll=ft.ScrollMode.ADAPTIVE
+                ),
+                padding=25,
+            ),
+            elevation=10,
+        )
+
+        self.controls = [
+            ft.AppBar(title=ft.Text(page_title)),
+            ft.Row(
+                [
+                    ft.Container(
+                        content=form_card,
+                        width=350,
+                        alignment=ft.alignment.center,
+                        padding=ft.padding.symmetric(vertical=20),
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                expand=True
+            ),
+            
+            ft.Row(
+                    [self.submit_button],
+                    height=50,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                
+        ]
+
+       
+
+    async def submit_form(self, e):
+        updated_data = {
+            "username": self.username_field.value,
+            "full_name": self.full_name_field.value,
+            "email": self.email_field.value,
+            "phone": self.phone_field.value,
+            "about": self.about_field.value,
+        }
+        
+        if self.password_field.value:
+            updated_data["password"] = self.password_field.value
+        
+        is_editing = self.user_data is not None
+        
+        if is_editing:
+            await asyncio.to_thread(create_or_update_user_profile, updated_data["username"], updated_data)
+        else:
+            if updated_data.get("password"):
+                await asyncio.to_thread(register_user, updated_data["username"], updated_data["password"])
+                await asyncio.to_thread(create_or_update_user_profile, updated_data["username"], updated_data)
+            else:
+                self.page.snack_bar = ft.SnackBar(ft.Text("Пароль є обов'язковим для нового користувача!"), open=True)
+                self.page.update()
+                return
+
+        if hasattr(self.parent_view, 'refresh_data'):
+            await self.parent_view.refresh_data(e)
+            
+        self.page.views.pop()
+        self.page.update()

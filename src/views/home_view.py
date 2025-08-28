@@ -4,13 +4,14 @@ from components.test_item import create_test_item
 from components.progress_bar import create_progress_bar
 from components.data import fetch_data_from_api
 from views.test_details_view import TestDetailsView
+from views.user_view_edite import UserEdite
 from views.history_view import HistoryView
 from components.database_manager import get_user_profile, get_assigned_tests_for_user
 
 class HomeView(ft.Container):
-    def __init__(self):
+    def __init__(self, page: ft.Page):
         super().__init__(expand=True, visible=False, padding=ft.padding.only(left=10, right=10, top=10))
-        
+        self.page = page   
         self.loading_indicator = ft.Column(
             [
                 ft.ProgressRing(width=32, height=32),
@@ -89,17 +90,24 @@ class HomeView(ft.Container):
                 content=ft.Row(
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     controls=[
+                        # Этот `Column` будет занимать всё свободное место
                         ft.Column([
                             ft.Text("Вітаємо,", size=20),
-                            ft.Text(self.user_info.get("full_name", ""), size=24, weight=ft.FontWeight.BOLD, max_lines=2 ,overflow=ft.TextOverflow.ELLIPSIS),
-                            ft.Text(self.user_info.get("role", ""), size=14,color=ft.Colors.BLUE_GREY_400),
-                        ]),
+                            ft.Text(
+                                self.user_info.get("full_name", ""),
+                                size=24,
+                                weight=ft.FontWeight.BOLD,
+                                max_lines=2,
+                                overflow=ft.TextOverflow.ELLIPSIS,
+                                expand=True, # <-- Главное исправление
+                            ),
+                            ft.Text(self.user_info.get("role", ""), size=14, color=ft.Colors.BLUE_GREY_400),
+                        ], expand=True), # <-- И здесь
                         ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60, color=ft.Colors.BLUE_200)
                     ]
                 )
             )
         )
-
         progress_bars = ft.Column(
             spacing=5,
             controls=[
@@ -172,7 +180,7 @@ class HomeView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Головна сторінка", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 user_card,
                 chart_container,
@@ -203,8 +211,8 @@ class HomeView(ft.Container):
 
         # Шаг 1: Проверяем, является ли текущий верхний View уже окном деталей
         # `isinstance` проверяет тип объекта, а не конкретный экземпляр
-        if self.page.views and isinstance(self.page.views[-1], TestDetailsView):
-            print("An old TestDetailsView is already open. Removing it first.")
+        if self.page.views and isinstance(self.page.views[-1], (TestDetailsView, UserEdite)):
+            print("Старое представление уже открыто. Удаляем его.")
             self.page.views.pop()
 
         # Шаг 2: Создаем и добавляем новый View деталей

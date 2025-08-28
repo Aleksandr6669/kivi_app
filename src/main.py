@@ -9,11 +9,10 @@ from views.progress_view import ProgressView
 from views.login_view import create_login_view
 from views.test_details_view import TestDetailsView
 
-# Main asynchronous function, which is the entry point for Flet
+from views.user_view import UsersView
+
 async def main(page: ft.Page):
-    # This function is now async, so we can use `await` directly
-    
-    # 1. SYNCHRONOUS SETUP: Page and database initialization
+    # 1. СИНХРОННАЯ ЧАСТЬ: Настройка страницы и инициализация базы данных
     page.title = "Тестування"
     page.theme_mode = ft.ThemeMode.SYSTEM
     page.padding = 0
@@ -21,19 +20,8 @@ async def main(page: ft.Page):
     page.overlay.append(ft.HapticFeedback())
     initialize_database()
 
-    # 2. DEFINE ASYNCHRONOUS HELPER FUNCTIONS
-    
-    async def refresh_all_views(source="unknown"):
-        """
-        A central function to silently refresh all views in the session.
-        """
-        if hasattr(page, 'views_list'):
-            for view in page.views_list:
-                if hasattr(view, 'silent_refresh') and callable(getattr(view, 'silent_refresh')):
-                    await view.silent_refresh()
-    
-    page.refresh_all_views = refresh_all_views
-
+    # 2. ВСЕ АСИНХРОННЫЕ ФУНКЦИИ ОПРЕДЕЛЯЮТСЯ ЗДЕСЬ
+    #    Это гарантирует, что они будут доступны для вызова.
     async def show_login_view():
         page.controls.clear()
         if page.views and isinstance(page.views[-1], TestDetailsView):
@@ -42,7 +30,7 @@ async def main(page: ft.Page):
         async def on_login_success():
             await show_main_view()
         
-        login_view = create_login_view(on_login_success=on_login_success)
+        login_view = create_login_view(page, on_login_success=on_login_success)
         
         page.add(login_view)
         page.update()
@@ -52,13 +40,15 @@ async def main(page: ft.Page):
         if page.views and isinstance(page.views[-1], TestDetailsView):
             page.views.pop()
 
-        home_view = HomeView()
-        search_view = SearchView()
-        history_view = HistoryView()
-        profile_view = ProfileView(on_logout=show_login_view)
-        progress_view = ProgressView()
+        # Создаем все представления, передавая page
+        home_view = HomeView(page)
+        search_view = SearchView(page)
+        history_view = HistoryView(page)
+        profile_view = ProfileView(page, on_logout=show_login_view)
+        progress_view = ProgressView(page)
+        users_view = UsersView(page)
 
-        page.views_list = [home_view, search_view, history_view, profile_view, progress_view]
+        page.views_list = [home_view, search_view, history_view, profile_view, progress_view, users_view]
 
         views = {
             "Головна": home_view,
@@ -66,11 +56,12 @@ async def main(page: ft.Page):
             "Історія": history_view,
             "Навчання": progress_view,
             "Профіль": profile_view,
+            "Користувачі": users_view,
         }
 
         async def on_nav_change(e):
             page.overlay[0].heavy_impact()
-            selected_label = views[navigation_bar.destinations[e.control.selected_index].label]
+            selected_label = views[navigation.destinations[e.control.selected_index].label]
 
             for view in views.values():
                 view.visible = (view == selected_label)
@@ -80,29 +71,138 @@ async def main(page: ft.Page):
             if hasattr(selected_label, 'refresh_data'):
                 await selected_label.refresh_data(None)
 
-        navigation_bar = ft.NavigationBar(
-            selected_index=0,
-            on_change=on_nav_change,
-            animation_duration=500,
-            animate_opacity=500,
-            label_behavior=ft.NavigationBarLabelBehavior.ALWAYS_SHOW,
-            destinations=[
-                ft.NavigationBarDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
-                ft.NavigationBarDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP, color=ft.Colors.BLUE_400), label="Пошук"),
-                ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
-                ft.NavigationBarDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
-                ft.NavigationBarDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль")
-            ]
-        )
+        async def logout_clicked(e):
+            e.page.session.clear()
+            e.page._invoke_method("clientStorage:remove", {"key": "username"}, wait_for_result=False)
+            await show_login_view()
 
-        page.add(ft.Column([home_view, search_view, history_view, progress_view, profile_view, navigation_bar],
-                          expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER, alignment=ft.MainAxisAlignment.CENTER,))
+        tab = page.width >= page.height
+
+        # tab = False
+        if tab:
+            app_bar = ft.Container(
+                content=ft.Row(
+                    [
+                        ft.Row(
+                            [
+                                ft.Icon(ft.Icons.MENU_BOOK, color=ft.Colors.BLUE_400, size=28),
+                                ft.Text(
+                                    "Школа KIVI",
+                                    size=22,
+                                    weight=ft.FontWeight.BOLD,
+                                    color=ft.Colors.ON_PRIMARY_CONTAINER,
+                                ),
+                            ],
+                            spacing=8,
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        # Заполнитель, чтобы сдвинуть кнопку выхода вправо
+                        ft.Container(expand=True),
+                        # Кнопка выхода
+                        ft.IconButton(
+                            icon=ft.Icons.LOGOUT,
+                            tooltip="Вийти",
+                            icon_color=ft.Colors.ON_PRIMARY_CONTAINER,
+                            on_click=logout_clicked,
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                padding=ft.padding.symmetric(horizontal=15),
+                height=50,
+                bgcolor=ft.Colors.PRIMARY_CONTAINER, # Легкий цвет фона
+            )
+
+            navigation = ft.NavigationRail(
+                selected_index=0,
+                on_change=on_nav_change,
+                label_type=ft.NavigationRailLabelType.ALL,
+                extended=True,
+                min_width=100,
+                min_extended_width=200,
+                leading=ft.Container(
+                    content=ft.Column(
+                        [
+                            ft.Row(
+                                [
+                                    ft.Icon(ft.Icons.MENU, color=ft.Colors.BLUE_400),
+                                    ft.Text(
+                                        "Меню додатку",
+                                        size=16,
+                                        weight=ft.FontWeight.W_600
+                                    ),
+                                ],
+                                alignment=ft.MainAxisAlignment.START
+                            ),
+                            ft.Divider(
+                                height=5,
+                                thickness=5,
+                                color=ft.Colors.GREY,
+                            )
+                        ],
+                        spacing=10,  # Відступ між заголовком і розділювачем
+                    ),
+                    padding=ft.padding.only(left=10, top=20, bottom=10),
+                    alignment=ft.alignment.center_left
+                ),
+                destinations=[
+                    ft.NavigationRailDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
+                    ft.NavigationRailDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP, color=ft.Colors.BLUE_400), label="Пошук"),
+                    ft.NavigationRailDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
+                    ft.NavigationRailDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
+                    ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль"),
+                    ft.NavigationRailDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Користувачі")
+                ]
+            )
+
+            if page.platform.name == "Windows" or "MacOS":
+                page.add(app_bar,
+                 ft.Row([navigation, home_view, search_view, history_view, progress_view, profile_view, users_view],
+                                expand=True, alignment=ft.MainAxisAlignment.CENTER,),
+                                ft.Container(
+                                    height=30,
+                                    content=ft.Text(
+                                        "© 2025 KIVI UA. Усі права захищено.",
+                                        size=10,
+                                    ),
+                                    alignment=ft.alignment.center,
+                                ))
+            else:
+                page.add(ft.Row([navigation, home_view, search_view, history_view, progress_view, profile_view, users_view],
+                                expand=True, alignment=ft.MainAxisAlignment.CENTER,), ft.Container(height=20))
+
+        else:
+            navigation = ft.NavigationBar(
+                selected_index=0,
+                on_change=on_nav_change,
+                animation_duration=500,
+                animate_opacity=500,
+                label_behavior=ft.NavigationBarLabelBehavior.ALWAYS_SHOW,
+                destinations=[
+                    ft.NavigationBarDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
+                    ft.NavigationBarDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP, color=ft.Colors.BLUE_400), label="Пошук"),
+                    ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
+                    ft.NavigationBarDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
+                    ft.NavigationBarDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль"),
+                    ft.NavigationRailDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Користувачі")
+                ]
+            )
+
+
+            
+
+            page.add(ft.Column([home_view, search_view, history_view, progress_view, profile_view, users_view, navigation],
+                            expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER, alignment=ft.MainAxisAlignment.CENTER,))
+
+        
         
         home_view.visible = True
         search_view.visible = False
         history_view.visible = False
         progress_view.visible = False
         profile_view.visible = False
+        users_view.visible = False
 
         page.update()
 
@@ -110,14 +210,17 @@ async def main(page: ft.Page):
                              search_view.initialize_data(),
                              history_view.initialize_data(),
                              profile_view.initialize_data(),
-                             progress_view.initialize_data())
+                             progress_view.initialize_data(),
+                             users_view.initialize_data())
+
+
     
-    # 3. CORE AUTHENTICATION LOGIC:
-    #    This part runs when the app starts.
+    # 3. ОСНОВНАЯ ЛОГИКА ЗАПУСКА ПРИЛОЖЕНИЯ
     saved_username = await page.client_storage.get_async("username")
     if saved_username:
         page.session.set("username", saved_username)
         await show_main_view()
+        # await show_main_view_tab()
     else:
         await show_login_view()
     

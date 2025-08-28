@@ -3,11 +3,13 @@ import asyncio
 from components.test_item import create_test_item
 from components.data import fetch_data_from_api
 from views.test_details_view import TestDetailsView
+from views.user_view_edite import UserEdite
 from components.database_manager import get_user_profile, get_assigned_tests_for_user
 
 class HistoryView(ft.Container):
-    def __init__(self):
+    def __init__(self, page: ft.Page):
         super().__init__(expand=True, visible=False, padding=ft.padding.all(10))
+        self.page = page
         self.loading_indicator = ft.Column(
             [
                 ft.ProgressRing(width=32, height=32),
@@ -44,7 +46,7 @@ class HistoryView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Історія Тестів", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Text("Ви не можете повторно відкрити тест.", size=16, weight=ft.FontWeight.BOLD),
                 self.history_list_view
@@ -61,13 +63,15 @@ class HistoryView(ft.Container):
         
     async def handle_test_click(self, e: ft.ControlEvent):
         test_data = e.control.data
+        
         print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
 
         # Шаг 1: Проверяем, является ли текущий верхний View уже окном деталей
         # `isinstance` проверяет тип объекта, а не конкретный экземпляр
-        if self.page.views and isinstance(self.page.views[-1], TestDetailsView):
-            print("An old TestDetailsView is already open. Removing it first.")
+        if self.page.views and isinstance(self.page.views[-1], (TestDetailsView, UserEdite)):
+            print("Старое представление уже открыто. Удаляем его.")
             self.page.views.pop()
+        
 
         # Шаг 2: Создаем и добавляем новый View деталей
         details_view = TestDetailsView(page=self.page, test_data=test_data, parent_view=self )

@@ -179,6 +179,14 @@ def create_or_update_user_profile(username: str, profile_data: dict):
         if not user:
             return False
 
+        if profile_data.get("password"):
+            # Хешируем новый пароль
+            hashed_password = bcrypt.hashpw(profile_data["password"].encode('utf-8'), bcrypt.gensalt())
+            user.password_hash = hashed_password.decode('utf-8')
+            user.save()
+            # Удаляем пароль из данных профиля, чтобы не сохранить его в UserProfile
+            del profile_data["password"]
+
         profile_info = {
             "user": user,
             "full_name": profile_data.get("full_name"),
@@ -196,6 +204,26 @@ def create_or_update_user_profile(username: str, profile_data: dict):
         ).execute()
         return True
     except Exception:
+        return False
+    finally:
+        if not db.is_closed():
+            db.close()
+
+def delete_user_from_db(username: str):
+    """
+    Видаляє користувача за ім'ям та його пов'язані дані.
+    Завдяки `on_delete='CASCADE'` у моделях, пов'язані профілі
+    та призначення автоматично видаляються.
+    """
+    try:
+        db.connect()
+        user_to_delete = User.get_or_none(User.username == username)
+        if user_to_delete:
+            user_to_delete.delete_instance(recursive=True, delete_nullable=True)
+            return True
+        return False
+    except Exception as e:
+        print(f"Помилка при видаленні користувача: {e}")
         return False
     finally:
         if not db.is_closed():

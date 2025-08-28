@@ -2,10 +2,12 @@ import flet as ft
 import asyncio
 from components.database_manager import get_user_profile, get_assigned_tests_for_user
 from views.test_details_view import TestDetailsView
+from views.user_view_edite import UserEdite
 
 class ProfileView(ft.Container):
-    def __init__(self, on_logout):
+    def __init__(self, page: ft.Page, on_logout):
         super().__init__(expand=True, visible=False, padding=ft.padding.all(10))
+        self.page = page
 
         self.content = ft.Container(expand=True)
 
@@ -63,7 +65,7 @@ class ProfileView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Профіль", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Card(
                     content=ft.Container(
