@@ -43,10 +43,7 @@ class ProfileView(ft.Container):
             
             # Очищаем сессию на сервере
             e.page.session.clear()
-            # Очищаем токен в браузере (если использовали)
-            e.page._invoke_method("clientStorage:remove", {"key": "session_token"}, wait_for_result=False)
-            # 👇 Убедись, что эта строка есть
-            e.page._invoke_method("clientStorage:remove", {"key": "saved_username"}, wait_for_result=False)
+            e.page._invoke_method("clientStorage:remove", {"key": "username"}, wait_for_result=False)
             await self.on_logout()
 
         logout_button = ft.ElevatedButton(

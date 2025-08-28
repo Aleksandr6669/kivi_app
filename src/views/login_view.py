@@ -51,6 +51,7 @@ def create_login_view(on_login_success):
 
         if is_success:
             # Сохраняем логин в сессии и переходим на главный экран
+            await e.page.client_storage.set_async("username", username_field.value)
             e.page.session.set("username", username_field.value)
             await on_login_success()
         else:
@@ -69,6 +70,7 @@ def create_login_view(on_login_success):
         style=ft.ButtonStyle(
             shape=ft.RoundedRectangleBorder(radius=20),
             bgcolor=ft.Colors.INDIGO_700,
+            color=ft.Colors.BLUE_200,
         ),
     )
 

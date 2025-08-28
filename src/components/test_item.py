@@ -28,11 +28,26 @@ def create_test_item(test, on_click=None):
     trailing_controls = []
     if type_info:
         trailing_controls.append(ft.Icon(name=type_info.get("icon"), tooltip=type_info.get("tooltip"), color=ft.Colors.BLUE_GREY_400))
-    score = test.get("score")
-    if score:
-        trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
+    # score = test.get("score")
+    percentage_score = test.get("percentage_score")
+    if percentage_score is not None:
+        percentage_score = int(percentage_score)
+    else:
+        percentage_score = 0  # Або будь-яке інше значення за замовчуванням
+    # if score:
+    #     trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
+    if percentage_score:
+        trailing_controls.append(ft.Text(f"{percentage_score}%", weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
+
+    status_text = f"Статус: {current_status['text']}"
+
     
-    # --- Создаем всю карточку вручную ---
+    if test.get('item_type') == 'test':
+   
+        attempts_used = test.get('attempts_used', 0)
+        total_attempts = test.get('total_attempts', 0)
+        status_text += f" {attempts_used}/{total_attempts}"
+    
     return ft.Card(
         elevation=3,
         margin=3,
@@ -60,7 +75,7 @@ def create_test_item(test, on_click=None):
                                 size=15
                             ),
                             ft.Text(
-                                f"Статус: {current_status['text']}",
+                               status_text,
                                 color=ft.Colors.BLUE_GREY_400,
                                 size=12
                             ),

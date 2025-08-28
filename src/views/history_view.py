@@ -2,6 +2,7 @@ import flet as ft
 import asyncio
 from components.test_item import create_test_item
 from components.data import fetch_data_from_api
+from views.test_details_view import TestDetailsView
 from components.database_manager import get_user_profile, get_assigned_tests_for_user
 
 class HistoryView(ft.Container):
@@ -34,7 +35,8 @@ class HistoryView(ft.Container):
         self.history_list_view = ft.ListView(
             expand=True,
             spacing=10,
-            controls=[create_test_item(t) for t in self.completed_tests],
+            # controls=[create_test_item(t) for t in self.completed_tests],
+            controls=[create_test_item(t, on_click=self.handle_test_click) for t in self.completed_tests],
         )
 
         self.content = ft.Column(
@@ -56,3 +58,20 @@ class HistoryView(ft.Container):
 
         await self.initialize_data()
 
+        
+    async def handle_test_click(self, e: ft.ControlEvent):
+        test_data = e.control.data
+        print(f'handle_test_click called for test: {test_data.get("title", "Unknown Test")}')
+
+        # Шаг 1: Проверяем, является ли текущий верхний View уже окном деталей
+        # `isinstance` проверяет тип объекта, а не конкретный экземпляр
+        if self.page.views and isinstance(self.page.views[-1], TestDetailsView):
+            print("An old TestDetailsView is already open. Removing it first.")
+            self.page.views.pop()
+
+        # Шаг 2: Создаем и добавляем новый View деталей
+        details_view = TestDetailsView(page=self.page, test_data=test_data, parent_view=self )
+        self.page.views.append(details_view)
+        
+        # Шаг 3: Обновляем страницу, чтобы показать новый View
+        self.page.update()
