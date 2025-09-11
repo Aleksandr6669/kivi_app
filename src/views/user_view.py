@@ -111,6 +111,13 @@ class UsersView(ft.Container):
             self.users_list_view.controls = filtered_list
             self.users_list_view.update()
 
+        tab = self.page.width >= self.page.height
+        if tab:
+            add_button = ft.FilledButton("Додати користувача", icon=ft.Icons.PERSON_ADD, icon_color=ft.Colors.GREEN_500 ,on_click=self.handle_add_user)
+        else:
+            add_button =ft.IconButton(icon=ft.Icons.PERSON_ADD, tooltip="Додати користувача",icon_color=ft.Colors.GREEN_500, icon_size=30,on_click=self.handle_add_user)
+           
+
         self.content = ft.Container(
             content=ft.Column(
                 spacing=10,
@@ -119,7 +126,7 @@ class UsersView(ft.Container):
                         ft.Text("Користувачі", size=24, weight=ft.FontWeight.BOLD),
                         ft.Row(
                             controls=[
-                            ft.IconButton(icon=ft.Icons.PERSON_ADD, tooltip="Додати користувача",icon_color=ft.Colors.GREEN_500, icon_size=30,on_click=self.handle_add_user),
+                            add_button,
                             ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data),
                         ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                       )  
@@ -155,8 +162,72 @@ class UsersView(ft.Container):
         self.page.views.append(edit_view)
         self.page.update()
 
+    
+
     def handle_delete_user(self, user):
-        print("Натиснуто кнопку 'Додати користувача'")
+        username_to_delete = user.get('username')
+
+        if self.page.views and isinstance(self.page.views[-1], (TestDetailsView, UserEdite)):
+            print("Старое представление уже открыто. Удаляем его.")
+            self.page.views.pop()
+
+        # Функция для закрытия диалогового окна
+        def close_dlg(e):
+            self.page.close(delete_dialog)
+            self.page.update()
+
+        # Функция для подтверждения удаления
+        async def confirm_delete(e):
+            # Закрываем диалоговое окно
+            close_dlg(e)
+            
+            # Тут должна быть ваша логика удаления
+            await asyncio.to_thread(delete_user_from_db, username_to_delete)
+            
+            # Обновляем интерфейс
+            await self.initialize_data()
+
+        # Создаём диалоговое окно
+        delete_dialog = ft.AlertDialog(
+            adaptive=False,
+            modal=True,
+            title=ft.Row([
+                ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.ORANGE_800),
+                ft.Text("Підтвердіть дію"),
+            ], alignment=ft.MainAxisAlignment.START),
+            content=ft.Column([
+                ft.Text("Ви впевнені, що хочете видалити користувача:"),
+                ft.Text(f"{username_to_delete}", weight=ft.FontWeight.BOLD, size=16),
+                ft.Text("Цю дію неможливо буде скасувати."),
+            ], spacing=10, tight=True),
+            actions=[
+                ft.TextButton(
+                    "Так, видалити",
+                    on_click=confirm_delete,
+                    style=ft.ButtonStyle(
+                        color=ft.Colors.WHITE,
+                        bgcolor=ft.Colors.RED_700,
+                        shape=ft.RoundedRectangleBorder(radius=5),
+                    )
+                ),
+                ft.TextButton(
+                    "Скасувати",
+                    on_click=close_dlg,
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.Colors.BLUE_GREY_100,
+                        color=ft.Colors.BLACK,
+                        shape=ft.RoundedRectangleBorder(radius=5),
+                    )
+                ),
+            ],
+            actions_alignment=ft.MainAxisAlignment.CENTER,
+        )
+
+        # Показываем диалоговое окно
+        self.page.open(delete_dialog)
+        # self.page.dialog.open = True
+        self.page.update()
+
         
 
     def handle_edit_user(self, user):

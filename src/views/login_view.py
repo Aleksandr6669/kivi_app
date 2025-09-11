@@ -74,21 +74,45 @@ def create_login_view(page: ft.Page, on_login_success):
         ),
     )
 
+    if page.platform.name in ["Windows", "MACOS"]:
+        width_t=450
+        height_t=480
+    else:
+        width_t=320
+        height_t=360
+
     login_view_container = ft.Container(
         content=ft.Column(
             [
                 ft.Container(
                     content=ft.Column(
                         [
-                            ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=100, color=ft.Colors.INDIGO_700),
-                            ft.Text("Авторизація", size=28, weight=ft.FontWeight.BOLD),
-                            ft.Divider(height=5, color="transparent"),
-                            username_field,
-                            password_field,
-                            login_button,
-                            error_text,
+                            
+                            ft.Card(
+                                elevation=2,
+                                width=width_t,
+                                height=height_t,
+                                content=ft.Container(
+                                    padding=20,
+                                    border_radius=20,
+                                    content=ft.Column([
+                                        # ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=100, color=ft.Colors.INDIGO_700),
+                                        ft.Text("Авторизація", size=28, weight=ft.FontWeight.BOLD),
+                                        ft.Divider(height=5, color="transparent"),
+                                        username_field,
+                                        password_field,
+                                        login_button,
+                                        error_text,
+                                        ],
+                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,alignment=ft.MainAxisAlignment.CENTER, spacing=20,
+                                    ),
+                                ),
+
+                            ),
+                            
+                            
                         ],
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,alignment=ft.MainAxisAlignment.CENTER, spacing=20,
                     ),
                     padding=ft.padding.all(10),
                 ),

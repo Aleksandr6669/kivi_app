@@ -6,8 +6,6 @@ class UserEdite(ft.View):
     def __init__(self, page: ft.Page, parent_view, user_data: dict = None):
 
         is_editing = user_data is not None
-        route_prefix = "edit" if is_editing else "add"
-        # Цей рядок призведе до помилки TypeError, тому що route відсутній
         super().__init__() 
         self.page = page
         self.parent_view = parent_view
@@ -20,33 +18,53 @@ class UserEdite(ft.View):
         
         # Поля форми
         self.username_field = ft.TextField(
+            adaptive=False,
             label="Ім'я користувача",
             value=self.user_data.get("username", "") if is_editing else "",
             disabled=is_editing, # Забороняємо редагування імені користувача
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
+            
         )
         self.full_name_field = ft.TextField(
+            adaptive=False,
             label="Повне ім'я",
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
             value=self.user_data.get("full_name", "") if is_editing else ""
+            
         )
         self.email_field = ft.TextField(
+            adaptive=False,
             label="Електронна пошта",
             prefix_icon=ft.Icons.EMAIL_OUTLINED,
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
             value=self.user_data.get("email", "") if is_editing else ""
         )
         self.phone_field = ft.TextField(
+            adaptive=False,
             label="Телефон",
             prefix_icon=ft.Icons.PHONE_OUTLINED,
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
             value=self.user_data.get("phone", "") if is_editing else ""
         )
         self.password_field = ft.TextField(
+            adaptive=False,
             label="Пароль",
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
             hint_text="Залиште пустим, щоб не змінювати" if is_editing else "Обов'язковий для нового користувача",
             password=True,
             can_reveal_password=True,
         )
         self.about_field = ft.TextField(
+            adaptive=False,
             label="Про себе",
             multiline=True,
+            border_radius=ft.border_radius.all(20),
+            border_color=ft.Colors.INDIGO_200,
             value=self.user_data.get("about", "") if is_editing else ""
         )
         
@@ -106,6 +124,7 @@ class UserEdite(ft.View):
                     height=50,
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
+            ft.Container(height=20)
                 
         ]
 

@@ -64,9 +64,42 @@ class ProgressView(ft.Container):
         passed_count = len([t for t in self.tests_data if t.get('status')  == "passed"])
         failed_count = len([t for t in self.tests_data if t.get('status')  == "failed"])
         total_tests = len([t for t in self.tests_data if t.get('status')  != "assigned_learned" and t.get('status')  != "learned" ])
+        tests_with_results = [t for t in self.tests_data if t.get('status') in ['passed', 'failed']]
         assigned_count = len(self.active_items)
 
-        # VVV Добавляем expand=True, чтобы ListView мог расшириться VVV
+        summ_count_failed = failed_count/(passed_count + failed_count)*100
+        summ_count_passed = passed_count/(passed_count + failed_count)*100
+        
+
+        if tests_with_results:
+            # Получаем список всех процентных баллов
+            scores = [t.get('percentage_score') for t in self.tests_data if t.get('percentage_score') is not None]
+            
+            # Вычисляем сумму баллов и их количество
+            total_score = sum(scores)
+            count = len(scores)
+
+            
+            # Возвращаем среднее значение
+            tests_results = total_score / count
+        else:
+            # Возвращаем 0, чтобы избежать ошибки деления на ноль
+            tests_results = 0
+        
+        color_tests_results = ft.Colors.BLACK  # Цвет по умолчанию, если не подходит ни одно условие
+
+        if tests_results >= 90:
+            color_tests_results = ft.Colors.GREEN  # Отличный результат
+        elif tests_results >= 75:
+            color_tests_results = ft.Colors.LIGHT_GREEN  # Хороший результат
+        elif tests_results >= 60:
+            color_tests_results = ft.Colors.YELLOW_600 # Средний результат
+        elif tests_results >= 40:
+            color_tests_results = ft.Colors.ORANGE  # Неудовлетворительный результат
+        else:
+            color_tests_results = ft.Colors.RED  # Очень низкий результат
+
+
         self.content = ft.Column(
             expand=True, 
             spacing=10,
@@ -85,6 +118,31 @@ class ProgressView(ft.Container):
                             create_progress_bar("Не пройдено", failed_count, total_tests, ft.Colors.RED),
                             create_progress_bar("Призначено/ не вивчено", assigned_count, total_tests, ft.Colors.BLUE),
                             ft.Container(height=5),
+                            ft.Divider(height=5, thickness=3),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Text("Середній результат: ", size=14, weight=ft.FontWeight.BOLD, color = color_tests_results),
+                                    ft.Text(f"{round(tests_results,1)} %", size=14, weight=ft.FontWeight.BOLD, color = color_tests_results),
+                                ],
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Text("Не пройдених", size=12, weight=ft.FontWeight.BOLD, color=ft.Colors.RED),
+                                    ft.Text(f"{round(summ_count_failed,1)} %", size=12, weight=ft.FontWeight.BOLD, color=ft.Colors.RED),
+                                ],
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Text("Пройдених", size=12, weight=ft.FontWeight.BOLD, color=ft.Colors.GREEN),
+                                    ft.Text(f"{round(summ_count_passed,1)} %", size=12, weight=ft.FontWeight.BOLD, color=ft.Colors.GREEN),
+                                ],
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                ),
                             ft.Text(f"Усього завдань: {total_tests}", text_align=ft.TextAlign.RIGHT, color=ft.Colors.BLUE_GREY_400, size=12)
                         ])
                     )
