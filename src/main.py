@@ -62,6 +62,7 @@ async def main(page: ft.Page):
     # 2. Создаем переключатель с правильным названием и состоянием
     c = ft.Switch(
         label="Світла тема" if page.theme_mode == ft.ThemeMode.LIGHT else "Темна тема",
+        # label_position=ft.LabelPosition.LEFT,
         value=(page.theme_mode == ft.ThemeMode.DARK), # Устанавливаем начальное состояние переключателя
         on_change=theme_changed
     )
@@ -383,4 +384,5 @@ async def main(page: ft.Page):
         await show_login_view()
     
 if __name__ == "__main__":
-    ft.app(target=main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    # ft.app(target=main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    ft.app(target=main)
