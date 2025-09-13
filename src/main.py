@@ -15,7 +15,7 @@ from views.user_view import UsersView
 
 async def main(page: ft.Page):
     # 1. СИНХРОННАЯ ЧАСТЬ: Настройка страницы и инициализация базы данных
-    page.title = "Тестування"
+    page.title = "Школа KIVI"
     # page.theme_mode = ft.ThemeMode.LIGHT
     # page.theme_mode = ft.ThemeMode.DARK
     page.padding = 0
@@ -308,7 +308,7 @@ async def main(page: ft.Page):
                     ft.NavigationRailDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
                     ft.NavigationRailDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
                     ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль"),
-                    ft.NavigationRailDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Користувачі"),
+                    ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icon(ft.Icons.GROUP, color=ft.Colors.BLUE_400), label="Користувачі"),
                     
                 ]
             )
@@ -384,5 +384,5 @@ async def main(page: ft.Page):
         await show_login_view()
     
 if __name__ == "__main__":
-    # ft.app(target=main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
-    ft.app(target=main)
+    ft.app(target=main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    # ft.app(target=main)

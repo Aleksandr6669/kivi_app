@@ -125,11 +125,11 @@ class HistoryView(ft.Container):
                                 controls=[
                                     ft.Card(
                                         content=ft.Container(
-                                            content=ft.Row( # Используем ft.Row для иконки и текста
+                                            content=ft.Row( 
                                                 controls=[
                                                     ft.Icon(
-                                                        ft.Icons.SETTINGS, # Пример иконки
-                                                        color=ft.Colors.INDIGO_300, # Цвет иконки
+                                                        ft.Icons.SETTINGS,
+                                                        color=ft.Colors.INDIGO_300, 
                                                         size=20,
                                                     ),
                                                     ft.Text(
@@ -137,10 +137,10 @@ class HistoryView(ft.Container):
                                                         weight=ft.FontWeight.BOLD,
                                                         size=16,
                                                         text_align=ft.TextAlign.CENTER,
-                                                        color=ft.Colors.ON_SURFACE, # Цвет текста, можно изменить
+                                                        color=ft.Colors.ON_SURFACE, 
                                                     ),
                                                 ],
-                                                alignment=ft.MainAxisAlignment.CENTER, # Центрируем иконку и текст
+                                                alignment=ft.MainAxisAlignment.CENTER, 
                                                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
                                             ),
                                             padding=10,
@@ -185,9 +185,9 @@ class HistoryView(ft.Container):
 
         # Сортировка
         if self.filter_options.sort_by == "date_desc":
-            filtered_tests.sort(key=lambda t: t.get("completed_at", ""), reverse=True)
+            filtered_tests.sort(key=lambda t: t.get("updated_at", ""), reverse=True)
         elif self.filter_options.sort_by == "date_asc":
-            filtered_tests.sort(key=lambda t: t.get("completed_at", ""), reverse=False)
+            filtered_tests.sort(key=lambda t: t.get("updated_at", ""), reverse=False)
         elif self.filter_options.sort_by == "status":
             filtered_tests.sort(key=lambda t: t.get("status", ""), reverse=False)
 
