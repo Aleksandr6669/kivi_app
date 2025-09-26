@@ -22,15 +22,21 @@ class UserEdite(ft.View):
             label="Ім'я користувача",
             value=self.user_data.get("username", "") if is_editing else "",
             disabled=is_editing, # Забороняємо редагування імені користувача
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             
         )
         self.full_name_field = ft.TextField(
             adaptive=False,
             label="Повне ім'я",
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             value=self.user_data.get("full_name", "") if is_editing else ""
             
         )
@@ -38,23 +44,32 @@ class UserEdite(ft.View):
             adaptive=False,
             label="Електронна пошта",
             prefix_icon=ft.Icons.EMAIL_OUTLINED,
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             value=self.user_data.get("email", "") if is_editing else ""
         )
         self.phone_field = ft.TextField(
             adaptive=False,
             label="Телефон",
             prefix_icon=ft.Icons.PHONE_OUTLINED,
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             value=self.user_data.get("phone", "") if is_editing else ""
         )
         self.password_field = ft.TextField(
             adaptive=False,
             label="Пароль",
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             hint_text="Залиште пустим, щоб не змінювати" if is_editing else "Обов'язковий для нового користувача",
             password=True,
             can_reveal_password=True,
@@ -63,8 +78,11 @@ class UserEdite(ft.View):
             adaptive=False,
             label="Про себе",
             multiline=True,
-            border_radius=ft.border_radius.all(20),
-            border_color=ft.Colors.INDIGO_200,
+            width=300,
+            height=45,
+            border_radius=ft.border_radius.all(10),
+            text_size=12,
+            text_vertical_align=ft.VerticalAlignment.CENTER,
             value=self.user_data.get("about", "") if is_editing else ""
         )
         
@@ -72,13 +90,13 @@ class UserEdite(ft.View):
             text=button_text,
             on_click=self.submit_form,
             icon=ft.Icons.SAVE if is_editing else ft.Icons.ADD,
-            style=ft.ButtonStyle(
-                bgcolor=ft.Colors.BLUE_400,
-                color=ft.Colors.WHITE,
-                shape=ft.RoundedRectangleBorder(radius=ft.border_radius.all(10)),
-                padding=ft.padding.symmetric(horizontal=25, vertical=15)
-            ),
-            icon_color=ft.Colors.WHITE
+            # style=ft.ButtonStyle(
+            #     bgcolor=ft.Colors.BLUE_400,
+            #     color=ft.Colors.WHITE,
+            #     shape=ft.RoundedRectangleBorder(radius=ft.border_radius.all(10)),
+            #     padding=ft.padding.symmetric(horizontal=25, vertical=15)
+            # ),
+            # icon_color=ft.Colors.WHITE
         )
         
         form_card = ft.Card(
@@ -96,23 +114,34 @@ class UserEdite(ft.View):
                     ],
                     spacing=15,
                     expand=True,
-                    scroll=ft.ScrollMode.ADAPTIVE
+                    scroll=ft.ScrollMode.HIDDEN
                 ),
                 padding=25,
             ),
             elevation=10,
+            expand=True,
         )
 
         self.controls = [
             ft.AppBar(title=ft.Text(page_title)),
+            # self.submit_button,
             ft.Row(
-                [
+                [   
+                    
                     ft.Container(
+                        # expand=True,
                         content=form_card,
-                        width=350,
+                        # width=350,
                         alignment=ft.alignment.center,
                         padding=ft.padding.symmetric(vertical=20),
                     ),
+                    # ft.Container(
+                    #     # expand=True,
+                    #     content=form_card,
+                    #     # width=350,
+                    #     alignment=ft.alignment.center,
+                    #     padding=ft.padding.symmetric(vertical=20),
+                    # ),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
@@ -121,7 +150,7 @@ class UserEdite(ft.View):
             
             ft.Row(
                     [self.submit_button],
-                    height=50,
+                    # height=50,
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
             ft.Container(height=20)

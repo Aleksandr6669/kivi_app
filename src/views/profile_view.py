@@ -65,14 +65,14 @@ class ProfileView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Профіль", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Card(
                     content=ft.Container(
                         padding=10,
                         content=ft.Column([
                             ft.Row([
-                                ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60, color=ft.Colors.BLUE_200),
+                                ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60),
                                 ft.Column([
                                     ft.Text(self.user_info.get("full_name", "Невідомо"), size=20, weight=ft.FontWeight.BOLD, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS),
                                     ft.Text(self.user_info.get("role", "Невідомо"), size=14, color=ft.Colors.BLUE_GREY_400),

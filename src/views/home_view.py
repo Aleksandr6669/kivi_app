@@ -99,11 +99,11 @@ class HomeView(ft.Container):
                                 weight=ft.FontWeight.BOLD,
                                 max_lines=2,
                                 overflow=ft.TextOverflow.ELLIPSIS,
-                                expand=True, # <-- Главное исправление
+                                expand=True,
                             ),
                             ft.Text(self.user_info.get("role", ""), size=14, color=ft.Colors.BLUE_GREY_400),
-                        ], expand=True), # <-- И здесь
-                        ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60, color=ft.Colors.BLUE_200)
+                        ], expand=True), 
+                        ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60)
                     ]
                 )
             )
@@ -180,7 +180,7 @@ class HomeView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Головна сторінка", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 user_card,
                 chart_container,

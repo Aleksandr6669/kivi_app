@@ -54,7 +54,7 @@ def create_test_item(test, on_click=None):
         content=ft.Container( # Контейнер для отступов и обработки нажатий
             on_click=on_click,
             data=test,
-            padding=ft.padding.symmetric(vertical=6, horizontal=12),
+            padding=ft.padding.symmetric(vertical=5, horizontal=10),
             border_radius=ft.border_radius.all(8),
             content=ft.Row( # Главная строка, которая имитирует ListTile
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,

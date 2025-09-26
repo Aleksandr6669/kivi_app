@@ -1,6 +1,7 @@
 import flet as ft
 import asyncio
 from components.database_manager import initialize_database
+from components.theme import get_active_theme
 from views.home_view import HomeView
 from views.search_view import SearchView
 from views.history_view import HistoryView
@@ -9,63 +10,106 @@ from views.progress_view import ProgressView
 from views.login_view import create_login_view
 from views.test_details_view import TestDetailsView
 from views.user_view_edite import UserEdite
-
-
 from views.user_view import UsersView
+import flet_lottie as fl
+
+
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
+
+# logging.getLogger("flet_core").setLevel(logging.INFO)
+
 
 async def main(page: ft.Page):
     # 1. СИНХРОННАЯ ЧАСТЬ: Настройка страницы и инициализация базы данных
     page.title = "Школа KIVI"
     # page.theme_mode = ft.ThemeMode.LIGHT
     # page.theme_mode = ft.ThemeMode.DARK
+    page.browser_context_menu.disable()
     page.padding = 0
     page.adaptive = True
-    page.overlay.append(ft.HapticFeedback())
+    hf = ft.HapticFeedback()
+    page.overlay.append(hf)
     initialize_database()
 
-    async def theme_changed(e):
 
-        if page.views and isinstance(page.views[-1], (TestDetailsView, UserEdite)):
-            page.views.pop()
-        # Переключаем тему
+    logo = ft.Container(
+            height=220,
+            width=220,
+            content=fl.Lottie(
+                src="lottiefiles/Back to school!.json",
+                reverse=False,
+                animate=True,
+            ),
+            padding=0
+        )
+
+
+
+    # Контейнер для иконки смены темы
+    theme_icon_container = ft.Row()
+
+    async def toggle_theme(e):
+        # 1. Меняем режим темы на противоположный
         page.theme_mode = (
             ft.ThemeMode.DARK
             if page.theme_mode == ft.ThemeMode.LIGHT
             else ft.ThemeMode.LIGHT
         )
+
+        # 2. Обновляем иконку
+        update_theme_icon()
+
+        # 3. Применяем новую тему
+        page.theme = get_active_theme(page.theme_mode)
+        page.bgcolor = page.theme.color_scheme.background
         
-        # Обновляем текст на переключателе
-        c.label = (
-            "Світла тема" if page.theme_mode == ft.ThemeMode.LIGHT else "Темна тема"
+        # 4. Обновляем страницу и сохраняем тему
+        await page.client_storage.set_async(
+            "theme_mode", page.theme_mode == ft.ThemeMode.DARK
         )
-
-        if page.theme_mode == ft.ThemeMode.DARK:
-            tems_dark = True
-        else:
-            tems_dark = False
-
-        # Сохраняем выбранную тему в локальное хранилище
-        await page.client_storage.set_async("theme_mode", tems_dark)
-
-        # Обновляем страницу, чтобы применить изменения
         page.update()
+
+        # Если есть необходимость, переходим на предыдущую страницу
+        if page.views and isinstance(page.views[-1], (TestDetailsView, UserEdite)):
+            page.views.pop()
     
+    def update_theme_icon():
+        theme_icon_container.controls.clear()
+        if page.theme_mode == ft.ThemeMode.DARK:
+            theme_icon_container.controls.append(
+                ft.IconButton(
+                    icon=ft.Icons.DARK_MODE,
+                    on_click=toggle_theme,
+                    tooltip="Переключить на светлую тему"
+                )
+            )
+        else:
+            theme_icon_container.controls.append(
+                ft.IconButton(
+                    icon=ft.Icons.LIGHT_MODE,
+                    on_click=toggle_theme,
+                    tooltip="Переключить на темную тему"
+                )
+            )
+        page.update()
+
     # 1. Загружаем сохраненную тему из локального хранилища при запуске
     saved_theme = await page.client_storage.get_async("theme_mode")
 
-    if saved_theme:
+    if saved_theme is None:
+        page.theme_mode = ft.ThemeMode.LIGHT
+    elif saved_theme:
         page.theme_mode = ft.ThemeMode.DARK
     else:
-        # Если тема не найдена, используем светлую по умолчанию
         page.theme_mode = ft.ThemeMode.LIGHT
-        
-    # 2. Создаем переключатель с правильным названием и состоянием
-    c = ft.Switch(
-        label="Світла тема" if page.theme_mode == ft.ThemeMode.LIGHT else "Темна тема",
-        # label_position=ft.LabelPosition.LEFT,
-        value=(page.theme_mode == ft.ThemeMode.DARK), # Устанавливаем начальное состояние переключателя
-        on_change=theme_changed
-    )
+    
+    # Устанавливаем начальную тему и фон
+    page.theme = get_active_theme(page.theme_mode)
+    page.bgcolor = page.theme.color_scheme.background
+    
+    # Устанавливаем начальную иконку
+    update_theme_icon()
 
     # 2. ВСЕ АСИНХРОННЫЕ ФУНКЦИИ ОПРЕДЕЛЯЮТСЯ ЗДЕСЬ
     #    Это гарантирует, что они будут доступны для вызова.
@@ -95,7 +139,6 @@ async def main(page: ft.Page):
         content=ft.Container(
                 padding=10,
                 border_radius=10,
-                # bgcolor=ft.Colors.BLUE_GREY_100,
                 content=ft.Row(
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     controls=[
@@ -109,30 +152,31 @@ async def main(page: ft.Page):
                                     ),
                             ),
                             ft.ListTile(
-                                leading=ft.Icon(ft.Icons.HISTORY, color=ft.Colors.BLUE_400),
+                                leading=ft.Icon(ft.Icons.HISTORY),
                                 title=ft.Text("Історія"),
                                 on_click=lambda e: page.run_task(on_nav_change_more,"Історія")
                             ),
                             ft.ListTile(
-                                leading=ft.Icon(ft.Icons.PERSON_OUTLINE, color=ft.Colors.BLUE_400),
+                                leading=ft.Icon(ft.Icons.PERSON_OUTLINE),
                                 title=ft.Text("Профіль"),
                                 on_click=lambda e: page.run_task(on_nav_change_more,"Профіль")
                             ),
                             ft.ListTile(
-                                leading=ft.Icon(ft.Icons.GROUP_OUTLINED, color=ft.Colors.BLUE_400),
+                                leading=ft.Icon(ft.Icons.GROUP_OUTLINED),
                                 title=ft.Text("Користувачі"),
                                 on_click=lambda e: page.run_task(on_nav_change_more,"Користувачі")
                             ),
                             ft.ListTile(
-                                title=ft.Text(
+                
+                                title=ft.Row([
+                                ft.Text(
                                     "Тема",
                                     weight=ft.FontWeight.BOLD,
                                     size=20,
                                     color=ft.Colors.ON_SURFACE, # Цвет текста, можно изменить
                                     ),
-                            ),
-                            ft.ListTile(
-                                c,
+                                theme_icon_container,          
+                            ]),
                             ),
                             ft.Container(
                                     height=30,
@@ -163,6 +207,12 @@ async def main(page: ft.Page):
                                 color=ft.Colors.ON_PRIMARY_CONTAINER,
                             ),
                             ft.Divider(height=5, color="transparent"),
+                            ft.Row(
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                controls=[
+                                    logo,
+                                ],
+                            ),
                             more_card
                         ],
                         spacing=5,
@@ -239,12 +289,13 @@ async def main(page: ft.Page):
                 content=ft.Row(
                     [
                         ft.Row(
-                            [
-                                ft.Icon(ft.Icons.MENU_BOOK, color=ft.Colors.BLUE_400, size=28),
+                            [   
+                                logo,
+                                # ft.Icon(ft.Icons.MENU_BOOK, size=28),
                                 ft.Text(
                                     "Школа KIVI",
                                     size=22,
-                                    weight=ft.FontWeight.BOLD,
+                                    # weight=ft.FontWeight.BOLD,
                                     color=ft.Colors.ON_PRIMARY_CONTAINER,
                                 ),
                             ],
@@ -253,7 +304,7 @@ async def main(page: ft.Page):
                         ),
                         # Заполнитель, чтобы сдвинуть кнопку выхода вправо
                         ft.Container(expand=True),
-                        c,
+                        theme_icon_container,
                         # Кнопка выхода
                         ft.IconButton(
                             icon=ft.Icons.LOGOUT,
@@ -267,7 +318,7 @@ async def main(page: ft.Page):
                 ),
                 padding=ft.padding.symmetric(horizontal=15),
                 height=50,
-                bgcolor=ft.Colors.PRIMARY_CONTAINER, # Легкий цвет фона
+                # bgcolor=ft.Colors.PRIMARY_CONTAINER, # Легкий цвет фона
             )
 
             navigation = ft.NavigationRail(
@@ -282,7 +333,7 @@ async def main(page: ft.Page):
                         [
                             ft.Row(
                                 [
-                                    ft.Icon(ft.Icons.MENU, color=ft.Colors.BLUE_400),
+                                    ft.Icon(ft.Icons.MENU),
                                     ft.Text(
                                         "Меню додатку",
                                         size=16,
@@ -303,17 +354,17 @@ async def main(page: ft.Page):
                     alignment=ft.alignment.center_left
                 ),
                 destinations=[
-                    ft.NavigationRailDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
-                    ft.NavigationRailDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP, color=ft.Colors.BLUE_400), label="Пошук"),
-                    ft.NavigationRailDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
-                    ft.NavigationRailDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
-                    ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль"),
-                    ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icon(ft.Icons.GROUP, color=ft.Colors.BLUE_400), label="Користувачі"),
+                    ft.NavigationRailDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME), label="Головна"),
+                    ft.NavigationRailDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP), label="Пошук"),
+                    ft.NavigationRailDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ), label="Навчання"),
+                    ft.NavigationRailDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF), label="Історія"),
+                    ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON), label="Профіль"),
+                    ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icon(ft.Icons.GROUP), label="Користувачі"),
                     
                 ]
             )
 
-            if page.platform.name in ["Windows", "MACOS"]:
+            if page.platform.name in ["WINDOWS", "MACOS"]:
                 page.add(app_bar,
                 ft.Row([navigation, home_view, search_view, history_view, progress_view, profile_view, users_view],
                                 expand=True, alignment=ft.MainAxisAlignment.CENTER,),
@@ -338,13 +389,13 @@ async def main(page: ft.Page):
                 animate_opacity=500,
                 label_behavior=ft.NavigationBarLabelBehavior.ALWAYS_SHOW,
                 destinations=[
-                    ft.NavigationBarDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME, color=ft.Colors.BLUE_400), label="Головна"),
-                    ft.NavigationBarDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP, color=ft.Colors.BLUE_400), label="Пошук"),
-                    ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ, color=ft.Colors.BLUE_400), label="Навчання"),
-                    # ft.NavigationBarDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF, color=ft.Colors.BLUE_400), label="Історія"),
-                    # ft.NavigationBarDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Профіль"),
-                    ft.NavigationBarDestination(icon=ft.Icons.MORE_HORIZ, selected_icon=ft.Icon(ft.Icons.MORE_HORIZ, color=ft.Colors.BLUE_400), label="Ще"),
-                    # ft.NavigationRailDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON, color=ft.Colors.BLUE_400), label="Користувачі")
+                    ft.NavigationBarDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icon(ft.Icons.HOME), label="Головна"),
+                    ft.NavigationBarDestination(icon=ft.Icons.SEARCH, selected_icon=ft.Icon(ft.Icons.YOUTUBE_SEARCHED_FOR_SHARP), label="Пошук"),
+                    ft.NavigationBarDestination(icon=ft.Icons.GRAPHIC_EQ, selected_icon=ft.Icon(ft.Icons.GRAPHIC_EQ), label="Навчання"),
+                    # ft.NavigationBarDestination(icon=ft.Icons.HISTORY, selected_icon=ft.Icon(ft.Icons.HISTORY_TOGGLE_OFF), label="Історія"),
+                    # ft.NavigationBarDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icon(ft.Icons.PERSON), label="Профіль"),
+                    ft.NavigationBarDestination(icon=ft.Icons.MORE_HORIZ, selected_icon=ft.Icon(ft.Icons.MORE_HORIZ), label="Ще"),
+                    # ft.NavigationRailDestination(icon=ft.Icons.PERSON, selected_icon=ft.Icon(ft.Icons.PERSON), label="Користувачі")
                 ],
             )
 
@@ -384,5 +435,5 @@ async def main(page: ft.Page):
         await show_login_view()
     
 if __name__ == "__main__":
-    ft.app(target=main, port=9002, assets_dir='assets', view=ft.WEB_BROWSER)
+    ft.app(target=main, assets_dir='assets')
     # ft.app(target=main)

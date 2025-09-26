@@ -45,9 +45,9 @@ if __name__ == '__main__':
 
     # Все данные из твоего примера, обновленные для новых полей
     all_content_data = [
-        {'user': 'sasha', 'title': 'Лінійка TV 2024', 'status': 'assigned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha', 'title': 'Лінійка TV 2024', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
         {'user': 'sasha', 'title': 'Історія компанії', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'KIVI KIDS', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha', 'title': 'KIVI KIDS', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
         {'user': 'sasha', 'title': 'Знання продукту KIVI TV', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Історія компанії'},
         {'user': 'sasha', 'title': 'Нова лінійка саундбарів та кранштейнів', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
         {'user': 'sasha', 'title': 'Техніки продажів', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Лінійка TV 2024'},

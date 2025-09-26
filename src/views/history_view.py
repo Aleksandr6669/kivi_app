@@ -106,7 +106,6 @@ class HistoryView(ft.Container):
                             icon=ft.Icons.UPDATE,
                             tooltip="Оновити дані",
                             icon_size=30,
-                            icon_color=ft.Colors.BLUE_200,
                             on_click=self.refresh_data
                         )
                     ],

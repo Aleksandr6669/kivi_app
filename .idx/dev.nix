@@ -38,7 +38,7 @@
             "-c"
             # Активируем venv, затем запускаем flet.
             # Убедитесь, что 'flet' скрипт доступен после активации venv
-            "source .venv/bin/activate && python3 src/main.py"
+            "source .venv/bin/activate && flet run --web --port 9002 main.py"
           ];
           manager = "web";
         };

@@ -55,14 +55,14 @@ class SearchView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Навчальний матеріал", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.TextField(
                     adaptive=False,
                     label="Пошук",
                     on_change=filter_materials,
                     border=ft.border.all(4, ft.Colors.OUTLINE),
-                    border_radius=ft.border_radius.all(20),
+                    border_radius=ft.border_radius.all(10),
                     content_padding=ft.padding.only(left=20, right=20),
                 ),
                 self.search_list_view,

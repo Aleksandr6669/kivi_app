@@ -61,14 +61,26 @@ class ProgressView(ft.Container):
         self.update()
 
     def build_view(self):
+        summ_count_failed =0
+        summ_count_passed =0
+        tests_results = 0
+        total_score = 0
+        count = 0
         passed_count = len([t for t in self.tests_data if t.get('status')  == "passed"])
         failed_count = len([t for t in self.tests_data if t.get('status')  == "failed"])
         total_tests = len([t for t in self.tests_data if t.get('status')  != "assigned_learned" and t.get('status')  != "learned" ])
         tests_with_results = [t for t in self.tests_data if t.get('status') in ['passed', 'failed']]
         assigned_count = len(self.active_items)
+        
 
-        summ_count_failed = failed_count/(passed_count + failed_count)*100
-        summ_count_passed = passed_count/(passed_count + failed_count)*100
+        if failed_count != 0:
+            summ_count_failed = failed_count/(passed_count + failed_count)*100
+        
+
+        if passed_count != 0:
+            summ_count_passed = passed_count/(passed_count + failed_count)*100
+
+        
         
 
         if tests_with_results:
@@ -78,13 +90,14 @@ class ProgressView(ft.Container):
             # Вычисляем сумму баллов и их количество
             total_score = sum(scores)
             count = len(scores)
-
             
-            # Возвращаем среднее значение
-            tests_results = total_score / count
-        else:
-            # Возвращаем 0, чтобы избежать ошибки деления на ноль
-            tests_results = 0
+
+            if total_score != 0 and count != 0:
+                # Возвращаем среднее значение
+                tests_results = total_score / count
+
+            print( total_score , count)
+            
         
         color_tests_results = ft.Colors.BLACK  # Цвет по умолчанию, если не подходит ни одно условие
 
@@ -106,7 +119,7 @@ class ProgressView(ft.Container):
             controls=[
                 ft.Row(controls=[
                     ft.Text("Навчання", size=24, weight=ft.FontWeight.BOLD),
-                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, icon_color=ft.Colors.BLUE_200, on_click=self.refresh_data)
+                    ft.IconButton(icon=ft.Icons.UPDATE, tooltip="Оновити дані", icon_size=30, on_click=self.refresh_data)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Card(
                     content=ft.Container(
