@@ -23,6 +23,15 @@ class User(BaseModel):
     role = peewee.CharField(default='user') 
     session_token = peewee.CharField(null=True)
 
+class Device(BaseModel):
+    user = peewee.ForeignKeyField(User, backref='devices', on_delete='CASCADE')
+    device_id = peewee.CharField()
+
+    class Meta:
+        indexes = (
+            (('user', 'device_id'), True),
+        )
+
 class UserProfile(BaseModel):
     # on_delete='CASCADE' - профиль удалится вместе с пользователем
     user = peewee.ForeignKeyField(User, backref='profile', unique=True, on_delete='CASCADE')
@@ -106,7 +115,7 @@ def initialize_database():
     """Создает все таблицы, если их еще нет."""
     try:
         db.connect()
-        db.create_tables([User, UserProfile, TestData, Assignment, MaterialContent, TestQuestion, TestAnswer], safe=True)
+        db.create_tables([User, UserProfile, TestData, Assignment, MaterialContent, TestQuestion, TestAnswer, Device], safe=True)
     finally:
         if not db.is_closed():
             db.close()
@@ -132,12 +141,14 @@ def register_user(username, password, role='user'):
         if not db.is_closed():
             db.close()
 
-def login_user(username, password):
+def login_user(username, password, device_id=None):
     """Проверяет логин/пароль и возвращает токен в случае успеха."""
     try:
         db.connect()
         user = User.get_or_none(User.username == username)
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
+            if device_id:
+                Device.get_or_create(user=user, device_id=device_id)
             new_token = secrets.token_hex(16)
             user.session_token = new_token
             user.save()
@@ -293,7 +304,6 @@ def add_test_data(data: dict):
     finally:
         if not db.is_closed():
             db.close()
-
 
 def add_test_question(test_title: str, step_data: dict):
     """

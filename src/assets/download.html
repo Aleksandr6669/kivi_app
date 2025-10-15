@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать приложение</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .download-button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2em;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+        .android {
+            background-color: #9E9E9E;
+            cursor: not-allowed;
+        }
+        .ios {
+            background-color: #000000;
+        }
+        .instructions {
+            margin-top: 20px;
+            text-align: left;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #safari-warning {
+            color: #D32F2F;
+            background-color: #FFEBEE;
+            padding: 15px;
+            border: 1px solid #FFCDD2;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        #safari-warning p {
+            margin: 0 0 10px;
+        }
+        #page-url {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Скачать приложение</h1>
+
+        <div id="android-section" style="display: none;">
+            <h2>Android</h2>
+            <p>Приложение для Android в разработке. Пожалуйста, зайдите позже.</p>
+            <a href="#" class="download-button android" onclick="return false;">Скачать для Android (в разработке)</a>
+        </div>
+
+        <div id="ios-section" style="display: none;">
+            <div id="safari-warning" style="display: none;">
+                <p><strong>Важно:</strong> Для установки приложения на iOS, пожалуйста, откройте эту страницу в браузере <strong>Safari</strong>.</p>
+                <p>Скопируйте ссылку ниже и вставьте ее в адресную строку Safari:</p>
+                <input type="text" id="page-url" readonly>
+            </div>
+
+            <div id="ios-instructions" style="display: none;">
+                <h2>iOS</h2>
+                <a href="VivaLearn.mobileconfig" class="download-button ios">1. Скачать профиль</a>
+                <div class="instructions">
+                    <h3>Инструкция по установке:</h3>
+                    <p>1. Нажмите кнопку выше, чтобы разрешить загрузку профиля конфигурации.</p>
+                    <p>2. Перейдите в <strong>Настройки > Основные > VPN и управление устройством</strong>.</p>
+                    <p>3. Нажмите на загруженный профиль «VivaLearn».</p>
+                    <p>4. Нажмите <strong>Установить</strong> в правом верхнем углу и введите свой пароль.</p>
+                    <p>5. Прочтите предупреждение и снова нажмите <strong>Установить</strong>.</p>
+                    <p>6. Приложение VivaLearn появится на вашем главном экране.</p>
+                </div>
+            </div>
+        </div>
+
+        <hr id="divider" style="width: 100%; margin: 30px 0;">
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userAgent = navigator.userAgent;
+
+            // Platform detection
+            const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+            const isAndroid = /android/i.test(userAgent);
+
+            // UI Elements
+            const androidSection = document.getElementById('android-section');
+            const iosSection = document.getElementById('ios-section');
+            const safariWarning = document.getElementById('safari-warning');
+            const iosInstructions = document.getElementById('ios-instructions');
+            const urlInput = document.getElementById('page-url');
+            const divider = document.getElementById('divider');
+
+            if (isAndroid) {
+                // --- ANDROID ---
+                androidSection.style.display = 'block';
+                divider.style.display = 'none';
+
+            } else if (isIOS) {
+                // --- IOS ---
+                iosSection.style.display = 'block';
+                divider.style.display = 'none';
+
+                // Browser detection for iOS. This is specific to standalone Safari,
+                // excluding Chrome, Firefox, and in-app browsers like Telegram's.
+                const isStandaloneSafari = /Version\//i.test(userAgent) && /Safari/i.test(userAgent) && !/CriOS/i.test(userAgent) && !/FxiOS/i.test(userAgent);
+
+                if (isStandaloneSafari) {
+                    // User is in Safari on iOS -> Show instructions
+                    safariWarning.style.display = 'none';
+                    iosInstructions.style.display = 'block';
+                } else {
+                    // User is on iOS, but NOT in Safari (e.g., Telegram, Chrome, etc.) -> Show warning
+                    safariWarning.style.display = 'block';
+                    iosInstructions.style.display = 'none';
+                    urlInput.value = window.location.href;
+                }
+            } else {
+                // --- OTHER OS ---
+                // For other operating systems, show both sections
+                androidSection.style.display = 'block';
+                iosSection.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -13,6 +13,7 @@
       pkgs.cairo
       pkgs.fontconfig
       pkgs.sqlite
+      pkgs.python311Packages.pillow
     ]; 
 
   idx = {

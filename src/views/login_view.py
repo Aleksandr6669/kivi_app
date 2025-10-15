@@ -3,14 +3,15 @@ import asyncio
 import flet_lottie as fl
 from components.theme import get_active_cart
 
+import random
+import string
+import hashlib
+
 # Импортируем только функцию для входа
 from components.database_manager import login_user
 
 def create_login_view(page: ft.Page, on_login_success):
-    """
-    Создает представление страницы входа.
-    """
-
+ 
     username_title = ft.Text("Login", size=16)
     
     password_title = ft.Text("Password", size=16)
@@ -62,7 +63,7 @@ def create_login_view(page: ft.Page, on_login_success):
         e.page.update()
 
         if not username_field.value or not password_field.value:
-            error_text.value = "Будь ласка, введіть логін та пароль"
+            error_text.value = "Please enter your login and password"
             error_text.visible = True
             e.page.update()
             return
@@ -83,10 +84,25 @@ def create_login_view(page: ft.Page, on_login_success):
             # Сохраняем логин в сессии и переходим на главный экран
             await page.client_storage.set_async("username", username_field.value)
             e.page.session.set("username", username_field.value)
+
+            
+            # await page.client_storage.set_async("user_agent", page.user_agent)
+
+            await page.client_storage.set_async("platform", page.platform.name)
+            await page.client_storage.set_async("client_user_agent", page.client_user_agent)
+
+            saved_username = await page.client_storage.get_async("id_device")
+            if not saved_username:
+                
+                characters = string.ascii_letters + string.digits
+                id_device = ''.join(random.choice(characters) for i in range(32))
+
+                await page.client_storage.set_async("id_device", id_device)
+
             await on_login_success()
         else:
             # В случае ошибки показываем сообщение и возвращаем кнопку
-            error_text.value = "Невірний логін або пароль"
+            error_text.value = "Incorrect login or password"
             error_text.visible = True
             login_button.disabled = False
             login_button.content = ft.Text("Login")
@@ -132,9 +148,11 @@ def create_login_view(page: ft.Page, on_login_success):
                                     border_radius=5,
                                     content=ft.Column([
                                         
-                                        ft.Text("Welcome to Acme Inc.", size=22, weight=ft.FontWeight.BOLD),
+                                        ft.Text("Welcome to VivaLearn.", size=22, weight=ft.FontWeight.BOLD),
                                         # ft.Divider(height=5, color="transparent"),
                                         ft.Text("Please log in", size=14),
+                                        ft.Text(page.client_ip, size=14),
+                                        
                                         ft.Column([
                                             username_title,
                                             username_field,
@@ -159,7 +177,7 @@ def create_login_view(page: ft.Page, on_login_success):
                     ),
                     padding=ft.padding.all(10),
                 ),
-                ft.Text("© 2025 KIVI UA. Усі права захищено.", size=10)
+                ft.Text("© 2025 VIVALEARN. All rights reserved.", size=10)
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,

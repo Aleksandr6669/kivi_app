@@ -22,7 +22,7 @@ import flet_lottie as fl
 
 async def main(page: ft.Page):
     # 1. СИНХРОННАЯ ЧАСТЬ: Настройка страницы и инициализация базы данных
-    page.title = "Школа KIVI"
+    page.title = "VivaLearn"
     # page.theme_mode = ft.ThemeMode.LIGHT
     # page.theme_mode = ft.ThemeMode.DARK
     page.browser_context_menu.disable()
@@ -35,7 +35,7 @@ async def main(page: ft.Page):
 
     logo = ft.Container(
             height=220,
-            width=220,
+            # width=220,
             content=fl.Lottie(
                 src="lottiefiles/Back to school!.json",
                 reverse=False,
@@ -98,7 +98,7 @@ async def main(page: ft.Page):
     saved_theme = await page.client_storage.get_async("theme_mode")
 
     if saved_theme is None:
-        page.theme_mode = ft.ThemeMode.LIGHT
+        page.theme_mode = ft.ThemeMode.DARK
     elif saved_theme:
         page.theme_mode = ft.ThemeMode.DARK
     else:
@@ -181,7 +181,7 @@ async def main(page: ft.Page):
                             ft.Container(
                                     height=30,
                                     content=ft.Text(
-                                        "© 2025 KIVI UA. Усі права захищено.",
+                                        "© 2025 VIVALEARN. All rights reserved.",
                                         size=10,
                                     ),
                                     alignment=ft.alignment.center,
@@ -293,7 +293,7 @@ async def main(page: ft.Page):
                                 logo,
                                 # ft.Icon(ft.Icons.MENU_BOOK, size=28),
                                 ft.Text(
-                                    "Школа KIVI",
+                                    "VIVALEARN",
                                     size=22,
                                     # weight=ft.FontWeight.BOLD,
                                     color=ft.Colors.ON_PRIMARY_CONTAINER,
@@ -371,7 +371,7 @@ async def main(page: ft.Page):
                                 ft.Container(
                                     height=30,
                                     content=ft.Text(
-                                        "© 2025 KIVI UA. Усі права захищено.",
+                                        "© 2025 VIVALEARN. All rights reserved.",
                                         size=10,
                                     ),
                                     alignment=ft.alignment.center,
