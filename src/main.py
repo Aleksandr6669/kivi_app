@@ -1,6 +1,6 @@
 import flet as ft
 import asyncio
-from components.database_manager import initialize_database
+from components.database_manager import initialize_database, sravnit_imya_i_id
 from components.theme import get_active_theme
 from views.home_view import HomeView
 from views.search_view import SearchView
@@ -12,7 +12,7 @@ from views.test_details_view import TestDetailsView
 from views.user_view_edite import UserEdite
 from views.user_view import UsersView
 import flet_lottie as fl
-
+import base64
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -428,9 +428,23 @@ async def main(page: ft.Page):
     # 3. ОСНОВНАЯ ЛОГИКА ЗАПУСКА ПРИЛОЖЕНИЯ
     saved_username = await page.client_storage.get_async("username")
     if saved_username:
-        page.session.set("username", saved_username)
-        await show_main_view()
-        # await show_main_view_tab()
+        saved_device = await page.client_storage.get_async("device")
+        platform_name = page.platform.name
+        user_agent = page.client_user_agent
+        combined_string = f"{platform_name}||{user_agent}||{saved_device}"
+        id_device = base64.b64encode(combined_string.encode('utf-8')).decode('utf-8')
+
+        is_device_success = await asyncio.to_thread(
+                sravnit_imya_i_id, 
+                saved_username, 
+                id_device,
+            )
+
+        if is_device_success:
+            page.session.set("username", saved_username)
+            await show_main_view()
+        else:
+            await show_login_view()
     else:
         await show_login_view()
     

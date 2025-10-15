@@ -6,6 +6,7 @@ from components.theme import get_active_cart
 import random
 import string
 import hashlib
+import base64
 
 # Импортируем только функцию для входа
 from components.database_manager import login_user
@@ -72,32 +73,43 @@ def create_login_view(page: ft.Page, on_login_success):
         login_button.disabled = True
         login_button.content = ft.ProgressRing(width=20, height=20, stroke_width=2)
         e.page.update()
+
+
+        platform_name = page.platform.name
+        user_agent = page.client_user_agent
+
+        combined_string = f"{platform_name}||{user_agent}"
+
+        saved_device = await page.client_storage.get_async("device")
+        if not saved_device:
+                
+            characters = string.ascii_letters + string.digits
+            device = ''.join(random.choice(characters) for i in range(32))
+
+            await page.client_storage.set_async("device", device)
+            combined_string = f"{platform_name}||{user_agent}||{device}"
+
+        else:
+            combined_string = f"{platform_name}||{user_agent}||{saved_device}"
+
+        id_device = base64.b64encode(combined_string.encode('utf-8')).decode('utf-8')
+
+        is_success = await asyncio.to_thread(
+                login_user, 
+                username_field.value, 
+                password_field.value,
+                id_device,
+            )
         
         # Вызываем функцию входа, которая возвращает True или False
-        is_success = await asyncio.to_thread(
-            login_user, 
-            username_field.value, 
-            password_field.value
-        )
+        
 
         if is_success:
             # Сохраняем логин в сессии и переходим на главный экран
             await page.client_storage.set_async("username", username_field.value)
             e.page.session.set("username", username_field.value)
 
-            
-            # await page.client_storage.set_async("user_agent", page.user_agent)
-
-            await page.client_storage.set_async("platform", page.platform.name)
-            await page.client_storage.set_async("client_user_agent", page.client_user_agent)
-
-            saved_username = await page.client_storage.get_async("id_device")
-            if not saved_username:
-                
-                characters = string.ascii_letters + string.digits
-                id_device = ''.join(random.choice(characters) for i in range(32))
-
-                await page.client_storage.set_async("id_device", id_device)
+            await page.client_storage.set_async("is_success", is_success)
 
             await on_login_success()
         else:
@@ -151,7 +163,7 @@ def create_login_view(page: ft.Page, on_login_success):
                                         ft.Text("Welcome to VivaLearn.", size=22, weight=ft.FontWeight.BOLD),
                                         # ft.Divider(height=5, color="transparent"),
                                         ft.Text("Please log in", size=14),
-                                        ft.Text(page.client_ip, size=14),
+                                        # ft.Text(page.client_ip, size=14),
                                         
                                         ft.Column([
                                             username_title,

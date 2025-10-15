@@ -158,6 +158,18 @@ def login_user(username, password, device_id=None):
         if not db.is_closed():
             db.close()
 
+def sravnit_imya_i_id(username, device_id):
+    try:
+        db.connect()
+        device = Device.get_or_none(Device.device_id == device_id)
+        if device and device.user.username == username:
+            return True
+        return False
+    
+    finally:
+        if not db.is_closed():
+            db.close()
+
 def update_related_tests_status(material_title, username):
     print(material_title, username)
     try:
