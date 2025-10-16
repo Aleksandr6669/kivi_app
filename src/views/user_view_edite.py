@@ -111,7 +111,7 @@ class UserEdite(ft.View):
         )
 
         self.error_text = ft.Text(value="", color=ft.Colors.RED_500, visible=False)
-        self.info_text = ft.Text(value="Полеpe з * обов\'язкове для заповнення", color=ft.Colors.RED_500)
+        self.info_text = ft.Text(value="Поле з * обов\'язкове для заповнення", color=ft.Colors.RED_500)
 
 
         def create_field_container(field):
@@ -216,7 +216,7 @@ class UserEdite(ft.View):
 
 
         updated_data = {
-            
+
             "username": self.username_field.value,
             "full_name": self.full_name_field.value,
             "email": self.email_field.value,
