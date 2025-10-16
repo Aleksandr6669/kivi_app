@@ -24,7 +24,7 @@ class UserEdite(ft.View):
         # Поля форми
         self.username_field = ft.TextField(
             adaptive=False,
-            label="* Системне ім'я",
+            label="Системне ім'я *",
             value=self.user_data.get("username", "") if is_editing else "",
             disabled=is_editing, # Забороняємо редагування імені користувача
             width=300,
@@ -37,7 +37,7 @@ class UserEdite(ft.View):
         )
         self.full_name_field = ft.TextField(
             adaptive=False,
-            label="* Повне ім\'я",
+            label="Повне ім\'я *",
             width=300,
             height=45,
             border_radius=ft.border_radius.all(10),
@@ -49,7 +49,7 @@ class UserEdite(ft.View):
         )
         self.email_field = ft.TextField(
             adaptive=False,
-            # label="Електронна пошта",
+            label="Електронна пошта",
             prefix_icon=ft.Icons.EMAIL_OUTLINED,
             width=300,
             height=45,
@@ -73,7 +73,7 @@ class UserEdite(ft.View):
         )
         self.password_field = ft.TextField(
             adaptive=False,
-            label="* Пароль",
+            label="Пароль *",
             width=300,
             height=45,
             border_radius=ft.border_radius.all(10),
