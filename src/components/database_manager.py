@@ -8,7 +8,7 @@ import datetime
 # --- НАСТРОЙКА БАЗЫ ДАННЫХ ---
 # Определяем путь к базе данных относительно корневой папки проекта
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-db_path = os.path.join(project_root, "app_data_base.db")
+db_path = os.path.join(project_root, "app_data.db")
 db = peewee.SqliteDatabase(db_path)
 
 # --- МОДЕЛИ (ОПИСАНИЕ ТАБЛИЦ) ---
@@ -17,11 +17,27 @@ class BaseModel(peewee.Model):
     class Meta:
         database = db
 
+
+class Institution(BaseModel):
+    institution_name = peewee.CharField(unique=True, index=True)
+    company_name = peewee.CharField(null=True)
+    address = peewee.CharField(null=True)
+    website = peewee.CharField(null=True)
+    logo_url = peewee.CharField(null=True)
+    contact_person = peewee.CharField(null=True)
+    contact_email = peewee.CharField(null=True)
+    contact_phone = peewee.CharField(null=True)
+    is_active = peewee.BooleanField(default=True)
+    about = peewee.TextField(null=True)
+
+
 class User(BaseModel):
     username = peewee.CharField(unique=True, index=True)
     password_hash = peewee.CharField()
-    role = peewee.CharField(default='user') 
+    role = peewee.CharField(default='user')
+    institution = peewee.ForeignKeyField(Institution, backref='users', null=True)
     session_token = peewee.CharField(null=True)
+
 
 class Device(BaseModel):
     user = peewee.ForeignKeyField(User, backref='devices', on_delete='CASCADE')
@@ -36,8 +52,11 @@ class UserProfile(BaseModel):
     # on_delete='CASCADE' - профиль удалится вместе с пользователем
     user = peewee.ForeignKeyField(User, backref='profile', unique=True, on_delete='CASCADE')
     full_name = peewee.CharField(null=True)
+    user_tupe = peewee.CharField(default='student')
     phone = peewee.CharField(null=True)
     email = peewee.CharField(null=True)
+    img = peewee.CharField(null=True)
+    ava = peewee.CharField(null=True)
     about = peewee.TextField(null=True)
 
 
@@ -91,6 +110,93 @@ class TestAnswer(BaseModel):
 
 # --- ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ БАЗОЙ ---
 
+def initialize_database():
+    """Создает все таблицы, если их еще нет."""
+    try:
+        db.connect()
+        db.create_tables([User, UserProfile, TestData, Assignment, MaterialContent, TestQuestion, TestAnswer, Device, Institution], safe=True)
+    finally:
+        if not db.is_closed():
+            db.close()
+
+def create_and_assign_institution(username: str, institution_data: dict):
+    try:
+        db.connect(reuse_if_open=True)
+        with db.atomic():
+            user = User.get_or_none(User.username == username.lower())
+            if not user or user.role != 'admin':
+                return False
+            if user.institution is not None:
+                return False
+            institution_name = institution_data.get("institution_name")
+            if not institution_name:
+                return False
+            # Используем универсальную функцию для создания/обновления
+            update_institution_details(institution_name, institution_data)
+            # Получаем созданное учреждение и привязываем
+            new_institution = Institution.get(Institution.institution_name == institution_name)
+            user.institution = new_institution
+            user.save()
+        return True
+    except Exception as e:
+        return False
+    finally:
+        if not db.is_closed():
+            db.close()
+
+def get_institution_details(institution_name: str):
+    """Возвращает детали указанного учебного заведения."""
+    try:
+        db.connect()
+        institution = Institution.get_or_none(Institution.institution_name == institution_name)
+        if institution:
+            return {
+                "company_name": institution.company_name,
+                "address": institution.address,
+                "website": institution.website,
+                "logo_url": institution.logo_url,
+                "contact_person": institution.contact_person,
+                "contact_email": institution.contact_email,
+                "contact_phone": institution.contact_phone,
+                "is_active": institution.is_active,
+                "about": institution.about
+            }
+        return None
+    finally:
+        if not db.is_closed():
+            db.close()
+
+def update_institution_details(institution_name: str, data: dict):
+    """
+    Обновляет информацию об учебном заведении.
+    Если заведение с таким названием не существует, оно будет создано.
+    """
+    try:
+        db.connect()
+
+        # Добавляем имя учреждения в основной словарь с данными
+        full_data = data.copy()
+        full_data['institution_name'] = institution_name
+
+        # Выполняем операцию "создать или обновить"
+        (Institution
+         .insert(full_data)
+         .on_conflict(
+             # В случае конфликта по уникальному полю institution_name...
+             conflict_target=[Institution.institution_name],
+             # ...обновить существующую запись данными из словаря data
+             update=data
+         )
+         .execute())
+
+        return True
+    except Exception as e:
+        print(f"Ошибка при создании/обновлении учреждения: {e}")
+        return False
+    finally:
+        if not db.is_closed():
+            db.close()
+
 def add_test_data_with_relation(data: dict):
     try:
         db.connect()
@@ -111,14 +217,7 @@ def add_test_data_with_relation(data: dict):
         if not db.is_closed():
             db.close()
 
-def initialize_database():
-    """Создает все таблицы, если их еще нет."""
-    try:
-        db.connect()
-        db.create_tables([User, UserProfile, TestData, Assignment, MaterialContent, TestQuestion, TestAnswer, Device], safe=True)
-    finally:
-        if not db.is_closed():
-            db.close()
+
 
 def register_user(username, password, role='user'):
     """Регистрирует нового пользователя и создает для него пустой профиль."""
@@ -145,7 +244,7 @@ def login_user(username, password, device_id=None):
     """Проверяет логин/пароль и возвращает токен в случае успеха."""
     try:
         db.connect()
-        user = User.get_or_none(User.username == username)
+        user = User.get_or_none(User.username.lower() == username.lower())
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
             if device_id:
                 Device.get_or_create(user=user, device_id=device_id)
@@ -215,9 +314,10 @@ def create_or_update_user_profile(username: str, profile_data: dict):
             "full_name": profile_data.get("full_name"),
             "phone": profile_data.get("phone"),
             "email": profile_data.get("email"),
+            "img": profile_data.get("img"),
+            "ava": profile_data.get("ava"),
             "about": profile_data.get("about")
         }
-        
         update_data = profile_info.copy()
         del update_data["user"]
 

@@ -8,11 +8,12 @@ from components.database_manager import (
     get_assigned_tests_for_user,
     add_content_step,
     add_test_question,
-    get_test_questions
+    get_test_questions,
+    create_and_assign_institution
 )
 
 # Определяем путь к базе данных, если он отличается
-db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_data_full_example.db")
+db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_data.db")
 
 # --- Пример использования ---
 if __name__ == '__main__':
@@ -24,8 +25,27 @@ if __name__ == '__main__':
     initialize_database()
     
     # 1. Регистрируем администратора и пользователя
-    register_user("admin", "admin123", role="admin")
+    print("--- Регистрация пользователей ---")
+    register_user("admin", "admin123", role='root')
+    register_user("admin", "admin123", role='admin')
     register_user("sasha", "sasha123")
+  
+
+    school_data = {
+        "institution_name": "Vivalearn test",
+        "company_name": "Vivalearn Inc.",
+        "address": "123 Learning St, Knowledge City",
+        "website": "https://vivalearn.com",
+        "contact_person": "Dr. Smith",
+        "contact_email": "contact@vivalearn.com",
+        "contact_phone": "1-800-LEARN",
+        "about": "A leading institution in online education."
+    }
+    create_and_assign_institution(
+        username="admin", 
+        institution_data=school_data
+    )
+    
     
     # 2. Создаем профили
     profile_dict_sasha = {
