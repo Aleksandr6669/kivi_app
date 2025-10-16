@@ -37,7 +37,7 @@ class UserProfile(BaseModel):
     user = peewee.ForeignKeyField(User, backref='profile', unique=True, on_delete='CASCADE')
     full_name = peewee.CharField(null=True)
     phone = peewee.CharField(null=True)
-    email = peewee.CharField(unique=True, null=True)
+    email = peewee.CharField(null=True)
     about = peewee.TextField(null=True)
 
 
@@ -277,7 +277,7 @@ def get_user_profile(username: str):
         if not db.is_closed():
             db.close()
 
-# --- НОВАЯ ФУНКЦИЯ ---
+
 def get_all_profiles_with_username():
     """
     Возвращает список ВСЕХ профилей, добавляя к каждому 'username' из таблицы User.
