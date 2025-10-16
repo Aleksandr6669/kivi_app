@@ -275,6 +275,8 @@ class UserEdite(ft.View):
                 self.page.update()
                 return
 
+                
+        self.parent_view.visible = True
         if hasattr(self.parent_view, 'refresh_data'):
             await self.parent_view.refresh_data(e)
             

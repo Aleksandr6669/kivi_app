@@ -50,6 +50,11 @@ async def main(page: ft.Page):
     theme_icon_container = ft.Row()
 
     async def toggle_theme(e):
+        # `isinstance` проверяет тип объекта, а не конкретный экземпляр
+        if page.views and isinstance(page.views[-1], (TestDetailsView, UserEdite)):
+            print("Старое представление уже открыто. Удаляем его.")
+            page.views.pop()
+
         # 1. Меняем режим темы на противоположный
         page.theme_mode = (
             ft.ThemeMode.DARK
