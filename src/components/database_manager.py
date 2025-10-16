@@ -119,30 +119,6 @@ def initialize_database():
         if not db.is_closed():
             db.close()
 
-def create_and_assign_institution(username: str, institution_data: dict):
-    try:
-        db.connect(reuse_if_open=True)
-        with db.atomic():
-            user = User.get_or_none(User.username == username.lower())
-            if not user or user.role != 'admin':
-                return False
-            if user.institution is not None:
-                return False
-            institution_name = institution_data.get("institution_name")
-            if not institution_name:
-                return False
-            # Используем универсальную функцию для создания/обновления
-            update_institution_details(institution_name, institution_data)
-            # Получаем созданное учреждение и привязываем
-            new_institution = Institution.get(Institution.institution_name == institution_name)
-            user.institution = new_institution
-            user.save()
-        return True
-    except Exception as e:
-        return False
-    finally:
-        if not db.is_closed():
-            db.close()
 
 def get_institution_details(institution_name: str):
     """Возвращает детали указанного учебного заведения."""
@@ -173,7 +149,6 @@ def update_institution_details(institution_name: str, data: dict):
     """
     try:
         db.connect()
-
         # Добавляем имя учреждения в основной словарь с данными
         full_data = data.copy()
         full_data['institution_name'] = institution_name
@@ -219,7 +194,7 @@ def add_test_data_with_relation(data: dict):
 
 
 
-def register_user(username, password, role='user'):
+def register_user(username, password, role='user', institution_name='VivaLearn'):
     """Регистрирует нового пользователя и создает для него пустой профиль."""
     if not password:
         return False
@@ -227,10 +202,14 @@ def register_user(username, password, role='user'):
     try:
         db.connect()
         with db.atomic():
+            institution_instance = None
+            if institution_name:
+                institution_instance, created = Institution.get_or_create(institution_name=institution_name)
             new_user = User.create(
-                username=username, 
+                username=username.lower(), 
                 password_hash=hashed_password.decode('utf-8'),
-                role=role
+                role=role,
+                institution=institution_instance
             )
             UserProfile.create(user=new_user)
         return True
@@ -244,7 +223,7 @@ def login_user(username, password, device_id=None):
     """Проверяет логин/пароль и возвращает токен в случае успеха."""
     try:
         db.connect()
-        user = User.get_or_none(User.username.lower() == username.lower())
+        user = User.get_or_none(User.username == username.lower())
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
             if device_id:
                 Device.get_or_create(user=user, device_id=device_id)
@@ -363,6 +342,7 @@ def get_user_profile(username: str):
             if hasattr(user, 'profile'):
                 try:
                     profile = user.profile.get()
+                    institution_name = user.institution.institution_name if user.institution else None
                     profile_data = {
                         "full_name": profile.full_name,
                         "phone": profile.phone,
@@ -371,7 +351,7 @@ def get_user_profile(username: str):
                     }
                 except UserProfile.DoesNotExist:
                     pass
-            return {"role": role, **profile_data}
+            return {"role": role, "institution": institution_name, **profile_data}
         return None
     finally:
         if not db.is_closed():

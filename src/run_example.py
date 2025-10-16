@@ -9,7 +9,7 @@ from components.database_manager import (
     add_content_step,
     add_test_question,
     get_test_questions,
-    create_and_assign_institution
+    update_institution_details
 )
 
 # Определяем путь к базе данных, если он отличается
@@ -26,13 +26,13 @@ if __name__ == '__main__':
     
     # 1. Регистрируем администратора и пользователя
     print("--- Регистрация пользователей ---")
-    register_user("admin", "admin123", role='root')
-    register_user("admin", "admin123", role='admin')
-    register_user("sasha", "sasha123")
+    register_user("root", "root123", role='root')
+    register_user("admin", "admin123", role='admin',institution_name="Vivalearn test")
+    register_user("sasha.vivalearn", "sasha123", institution_name="Vivalearn")
+    register_user("sasha2.Vivalearn", "sasha2123", institution_name="Vivalearn")
   
 
     school_data = {
-        "institution_name": "Vivalearn test",
         "company_name": "Vivalearn Inc.",
         "address": "123 Learning St, Knowledge City",
         "website": "https://vivalearn.com",
@@ -41,11 +41,8 @@ if __name__ == '__main__':
         "contact_phone": "1-800-LEARN",
         "about": "A leading institution in online education."
     }
-    create_and_assign_institution(
-        username="admin", 
-        institution_data=school_data
-    )
-    
+    update_institution_details(institution_name="Vivalearn test", data=school_data)
+    update_institution_details(institution_name="Vivalearn", data=school_data)
     
     # 2. Создаем профили
     profile_dict_sasha = {
@@ -60,47 +57,47 @@ if __name__ == '__main__':
         "email": "sasha@example32423.com",
         "about": "Admin"
     }
-    create_or_update_user_profile("sasha", profile_dict_sasha)
+    create_or_update_user_profile("sasha.vivalearn", profile_dict_sasha)
     create_or_update_user_profile("admin", profile_dict_admin)
 
     # Все данные из твоего примера, обновленные для новых полей
     all_content_data = [
-        {'user': 'sasha', 'title': 'Лінійка TV 2024', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Історія компанії', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'KIVI KIDS', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Знання продукту KIVI TV', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Історія компанії'},
-        {'user': 'sasha', 'title': 'Нова лінійка саундбарів та кранштейнів', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Техніки продажів', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Лінійка TV 2024'},
-        {'user': 'sasha', 'title': 'KIVI Plus', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'KIVI Media', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Лінійка TV 2024', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Історія компанії', 'status': 'not_learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'KIVI KIDS', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Знання продукту KIVI TV', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Історія компанії'},
+        {'user': 'sasha.vivalearn', 'title': 'Нова лінійка саундбарів та кранштейнів', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Техніки продажів', 'status': 'assigned_learned', 'score': None, 'item_type': 'test', 'related_material_title': 'Лінійка TV 2024'},
+        {'user': 'sasha.vivalearn', 'title': 'KIVI Plus', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'KIVI Media', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
         {'user': 'admin', 'title': 'Єволюція KIVI', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Єволюція KIVI', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Лінійка TV 2023', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'KIVI Кріплення', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'HDR and colors FIX Додатковий материал для возвитку', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Єволюція KIVI', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Лінійка TV 2023', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'KIVI Кріплення', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'HDR and colors FIX Додатковий материал для возвитку', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
         {'user': 'admin', 'title': 'Інструкція KIDS TV Додатковий материал для возвитку', 'status': 'learned', 'score': None, 'item_type': 'material', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 1', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 2', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 3', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 4', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 5', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 1', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 2', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 3', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 4', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 5', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
         {'user': 'admin', 'title': 'Тест 6', 'status': 'passed', 'score': '10/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 7', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 8', 'status': 'failed', 'score': '5/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 7', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 8', 'status': 'failed', 'score': '5/10', 'item_type': 'test', 'related_material_title': None},
         {'user': 'admin', 'title': 'Тест 9', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 10', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 11', 'status': 'failed', 'score': '7/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 12', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 13', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 14', 'status': 'failed', 'score': '3/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 15', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 16', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 17', 'status': 'failed', 'score': '4/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 18', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 19', 'status': 'passed', 'score': '7/7', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 20', 'status': 'passed', 'score': '8/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 21', 'status': 'passed', 'score': '10/10', 'item_type': 'test', 'related_material_title': None},
-        {'user': 'sasha', 'title': 'Тест 22', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None}
+        {'user': 'sasha.vivalearn', 'title': 'Тест 10', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 11', 'status': 'failed', 'score': '7/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 12', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 13', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 14', 'status': 'failed', 'score': '3/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 15', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 16', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 17', 'status': 'failed', 'score': '4/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 18', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 19', 'status': 'passed', 'score': '7/7', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 20', 'status': 'passed', 'score': '8/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 21', 'status': 'passed', 'score': '10/10', 'item_type': 'test', 'related_material_title': None},
+        {'user': 'sasha.vivalearn', 'title': 'Тест 22', 'status': 'passed', 'score': '9/10', 'item_type': 'test', 'related_material_title': None}
     ]
 
     print("\n--- Добавление всех уникальных тестов и материалов ---")
@@ -124,8 +121,8 @@ if __name__ == '__main__':
             }
         )
 
-    print("\n--- Проверка: загружаем начальные назначенные материалы для 'sasha' ---")
-    sasha_materials = get_assigned_tests_for_user("sasha")
+    print("\n--- Проверка: загружаем начальные назначенные материалы для 'sasha.vivalearn' ---")
+    sasha_materials = get_assigned_tests_for_user("sasha.vivalearn")
     for mat in sasha_materials:
         print(f"- {mat['title']} (Тип: {mat['item_type']}, Статус: {mat['status']}, Результат: {mat.get('score')})")
 
@@ -370,21 +367,21 @@ if __name__ == '__main__':
     print("\n--- Демонстрация автоматического обновления статуса теста ---")
     
     # 1. Проверяем начальные статусы
-    print("\nНачальные статусы назначений для 'sasha':")
-    initial_assignments = get_assigned_tests_for_user("sasha")
+    print("\nНачальные статусы назначений для 'sasha.vivalearn':")
+    initial_assignments = get_assigned_tests_for_user("sasha.vivalearn")
     for a in initial_assignments:
         print(f"- {a['title']}: Статус - {a['status']}")
 
     # 2. Имитируем прохождение материала "Історія компанії"
     print("\nИмитируем прохождение материала 'Історія компанії'...")
     update_assignment(
-        username='sasha',
+        username='sasha.vivalearn',
         test_title='Історія компанії',
         new_data={'status': 'learned'}
     )
     
     # 3. Проверяем конечные статусы
-    print("\nКонечные статусы назначений для 'sasha':")
+    print("\nКонечные статусы назначений для 'sasha.vivalearn':")
     final_assignments = get_assigned_tests_for_user("sasha")
     for a in final_assignments:
         print(f"- {a['title']}: Статус - {a['status']}")
