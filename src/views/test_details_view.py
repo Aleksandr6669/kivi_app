@@ -549,8 +549,17 @@ class TestDetailsView(ft.View):
             size=16,
             color=ft.Colors.BLUE_GREY_200
         )
+        
+        if self.page.platform.name in ["Windows", "MACOS"]:
+            width_t=450
+            height_t=480
+        else:
+            width_t=320
+            height_t=360
 
         results_content = ft.Card(
+            width=width_t,
+            # height=height_t,
             elevation=10,  # Задаємо тінь для картки
             content=ft.Container(
                 content=ft.Column(
