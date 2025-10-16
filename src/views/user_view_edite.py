@@ -111,7 +111,7 @@ class UserEdite(ft.View):
         )
 
         self.error_text = ft.Text(value="", color=ft.Colors.RED_500, visible=False)
-        self.info_text = ft.Text(value="Поле с * обовьязкове для заповнення", color=ft.Colors.RED_500)
+        self.info_text = ft.Text(value="Полеpe з * обов\'язкове для заповнення", color=ft.Colors.RED_500)
 
 
         def create_field_container(field):
@@ -210,12 +210,13 @@ class UserEdite(ft.View):
                 self.error_text.visible = True
 
         if error_found:
-            self.error_text.value = "Требо заповнити обовьязкові поля"
+            self.error_text.value = "Треба заповнити обовь\'язкові поля"
             self.page.update()
             return
 
 
         updated_data = {
+            
             "username": self.username_field.value,
             "full_name": self.full_name_field.value,
             "email": self.email_field.value,
