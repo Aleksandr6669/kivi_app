@@ -19,6 +19,15 @@ class TestDetailsView(ft.View):
         else:
             self.top_pading = 0
 
+        if self.page.platform.name in ["Windows", "MACOS"]:
+            self.width_c=450
+            self.width_t=450
+            self.height_t=480
+        else:
+            self.width_c=450
+            self.width_t=320
+            self.height_t=360
+
         self.app_bar = ft.AppBar(
             title=ft.Text(self.test_data.get('title', 'Деталі')),
             bgcolor=ft.Colors.with_opacity(0.1, ft.Colors.BLUE_GREY_400),
@@ -35,8 +44,10 @@ class TestDetailsView(ft.View):
                 content=ft.ProgressRing(width=32, height=32),
                 alignment=ft.alignment.center,
                 expand=True
-            )], 
-            expand=True
+            )],
+            expand=True,
+            alignment=ft.alignment.center,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         )
         self.controls.append(self.content_area)
 
@@ -91,16 +102,18 @@ class TestDetailsView(ft.View):
             list_bullet_text_style=ft.TextStyle(color=ft.Colors.CYAN_ACCENT_400, weight=ft.FontWeight.BOLD),
             block_spacing=10
         )
-        self.step_content_column = ft.Column(scroll=ft.ScrollMode.HIDDEN, spacing=15)
+        self.step_content_column = ft.Column(scroll=ft.ScrollMode.HIDDEN, spacing=15, width=self.width_c)
         self.progress_text = ft.Text(color=ft.Colors.BLUE_400)
         # self.prev_button = ft.IconButton(icon=ft.Icons.NAVIGATE_BEFORE, on_click=self.prev_step, icon_color=ft.Colors.BLUE_400, icon_size=20, padding=0,  tooltip="Попередній крок")
         self.prev_button = ft.ElevatedButton(text=" Назад",color=ft.Colors.BLUE_400, icon_color = ft.Colors.BLUE_400, icon = ft.Icons.NAVIGATE_BEFORE, on_click=self.prev_step, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8), padding=ft.padding.symmetric(horizontal=16)))
         self.next_button = ft.ElevatedButton(on_click=self.next_step, text="Далі", style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8), padding=ft.padding.symmetric(horizontal=16)))
 
         navigation_panel = ft.Container(
+            width=self.width_c,
+            # height=300,
             padding=ft.padding.only(left=15, right=15),
             content=ft.Column(
-                spacing=5,
+                spacing=1,
                 controls=[
                     ft.Row(
                         controls=[self.prev_button, self.progress_text, self.next_button],
@@ -112,11 +125,12 @@ class TestDetailsView(ft.View):
         )
         self.content_area.padding = 0
         self.content_area.controls = [
+            ft.Container(width=9999),
             ft.Container(
                 content=self.step_content_column,
-                expand=True,
-                padding=ft.padding.only(top=self.top_pading, left=15, right=15)
-            ),
+                    expand=True,
+                    padding=ft.padding.only(top=self.top_pading, left=15, right=15)
+                ),
             navigation_panel
         ]
         self.update_step_content()
@@ -226,8 +240,12 @@ class TestDetailsView(ft.View):
         
         self.content_area.padding = 0
         self.content_area.controls = [
+            ft.Container(width=9999),
             ft.Container(
+                alignment=ft.alignment.center,
                 content=ft.Column(
+                    # alignment=ft.alignment.top,
+                    width=self.width_c,
                     controls=[
                         self.question_card,
                         self.answers_column,
@@ -242,16 +260,16 @@ class TestDetailsView(ft.View):
                 expand=True
             ),
             ft.Container(
-                content=ft.Column(
-                    controls=[
-                        ft.Row(
-                            controls=[self.progress_text_test],
-                            alignment=ft.MainAxisAlignment.START
-                        ),
-                        self.dynamic_controls_panel
-                    ]
-                )
-            )
+                alignment=ft.alignment.center,
+                content=ft.Row(
+                        width=self.width_c,
+                        controls=[self.progress_text_test, self.dynamic_controls_panel],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        vertical_alignment=ft.CrossAxisAlignment.CENTER
+                    ), 
+                padding=ft.padding.only(top=self.top_pading, left=15, right=15),
+            ),
+               
         ]
 
     def _on_answer_select(self, e):
@@ -383,6 +401,7 @@ class TestDetailsView(ft.View):
                     data=answer
                 )
                 
+                
                 card_content = ft.Container(
                     # on_click=lambda e, checkbox=control: setattr(checkbox, 'value', not checkbox.value) or self.update() if not self.is_checked else None,
                     content=ft.Row(
@@ -405,6 +424,7 @@ class TestDetailsView(ft.View):
         if not self.is_checked:
             check_button = ft.ElevatedButton(
                 text="Перевірити",
+                color=ft.Colors.BLUE_400,
                 on_click=self._check_answer,
                 disabled=not self.is_answered
             )
@@ -412,9 +432,9 @@ class TestDetailsView(ft.View):
         else:
             is_last_question = self.current_step == len(self.test_questions) - 1
             if is_last_question:
-                next_button = ft.ElevatedButton(text="Завершити", on_click=self.complete_test)
+                next_button = ft.ElevatedButton(text="Завершити", color=ft.Colors.GREEN_300, on_click=self.complete_test)
             else:
-                next_button = ft.ElevatedButton(text="Наступне питання", on_click=self._next_question)
+                next_button = ft.ElevatedButton(text="Наступне питання", color=ft.Colors.BLUE_400, on_click=self._next_question)
             
             self.dynamic_controls_panel.controls.append(next_button)
 
@@ -550,15 +570,9 @@ class TestDetailsView(ft.View):
             color=ft.Colors.BLUE_GREY_200
         )
         
-        if self.page.platform.name in ["Windows", "MACOS"]:
-            width_t=450
-            height_t=480
-        else:
-            width_t=320
-            height_t=360
 
         results_content = ft.Card(
-            width=width_t,
+            width=self.width_t,
             # height=height_t,
             elevation=10,  # Задаємо тінь для картки
             content=ft.Container(
@@ -688,15 +702,10 @@ class TestDetailsView(ft.View):
             color=ft.Colors.BLUE_GREY_200
         )
 
-        if self.page.platform.name in ["Windows", "MACOS"]:
-            width_t=450
-            height_t=480
-        else:
-            width_t=320
-            height_t=360
+        
 
         results_content = ft.Card(
-            width=width_t,
+            width=self.width_t,
             # height=height_t,
             elevation=10,  # Задаємо тінь для картки
             content=ft.Container(
