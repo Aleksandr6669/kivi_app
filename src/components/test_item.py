@@ -29,14 +29,18 @@ def create_test_item(test, on_click=None):
     if type_info:
         trailing_controls.append(ft.Icon(name=type_info.get("icon"), tooltip=type_info.get("tooltip"), color=ft.Colors.BLUE_GREY_400))
     # score = test.get("score")
+    
     percentage_score = test.get("percentage_score")
+    print(percentage_score)
     if percentage_score is not None:
         percentage_score = int(percentage_score)
     else:
-        percentage_score = 0  # Або будь-яке інше значення за замовчуванням
+        percentage_score = 0
+
+    
     # if score:
     #     trailing_controls.append(ft.Text(score, weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
-    if percentage_score:
+    if percentage_score is not None and test.get('item_type') == 'test':
         trailing_controls.append(ft.Text(f"{percentage_score}%", weight=ft.FontWeight.BOLD, size=14, color=ft.Colors.BLUE_GREY_400))
 
     status_text = f"Статус: {current_status['text']}"
