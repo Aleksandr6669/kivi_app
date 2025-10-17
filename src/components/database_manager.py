@@ -291,12 +291,15 @@ def create_or_update_user_profile(username: str, profile_data: dict):
         profile_info = {
             "user": user,
             "full_name": profile_data.get("full_name"),
+            "user_tupe": profile_data.get("user_tupe"),
             "phone": profile_data.get("phone"),
             "email": profile_data.get("email"),
             "img": profile_data.get("img"),
             "ava": profile_data.get("ava"),
             "about": profile_data.get("about")
         }
+
+        
         update_data = profile_info.copy()
         del update_data["user"]
 
@@ -345,8 +348,11 @@ def get_user_profile(username: str):
                     institution_name = user.institution.institution_name if user.institution else None
                     profile_data = {
                         "full_name": profile.full_name,
+                        "user_tupe": profile.user_tupe,
                         "phone": profile.phone,
                         "email": profile.email,
+                        "img": profile.img,
+                        "ava": profile.ava,
                         "about": profile.about
                     }
                 except UserProfile.DoesNotExist:

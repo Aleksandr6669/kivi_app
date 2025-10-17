@@ -101,7 +101,7 @@ class HomeView(ft.Container):
                                 overflow=ft.TextOverflow.ELLIPSIS,
                                 expand=True,
                             ),
-                            ft.Text(self.user_info.get("role", ""), size=14, color=ft.Colors.BLUE_GREY_400),
+                            ft.Text(self.user_info.get("user_tupe", ""), size=14, color=ft.Colors.BLUE_GREY_400),
                         ], expand=True), 
                         ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60)
                     ]

@@ -75,7 +75,7 @@ class ProfileView(ft.Container):
                                 ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=60),
                                 ft.Column([
                                     ft.Text(self.user_info.get("full_name", "Невідомо"), size=20, weight=ft.FontWeight.BOLD, max_lines=2, overflow=ft.TextOverflow.ELLIPSIS),
-                                    ft.Text(self.user_info.get("role", "Невідомо"), size=14, color=ft.Colors.BLUE_GREY_400),
+                                    ft.Text(self.user_info.get("user_tupe", "Невідомо"), size=14, color=ft.Colors.BLUE_GREY_400),
                                 ])
                             ], alignment=ft.MainAxisAlignment.START),
                             ft.Divider(height=10, color=ft.Colors.with_opacity(0.5, ft.Colors.WHITE)),
